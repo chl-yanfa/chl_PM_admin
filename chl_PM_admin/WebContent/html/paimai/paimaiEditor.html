@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/icon.css" rel="stylesheet" type="text/css" />
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/auction/qrm-pinming.css" rel="stylesheet">
+<link href="../../resources/css/paimai/paimai.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/controller/paimai/overrideDataGridView.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../js/controller/paimai/paimaiEditor.js"> </script>
+<title>拍卖会详情</title>
+<style>
+input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px white inset;}
+.numberbox{
+  width:167px;height: 16px;
+}
+</style>
+</head>
+<body style="min-height: 2000px">
+	<div class="content paimai-top">
+		<div class="c-header">
+			<label>拍卖会ID：</label><span col="pmhId"></span>
+			<label>拍卖会名称：</label><span col="paimaiName"></span>
+		</div>
+		<div class="c-header">
+			<label>开始时间：</label><span col="paimaiStartTime"></span>
+			<label>结束时间：</label><span col="paimaiFinishTime"></span>
+			<label>拍卖会状态：</label><span col="paimaiStates"></span>
+		</div>
+	</div>
+	<div class="content" style="height: 120px;">
+		<div style="float: left;width: 80%">
+			<table class="table-body hasborder paimai-middle">
+				<tr>
+					<td style="width: 100px;">车辆总数</td>
+					<td style="width: 100px;" col="auctionCount"></td>
+					<td style="width: 100px;">成交数量</td>
+					<td style="width: 100px;" col="dealCount"></td>
+					<td style="width: 100px;">流拍数量</td>
+					<td style="width: 100px;" col="abortiveCount"></td>
+					<td style="width: 100px;">合手价总额</td>
+					<td style="width: 100px;" col="jointPriceTotal"></td>
+				</tr>
+				<tr>
+					<td>佣金总额</td><td col="commissionTotal"></td>
+					<td>其他费用总额</td><td col="otherPriceTotal"></td>
+					<td>撤拍数量</td><td col="revokeCount"></td>
+					<td></td><td></td>
+				</tr>
+			</table>
+		</div>
+		<div class="button-div" style="float: left;margin: 50px 10px;">
+		</div>
+	</div>
+	<div class="content">
+		<p style="font-size: 22px;font-weight: bold;margin-bottom: 40px;">已选取参拍车辆</p>
+		<input type="checkbox" id="checkAll"/>
+		<label for="checkAll" style="margin-right: 30px;">全选</label>
+		<button class="border-btn" onclick="batchDeleteAuctionCar()">删除</button>
+		<button class="border-btn" onclick="addAuctionCar()">添加</button>
+		<!-- <button class="down-btn" style="margin-left: 280px;">下载《关于全损（推定全损）车辆拍卖告知函》</button>
+		<button class="down-btn">下载《参拍结果告知函》</button>
+		<button class="down-btn">下载《成交确认书》</button>
+		<button class="down-btn">导出下载成交情况明细表</button> -->
+	</div>
+	<div class="content">
+		<table id="auctionCar"></table>	
+	</div>
+</body>
+</html>

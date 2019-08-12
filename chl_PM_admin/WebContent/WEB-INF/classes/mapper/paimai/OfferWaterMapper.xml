@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.OfferWaterMapper">
+	<resultMap id="BaseResultMap" type="OfferWaterInfo">
+		<id 	column="id" 			property="id" />
+		<result column="mid"			property="mid" />
+		<result column="nickname" 		property="nickname" />
+		<result column="user_name" 		property="realname" />
+		<result column="phone" 			property="phone" />
+		<result column="bid_amount" 	property="bidAmount" />
+		<result column="bid_time" 		property="bidTime" />
+	</resultMap>
+	<select id="getOfferWaterListByOrderId" resultMap="BaseResultMap">
+		SELECT
+			SPOW.id,SPOW.mid,SPCI.login_name nickname,
+			SPCI.user_name,
+			SPCI.phone,
+			SPOW.bid_amount,SPOW.bid_time
+		FROM 
+			car_pm_offer_water SPOW LEFT JOIN sys_client SPCI ON SPOW.mid = SPCI.id
+		WHERE 
+			SPOW.order_id = #{auctionSetId}
+		AND
+			SPOW.is_delete = 0
+		ORDER BY SPOW.BID_TIME DESC
+		LIMIT 10
+	</select>
+	<select id="getOfferWaterTotalByOrderId" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM 
+			car_pm_offer_water SPOW LEFT JOIN sys_client SPCI ON SPOW.mid = SPCI.id
+		WHERE 
+			SPOW.ORDER_ID = #{auctionSetId}
+		AND
+			SPOW.is_delete = 0
+	</select>
+	<select id="getBidCountByOrderId" resultType="int">
+		SELECT COUNT(1) FROM(		
+			SELECT
+				DISTINCT SPOW.mid
+			FROM 
+				car_pm_offer_water SPOW LEFT JOIN sys_client SPCI ON SPOW.mid = SPCI.id
+			WHERE 
+				SPOW.ORDER_ID = #{auctionSetId}
+			AND
+				SPOW.is_delete = 0
+		) S
+	</select>
+	<select id="getHighestCustomerByOrderId" resultType="HighestCustomerInfo">
+		SELECT
+			SPCI.id mid,
+			SPCI.login_name nickname,
+			SPCI.user_name realname,
+			SPCI.phone,
+			SPCI.id_card idCard,
+			SPHB.ORDER_ID orderId,
+			SPHB.MAXIMUM_PRICE maximumPrice,
+			SPHB.MARGIN margin
+		FROM 
+			car_pm_highest_bid SPHB left join sys_client SPCI ON SPHB.mid = SPCI.id
+		WHERE 
+			SPHB.ORDER_ID = #{auctionSetId}
+		AND
+			SPHB.is_delete = 0
+	</select>
+</mapper>

@@ -1,0 +1,29 @@
+.namexing{
+	color:#66BAFF;
+	margin-bottom: 10px;
+}
+.trailer-body{
+	margin-left: 44px;
+    margin-top: 0px;
+}
+.company{
+	margin-left: 44px;
+    margin-top: 25px;
+    display: inline-block;
+}
+.companys{
+	margin-left: 44px;
+    display: inline-block;
+}
+.trailer-body input{
+	width: 300px;
+    height: 24px;
+    margin-bottom: 20px;
+}
+.trailer{
+	width: 300px;
+    height: 80px;
+}
+.straile{
+	width: 200px;
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+<title>确认报废</title>
+
+<link href="../../js/lib/eui/themes/icon.css" rel="stylesheet" type="text/css" />
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/auction/confirmScrap.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../js/controller/auction/confirmScrap.js"> </script>
+</head>
+<body style="min-height: 1000px;">
+	<div class="content-top">
+		<div class="top-title">报废待处理</div>
+		<div class="scrapDiv">
+			<label style="margin-right: 10px">报废单位：</label><span col="scrapCompany"></span>
+			<label style="margin-right: 10px">报废金额：</label><span col="scrapMoney"></span>元
+		</div>
+		<div class="scrapDiv">
+			<label style="margin-right: 10px">备注：</label><span col="remark"></span>
+		</div>
+	</div>
+	<div class="content">
+		<div class="easyui-tabs">
+			<div title="确认报废">
+				<input id="scrap-id" name="parentId" hidden/>
+				<h3 style="margin: 20px 0px;"><span style="color:#5191e1;margin-right:3px;">▍</span>备注</h3>
+				<textarea warp="virtual" name="confirmRemark" class="beizhu"></textarea>
+				<h3 style="margin: 20px 0px;"><span style="color:#5191e1;margin-right:3px;">▍</span>车辆图片</h3>
+				<div id="uploader" style="width: 90%;margin: 10px 0px;">
+					<!-- 图片上传 -->
+					<ul id="pic-upload-row">
+						<li class="pic-single">
+		                    <div class="input-pic-box pic-box">
+		                        <img class="pic-img" src="../../resources/images/addimg-bg.png" onclick="addPic('upload-confirmScrap')" />
+		                        <input style="display: none;" type="file" accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" class="upload-confirmScrap" onchange="doUpload('upload-confirmScrap')" />
+		                    </div>
+		                </li>
+					</ul>
+				</div>
+				<div style="width: 90%;text-align: center;margin: 40px 0px;">
+					<button class="saveBtn" onclick="confirmScrap()">确定报废</button>
+				</div>
+			</div>
+			<div title="拍品信息">
+				<div id="vehicleBody"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

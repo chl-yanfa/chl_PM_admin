@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.ProcedureWholeMapper">
+	<resultMap id="procedureWhole" type="ProcedureWhole">
+		<id 	column="auction_id" 		property="auctionId" />
+		<result column="procedure_id" 		property="procedureId" />
+		<result column="auction_no" 		property="auctionNo" />
+		<result column="full_name" 			property="fullName" />
+		<result column="lot_areas" 			property="lotAreas" />
+		<result column="vehicle_brand" 		property="vehicleBrand" />
+	    <result column="vehicle_type" 		property="vehicleType" />
+	    <result column="vehicle_system" 	property="vehicleSystem" />
+	    <result column="license_number" 	property="licenseNumber" />
+		<result column="sub_company_audit" 	property="subCompanyAudit" />
+		<result column="is_record" 			property="isRecord" />
+		<result column="vehicle_state" 		property="vehicleState" />
+		<result column="newestInTime" 		property="newestInTime" />
+		<result column="latestOutTime" 		property="latestOutTime" />
+		<result column="auction_type_flag" 	property="auctionTypeFlag" />
+		<association property="imgPath" column="auctionId=auction_id" javaType="String" 
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+		<!-- 手续上传文件 -->
+		<collection property="procedureFileList" ofType="ProcedureFile" column="procedure_id=procedure_id"
+			select="mapper.standard.ProcedureFileMapper.getProcedureFileCollection">
+		</collection>
+	</resultMap>
+	<sql id="ListIf">
+		<if test="auctionType != null">
+			AND SIA.auction_type = #{auctionType}
+		</if>
+		<if test="subCompanyAuditId != null">
+			AND SIA.audit_state = #{subCompanyAuditId}
+		</if>
+		<if test="isRecordId != null">
+			AND SIPB.is_record = #{isRecordId}
+		</if>
+		<if test="inTimeStart != null">
+			AND SIPB.in_time <![CDATA[>=]]> #{inTimeStart}
+		</if>
+		<if test="inTimeEnd != null">
+			AND SIPB.in_time <![CDATA[<=]]> #{inTimeEnd}
+		</if>
+		<if test="keywords != null and keywords != ''">
+			AND (SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%') 
+			OR SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%'))
+        </if>
+	</sql>
+	<select id="getProcedureListByPage" resultMap="procedureWhole">
+		SELECT
+			SIA.id AS auction_id,
+			SIPB.id AS procedure_id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system, 
+		    SIA.license_number, 
+		    case SIA.audit_state when 0 then '待审核' when 1 then '审核通过' when 2 then '已驳回' end
+		    AS sub_company_audit,
+		    case SIPB.is_record when 0 then '未归档' when 1 then '已归档' end AS is_record,
+		    case SIA.auction_state when 1 then '未上拍' when 10 then '未上拍' when 2 then '进入拍卖会' when 3 then '待发布' when 4 then '拍卖中' when 5 then '成交' when 8 then '流拍' when -10 then '已退货' end
+			AS vehicle_state,
+		    0 AS in_type,
+		    1 AS out_type,
+		    SIPB.in_time AS newestInTime,
+		    SIPB.out_time AS latestOutTime,
+			SIA.auction_type auction_type_flag
+		FROM 
+			car_pm_auction SIA LEFT JOIN car_pm_procedure SIPB
+			ON SIA.id=SIPB.auction_id
+		WHERE
+			SIA.id is not null
+		AND 
+			SIA.auction_state != 0
+			<include refid="ListIf" />
+		ORDER BY SIA.TS DESC
+	</select>
+	<select id="getProcedureListTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM
+			car_pm_auction SIA LEFT JOIN car_pm_procedure SIPB
+			ON SIA.ID=SIPB.auction_id
+		WHERE
+			SIA.id is not null
+			AND SIA.auction_state != 0
+			<include refid="ListIf" />
+	</select>
+	<!-- 获取手续统计 -->
+	<select id="getProcedureStatisticsByPage" resultType="ProcedureStatistics">
+		SELECT
+			DATE_FORMAT(A.CREATE_TIME,'%Y-%m') AS procedureMonth,
+			COUNT(1) AS auctionCount,<!-- 车辆总数 -->
+			(	SELECT COUNT(1) 
+				FROM car_pm_auction SIA
+				WHERE SIA.IS_DELETE=0
+				AND DATE_FORMAT(SIA.CREATE_TIME,'%Y-%m')=procedureMonth
+				AND auction_state=5
+				<if test="lotAreasId != null and lotAreasId != ''">   
+					AND SIA.lot_areas_id = #{lotAreasId}
+				</if>
+			) AS dealCount,<!-- 成交总数 -->
+			(	SELECT COUNT(1) 
+				FROM car_pm_auction SIA,car_pm_aftersale SIAS
+				WHERE SIA.IS_DELETE=0
+				AND DATE_FORMAT(SIA.CREATE_TIME,'%Y-%m')=procedureMonth
+				AND SIA.ID=SIAS.AUCTION_ID
+				AND SIAS.IS_DELETE=0
+				AND SIAS.is_history=0
+				AND SIAS.take_car_state=0
+				<if test="lotAreasId != null and lotAreasId != ''">   
+					AND SIA.lot_areas_id = #{lotAreasId}
+				</if>
+			) AS unTransOwnerCount,	<!-- 未过户 -->
+			(	SELECT COUNT(1) 
+				FROM car_pm_auction SIA,car_pm_aftersale SIAS
+				WHERE SIA.IS_DELETE=0
+				AND DATE_FORMAT(SIA.CREATE_TIME,'%Y-%m')=procedureMonth
+				AND SIA.ID=SIAS.AUCTION_ID
+				AND SIAS.IS_DELETE=0
+				AND SIAS.is_history=0
+				AND SIAS.take_car_state=1
+				<if test="lotAreasId != null and lotAreasId != ''">   
+					AND SIA.lot_areas_id = #{lotAreasId}
+				</if>
+			) AS transOwnerCount,<!-- 已过户 -->
+			(	SELECT COUNT(1)
+				FROM car_pm_procedure SIPB LEFT JOIN car_pm_auction SIA
+				ON SIPB.auction_id=SIA.ID
+				WHERE SIA.IS_DELETE=0 AND SIPB.IS_DELETE=0
+				AND DATE_FORMAT(SIPB.CREATE_TIME,'%Y-%m')=procedureMonth
+				AND SIPB.is_record=1
+				<if test="lotAreasId != null and lotAreasId != ''">   
+					AND SIA.lot_areas_id = #{lotAreasId}
+				</if>
+			) AS recordCount,	<!-- 已归档 -->
+			(	SELECT COUNT(1) 
+				FROM car_pm_procedure SIPB LEFT JOIN car_pm_auction SIA
+				ON SIPB.auction_id=SIA.ID
+				WHERE SIA.IS_DELETE=0 AND SIPB.IS_DELETE=0
+				AND DATE_FORMAT(SIPB.CREATE_TIME,'%Y-%m')=procedureMonth
+				AND SIPB.is_record=0
+				<if test="lotAreasId != null and lotAreasId != ''">   
+					AND SIA.lot_areas_id = #{lotAreasId}
+				</if>
+			) AS unRecordCount	<!-- 未归档 -->
+		FROM car_pm_auction A
+		<trim prefix="WHERE" prefixOverrides="AND"> 
+			AND A.is_delete = 0
+			<if test="lotAreasId != null and lotAreasId != ''">   
+					AND A.lot_areas_id = #{lotAreasId}
+				</if>
+			<if test="procedureMonthStart != null">
+				AND YEAR(A.CREATE_TIME) <![CDATA[>=]]> YEAR(#{procedureMonthStart})
+			</if>
+			<if test="procedureMonthEnd != null">
+				AND YEAR(A.CREATE_TIME) <![CDATA[<=]]> YEAR(#{procedureMonthEnd})
+			</if>
+		</trim>  
+		GROUP BY procedureMonth   
+		ORDER BY procedureMonth DESC
+	</select>
+	<select id="getProcedureStatisticsTotal" resultType="int">
+		SELECT COUNT(1) FROM 
+		(	SELECT COUNT(1),
+			DATE_FORMAT(CREATE_TIME,'%Y-%m') AS procedureMonth
+			FROM car_pm_auction
+			<trim prefix="WHERE" prefixOverrides="AND"> 
+				AND is_delete = 0
+				<if test="lotAreasId != null and lotAreasId != ''">   
+					AND lot_areas_id = #{lotAreasId}
+				</if>
+				<if test="procedureMonthStart != null">
+					AND YEAR(CREATE_TIME) <![CDATA[>=]]> YEAR(#{procedureMonthStart})
+				</if>
+				<if test="procedureMonthEnd != null">
+					AND YEAR(CREATE_TIME) <![CDATA[<=]]> YEAR(#{procedureMonthEnd})
+				</if>
+			</trim> 
+			GROUP BY procedureMonth
+		) S
+	</select>
+</mapper>

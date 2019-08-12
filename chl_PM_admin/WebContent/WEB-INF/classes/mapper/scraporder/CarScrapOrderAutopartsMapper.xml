@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.CarScrapOrderAutopartsMapper">
+	<select id="getAutopartsIdByAuctionId" resultType="String">
+		select
+			id
+		from 
+			car_scrap_order_autoparts
+		where 
+			auction_id = #{auctionId}
+		and 
+			is_valid = 1
+	</select>
+	<update id="updateCarScrapOrderAutoparts">
+		update car_scrap_order_autoparts
+		<set>
+			order_autoparts_status = #{orderAutopartsStatus},
+			auction_id = #{auctionId},
+			operator = #{operator},
+			operatortime = #{operatortime},
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

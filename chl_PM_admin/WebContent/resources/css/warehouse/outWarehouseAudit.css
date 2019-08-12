@@ -1,0 +1,68 @@
+.all{
+	width:200px;
+	line-height:40px;
+	border:1px solid red;
+	color:red;
+	font-size:18px;
+	margin-left: 20px;
+}
+.splid{
+	margin-left:20px;
+	margin-top: 10px;
+	display:inline-block;
+	font-size:12px;
+}
+.splid,.jj input{
+	border:none;
+} 
+.splid input{
+	border:none;
+}
+.shouxu{
+	margin-left: 20px;
+    margin-top: 15px;
+    display:inline-block;
+}
+.aa{
+	width: 1200px;
+    border: none;
+}
+.cc{
+	width:800px;
+	height: 60px;
+}
+.ee{
+	display:inline-block;
+	font-size:12px;
+}
+.ef{
+	display:inline-block;
+	margin-top: 15px;
+}
+.hj{
+	font-size:12px;
+}
+.jj{
+	display:inline-block;
+	margin-left: 20px;
+	margin-top: 15px;
+}
+.agreeBtn{
+    margin-left:520px;
+    width: 89px;
+    line-height: 32px;
+    color: #FFFFFF;
+    background-color: #00A2D4;
+    border-radius: 4px;
+    font-size:16px;
+    height: 35px;
+}
+.rejectBtn{
+    width: 89px;
+    line-height: 32px;
+    color: #FFFFFF;
+    background-color: #00A2D4;
+    border-radius: 4px;
+    font-size:16px;
+    height: 35px;
+}

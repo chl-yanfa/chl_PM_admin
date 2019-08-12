@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.PaimaiMapper">
+	<resultMap id="BaseResultMap" type="Paimai">
+		<id 	column="id"  						property="id" />
+		<result column="pmh_id"  					property="pmhId" />
+		<result column="paimai_name"  				property="paimaiName" />
+		<result column="paimai_start_time"  		property="paimaiStartTime" />
+		<result column="interval_time"  			property="intervalTime" />
+		<result column="paimai_finish_time"  		property="paimaiFinishTime" />
+		<result column="single_time"  				property="singleTime" />
+		<result column="remark"  					property="remark" />
+		<result column="paimai_state"  				property="paimaiState" />
+		<result column="paimai_states"  			property="paimaiStates" />
+		<result column="publish_time"  				property="publishTime" />
+		<result column="auction_count" 				property="auctionCount" />
+		<result column="deal_count"  				property="dealCount" />
+		<result column="abortive_count"  			property="abortiveCount" />
+		<result column="revoke_count"  				property="revokeCount" />
+		<result column="create_user"  				property="createUser" />
+		<result column="create_time"  				property="createTime" />
+		<result column="is_delete"  				property="isDelete" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, pmh_id, paimai_name, paimai_start_time,
+		interval_time, paimai_finish_time, single_time, remark, paimai_state, 
+		case paimai_state when 0 then '待发布' when 1 then '进行中' when 2 then '已结束' end 
+		AS paimai_states,
+		publish_time,create_user,create_time, is_delete
+	</sql>
+	<sql id="ListIf">
+		<if test="auctionPlatform != null and auctionPlatform !=''">
+			AND SIP.auction_platform = #{auctionPlatform}
+		</if>
+		<if test="paimaiDateStart != null">
+			AND SIP.paimai_start_time <![CDATA[>=]]> #{paimaiDateStart}
+		</if>
+		<if test="paimaiDateEnd != null">
+			AND SIP.paimai_start_time <![CDATA[<=]]> #{paimaiDateEnd}
+		</if>
+		<if test="paimaiName != null and paimaiName !=''">
+			AND SIP.paimai_name like CONCAT(CONCAT('%', #{paimaiName}),'%')
+		</if>
+	</sql>
+	<select id="getPaimaiById" resultMap="BaseResultMap">
+		SELECT
+			SIP.id, SIP.pmh_id, SIP.paimai_name, SIP.paimai_start_time,
+			SIP.interval_time, SIP.paimai_finish_time, SIP.single_time, SIP.remark, 
+			SIP.paimai_state, 
+			case SIP.paimai_state when 0 then '待发布' when 1 then '进行中' when 2 then '已结束' end 
+			AS paimai_states,
+			SIP.publish_time,SIP.create_time, SIP.is_delete,
+			(
+				SELECT COUNT(1)
+				FROM car_pm_auction_set SIAS
+				WHERE
+					SIAS.is_delete = 0
+				AND 
+					SIAS.pmh_id = SIP.pmh_id
+			)AS auction_count,
+			(
+				SELECT 
+					COUNT(1)
+				FROM 
+					car_pm_auction_set SIAS LEFT JOIN car_pm_aftersale SIAA on SIAS.id = SIAA.auction_set_id AND SIAA.is_delete = 0 AND SIAA.is_history = 0
+				WHERE
+					SIAS.pmh_id = SIP.pmh_id
+				AND 
+					SIAA.id is not null
+				AND 
+					SIAS.is_delete = 0
+				AND 
+					SIAS.is_history = 0
+			)AS deal_count,
+			(
+				SELECT 
+					COUNT(1)
+				FROM 
+					car_pm_auction_set SIAS
+				WHERE
+					SIAS.pmh_id = SIP.pmh_id
+				AND 
+					SIAS.is_delete = 0
+				AND 
+					SIAS.order_state = '40'
+			)AS abortive_count,
+			(
+				SELECT 
+					COUNT(1)
+				FROM 
+					car_pm_auction_set SIAS
+				WHERE
+					SIAS.pmh_id = SIP.pmh_id
+				AND 
+					SIAS.is_delete = 0
+				AND 
+					SIAS.order_state = '-9'
+			)AS revoke_count,
+			(
+				SELECT 
+					SUM(joint_price)
+				FROM 
+					car_pm_auction_set SIAS
+				WHERE
+					SIAS.is_delete = 0
+				AND 
+					SIAS.pmh_id = SIP.pmh_id
+			)AS jointPriceTotal,
+			(
+				SELECT 
+					SUM(commission)
+				FROM 
+					car_pm_auction_set SIAS
+				WHERE
+					SIAS.is_delete = 0
+				AND 
+					SIAS.pmh_id = SIP.pmh_id
+			)AS commissionTotal,
+			(
+				SELECT 
+					SUM(other_price)
+				FROM 
+					car_pm_auction_set SIAS
+				WHERE
+					SIAS.is_delete = 0
+				AND 
+					SIAS.pmh_id = SIP.pmh_id
+			)AS otherPriceTotal
+		FROM 
+			car_pm_paimai SIP
+		WHERE 
+			SIP.id = #{id}
+	</select>
+	<select id="getPaimaiByPmhId" resultMap="BaseResultMap">
+		SELECT
+			SIP.id, SIP.pmh_id, SIP.paimai_name, SIP.paimai_start_time,
+			SIP.interval_time, SIP.paimai_finish_time, SIP.single_time, 
+			SIP.remark, SIP.paimai_state,
+			SIP.publish_time,SIP.create_time, SIP.is_delete
+		FROM 
+			car_pm_paimai SIP
+		WHERE 
+			SIP.pmh_id = #{pmhId}
+		and
+			SIP.is_delete = 0
+	</select>
+	
+	<select id="getPaimaiListByPage" resultMap="BaseResultMap">
+		SELECT
+			SIP.id, SIP.pmh_id, SIP.paimai_name, 
+			SIP.paimai_start_time,
+			SIP.interval_time, SIP.paimai_finish_time, SIP.single_time, SIP.remark, SIP.paimai_state, 
+			case SIP.paimai_state when 0 then '待发布' when 1 then '进行中' when 2 then '已结束' end 
+			AS paimai_states,
+			SIP.publish_time,SIP.create_user,SIP.create_time, SIP.is_delete,
+			(
+				SELECT COUNT(1)
+				FROM car_pm_auction_set SIAS
+				WHERE
+					SIAS.is_delete = 0
+				AND 
+					SIAS.pmh_id = SIP.pmh_id
+			)AS auction_count,
+			(
+				SELECT 
+					COUNT(1)
+				FROM 
+					car_pm_auction_set SIAS LEFT JOIN car_pm_aftersale SIAA on SIAS.id = SIAA.auction_set_id AND SIAA.is_delete = 0 AND SIAA.is_history = 0
+				WHERE
+					SIAS.pmh_id = SIP.pmh_id
+				AND 
+					SIAA.id is not null
+				AND 
+					SIAS.is_delete = 0
+				AND 
+					SIAS.is_history = 0
+			)AS deal_count
+		FROM 
+			car_pm_paimai SIP
+		WHERE 
+			SIP.is_delete=0
+		<include refid="ListIf" />
+		<if test="paimaiState != null">
+			AND SIP.paimai_state = #{paimaiState}
+		</if>
+		order by SIP.TS DESC
+	</select>
+	<select id="getPaimaiListTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM
+			car_pm_paimai SIP
+		where 
+			SIP.is_delete=0
+		<include refid="ListIf" />
+		<if test="paimaiState != null">
+			AND SIP.paimai_state = #{paimaiState}
+		</if>
+	</select>
+	<!-- getPaimaiTab-->
+	<select id="getPaimaiTab" parameterType="map" resultType="map">
+		SELECT 
+			'0' AS paimai_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_paimai SIP
+		WHERE
+		SIP.is_delete = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'1' AS paimai_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_paimai SIP
+		WHERE 
+		SIP.is_delete = 0 AND SIP.paimai_state = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'2' AS paimai_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_paimai SIP
+		WHERE 
+		SIP.is_delete = 0 AND SIP.paimai_state = 1
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'3' AS paimai_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_paimai SIP
+		WHERE 
+		SIP.is_delete = 0 AND SIP.paimai_state = 2
+		<include refid="ListIf" />
+	</select>
+	<insert id="addPaimai">
+		insert into car_pm_paimai (
+			id, pmh_id,
+			paimai_name, paimai_start_time,
+			interval_time, paimai_finish_time, single_time, remark,paimai_state, publish_time,
+			create_user,create_time, is_delete
+		)values (
+			#{id}, #{pmhId},
+			#{paimaiName}, #{paimaiStartTime},
+			#{intervalTime}, #{paimaiFinishTime},
+			#{singleTime},
+			#{remark},0, 
+			#{publishTime},#{createUser},
+			now(), 0
+		)
+	</insert>
+	<update id="updatePaimaiSelective">
+		update car_pm_paimai
+		<set>
+			<if test="pmhId != null">
+				pmh_id = #{pmhId},
+			</if>
+			<if test="paimaiName != null">
+				paimai_name = #{paimaiName},
+			</if>
+			<if test="paimaiStartTime != null">
+				paimai_start_time = #{paimaiStartTime},
+			</if>
+			<if test="intervalTime != null">
+				interval_time = #{intervalTime},
+			</if>
+			<if test="paimaiFinishTime != null">
+				paimai_finish_time = #{paimaiFinishTime},
+			</if>
+			<if test="singleTime != null">
+				single_time = #{singleTime},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="paimaiState != null">
+				paimai_state = #{paimaiState},
+			</if>
+			<if test="publishTime != null">
+				publish_time = #{publishTime},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updatePaimai">
+		update car_pm_paimai
+		set 
+			pmh_id = #{pmhId},
+			paimai_name = #{paimaiName},
+			paimai_start_time = #{paimaiStartTime},
+			interval_time = #{intervalTime},
+			paimai_finish_time = #{paimaiFinishTime},
+			single_time = #{singleTime},
+			remark = #{remark},
+			paimai_state = #{paimaiState},
+			publish_time = #{publishTime},
+			is_delete = #{isDelete}
+		where id = #{id}
+	</update>
+	<update id="deletePaimai">
+		update car_pm_paimai
+		set 
+			is_delete = 1
+		where id = #{id}
+	</update>
+	<select id="getPaimaiStatistics" resultType="PaimaiStatistics">
+		SELECT 
+			SA.ID,
+			SA.areas_name AS lotAreas,
+		(
+			SELECT 
+				COUNT(1)
+			FROM 
+				car_pm_auction_set SIAS LEFT JOIN car_pm_auction A ON SIAS.auction_id = A.id
+			WHERE
+				SIAS.pmh_id = #{pmhId}
+			AND 
+				SIAS.is_delete = 0
+			AND 
+				A.auction_type=#{auctionType}
+			AND 
+				A.lot_areas_id = SA.ID
+		) AS auctionCount,	<!-- 上拍车辆数 -->
+		(
+			SELECT 
+				COUNT(1)
+			FROM 
+				car_pm_auction_set SIAS LEFT JOIN car_pm_aftersale SIAA on SIAS.auction_id = SIAA.auction_id
+				LEFT JOIN car_pm_auction A ON SIAS.auction_id = A.id 
+			WHERE
+				SIAS.pmh_id = #{pmhId}
+			AND 
+				SIAS.is_delete = 0
+			AND 
+				SIAS.is_history = 0
+			AND 
+				SIAA.id IS NOT NULL
+			AND 
+				SIAA.is_delete = 0
+			AND 
+				SIAA.is_history = 0
+			AND 
+				A.auction_type=#{auctionType}
+			AND 
+				A.lot_areas_id = SA.ID
+		) AS dealCount,		<!-- 成交车辆数 -->
+		(	
+			SELECT 
+				COUNT(1) 
+			FROM 
+				car_pm_auction_set SIAS 
+				LEFT JOIN (SELECT ID,ORDER_ID from car_pm_offer_water where is_delete = 0 GROUP BY ORDER_ID)SPOW ON SIAS.ID = SPOW.ORDER_ID
+				LEFT JOIN car_pm_auction A ON SIAS.auction_id = A.id 
+			WHERE 
+				SIAS.pmh_id = #{pmhId}
+			AND 
+				SIAS.is_delete = 0
+			AND 
+				SPOW.ID IS NOT NULL
+			AND 
+				A.auction_type=#{auctionType}
+			AND 
+				A.lot_areas_id = SA.ID
+		) AS hasPriceCount,		<!-- 有人出价车辆数 -->
+		(	
+			SELECT 
+				COUNT(1) 
+			FROM 
+				car_pm_auction_set SIAS 
+				LEFT JOIN (SELECT ID,ORDER_ID from car_pm_offer_water where is_delete = 0 GROUP BY ORDER_ID)SPOW ON SIAS.ID = SPOW.ORDER_ID
+				LEFT JOIN car_pm_auction A ON SIAS.auction_id = A.id 
+			WHERE 
+				SIAS.pmh_id = #{pmhId}
+			AND 
+				SIAS.is_delete = 0
+			AND 
+				SPOW.ID IS NULL
+			AND 
+				A.auction_type=#{auctionType}
+			AND 
+				A.lot_areas_id = SA.ID
+		) AS hasNoPriceCount,	<!-- 没人出价车辆数 -->
+		(	
+			SELECT 
+				COUNT(1) 
+			FROM 
+				car_pm_auction_set SIAS LEFT JOIN car_pm_auction A ON SIAS.auction_id = A.id
+			WHERE 
+				SIAS.pmh_id = #{pmhId}
+			AND 
+				SIAS.is_delete = 0
+			AND 
+				SIAS.order_state = '40'
+			AND 
+				A.auction_type=#{auctionType}
+			AND 
+				A.lot_areas_id = SA.ID
+		) AS abortiveCount,	<!-- 流拍车辆数 -->
+		(
+			SELECT 
+				AVG(SIAS.joint_price)
+			FROM 
+				car_pm_auction_set SIAS LEFT JOIN car_pm_aftersale SIAA on SIAS.auction_id = SIAA.auction_id
+				LEFT JOIN car_pm_auction A ON SIAS.auction_id = A.id
+			WHERE 
+				SIAS.pmh_id = #{pmhId}
+			AND 
+				SIAS.is_delete = 0
+			AND 
+				SIAA.id IS NOT NULL
+			AND 
+				SIAA.is_delete = 0
+			AND 
+				SIAA.is_history = 0
+			AND 
+				A.auction_type=#{auctionType}
+			AND 
+				A.lot_areas_id = SA.ID
+		) AS aveDealPrice	<!-- 平均成交价格 -->
+		FROM 
+			sys_areas SA
+		WHERE 
+			SA.status = 1
+		AND 
+			SA.is_virtual_field = 0
+	</select>
+	<select id="getPaimaiPersonTotal" resultType="int">
+		SELECT 
+			COUNT(1) 
+		FROM 
+			car_pm_auction_set SIAS 
+			LEFT JOIN (SELECT ID,ORDER_ID from car_pm_offer_water where is_delete = 0 GROUP BY MID)SPOW ON SIAS.ID = SPOW.ORDER_ID
+		WHERE 
+			SIAS.pmh_id = #{pmhId}
+		AND 
+			SIAS.is_delete = 0
+		AND 
+			SPOW.ID IS NOT NULL
+	</select>
+	<select id="getPaimaiHandleTotal" resultType="int">
+		SELECT 
+			COUNT(1) 
+		FROM 
+			car_pm_auction_set SIAS 
+			LEFT JOIN car_pm_offer_water SPOW ON SIAS.ID = SPOW.ORDER_ID
+		WHERE 
+			SIAS.pmh_id = #{pmhId}
+		AND 
+			SIAS.is_delete = 0
+		AND 
+			SPOW.ID IS NOT NULL
+		AND 
+			SPOW.is_delete = 0
+	</select>
+	<select id="getPaimaiInfo" resultType="PaimaiInfo">
+		SELECT
+			SIAS.pmh_id pmhId,
+			SIP.paimai_name paimaiName,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS fullName,
+			SIAS.pm_order paimaiOrder
+		FROM 
+			car_pm_auction_set SIAS LEFT JOIN car_pm_auction SIA ON SIAS.auction_id = SIA.id
+			LEFT JOIN car_pm_paimai SIP ON SIAS.pmh_id = SIP.pmh_id
+		WHERE
+			SIAS.id = #{auctionSetId}
+	</select>
+</mapper>

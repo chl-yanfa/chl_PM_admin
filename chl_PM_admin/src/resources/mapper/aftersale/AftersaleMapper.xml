@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.AftersaleMapper">
+	<resultMap id="BaseResultMap" type="Aftersale">
+		<id 	column="id"  				property="id" />
+	    <result column="auction_id"  		property="auctionId" />
+	    <result column="auction_set_id"  	property="auctionSetId" />
+	    <result column="deal_time"  		property="dealTime" />
+	    <result column="deal_handler" 		property="dealHandler" />
+	    <result column="pay_time"  			property="payTime" />
+	    <result column="pay_state"  		property="payState" />
+	    <result column="take_car_time"  	property="takeCarTime" />
+	    <result column="take_car_state"  	property="takeCarState" />
+	    <result column="defer_state"  		property="deferState" />
+	    <result column="adjust_price_state"	property="adjustPriceState" />
+	    <result column="back_car_state"  	property="backCarState" />
+	    <result column="is_history" 		property="isHistory" />
+	    <result column="is_delete"  		property="isDelete" />
+	    <result column="create_time"  		property="createTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, auction_id, auction_set_id, deal_time,deal_handler,pay_time, 
+		pay_state, take_car_time, take_car_state, 
+		defer_state, 
+    	adjust_price_state, back_car_state, is_history, is_delete, create_time
+	</sql>
+	<select id="getAftersaleById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale
+		where id = #{id}
+	</select>
+	<select id="getAftersaleByAuctionSetId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale
+		where auction_set_id = #{auctionSetId}
+		and is_delete=0
+		and is_history=0
+	</select>
+	<insert id="addAftersale">
+		insert into car_pm_aftersale (
+			id, auction_id, auction_set_id, deal_time, deal_handler,pay_time,
+			pay_state, take_car_time, take_car_state,  
+			defer_state, adjust_price_state, back_car_state, 
+			is_history, is_delete, create_time
+		)values (
+			#{id}, 
+			#{auctionId}, #{auctionSetId},#{dealTime}, #{dealHandler}, #{payTime}, 
+			0, #{takeCarTime}, 0, 0, 0, 0, 0, 0, now()
+		)
+	</insert>
+	
+	<update id="updateAftersaleSelective">
+		update car_pm_aftersale
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="auctionSetId != null">
+				auction_set_id = #{auctionSetId},
+			</if>
+			<if test="dealTime != null">
+				deal_time = #{dealTime},
+			</if>
+			<if test="dealHandler != null">
+				deal_handler = #{dealHandler},
+			</if>
+			<if test="payTime != null">
+				pay_time = #{payTime},
+			</if>
+			<if test="payState != null">
+				pay_state = #{payState},
+			</if>
+			<if test="takeCarTime != null">
+				take_car_time = #{takeCarTime},
+			</if>
+			<if test="takeCarState != null">
+				take_car_state = #{takeCarState},
+			</if>
+			<if test="deferState != null">
+				defer_state = #{deferState},
+			</if>
+			<if test="adjustPriceState != null">
+				adjust_price_state = #{adjustPriceState},
+			</if>
+			<if test="backCarState != null">
+				back_car_state = #{backCarState},
+			</if>
+			<if test="isHistory != null">
+				is_history = #{isHistory},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateAftersale">
+		update car_pm_aftersale
+		set
+			deal_time = #{dealTime},
+			deal_handler = #{dealHandler},
+			pay_time = #{payTime},
+			pay_state = #{payState},
+			take_car_time = #{takeCarTime},
+			take_car_state = #{takeCarState},
+			defer_state = #{deferState},
+			adjust_price_state = #{adjustPriceState},
+			back_car_state = #{backCarState},
+			is_delete = #{isDelete}
+		where id = #{id}
+	</update>
+	<update id="updateAftersaleStateByAuctionSetId">
+		update car_pm_aftersale
+		<set>
+			<if test="payTime != null">
+				pay_time = #{payTime},
+			</if>
+			<if test="payState != null">
+				pay_state = #{payState},
+			</if>
+			<if test="takeCarTime != null">
+				take_car_time = #{takeCarTime},
+			</if>
+			<if test="takeCarState != null">
+				take_car_state = #{takeCarState},
+			</if>
+			<if test="deferState != null">
+				defer_state = #{deferState},
+			</if>
+			<if test="adjustPriceState != null">
+				adjust_price_state = #{adjustPriceState},
+			</if>
+			<if test="backCarState != null">
+				back_car_state = #{backCarState}
+			</if>
+		</set>
+		where auction_set_id = #{auctionSetId}
+		and is_history=0
+	</update>
+	<select id="getDealInfoByAuctionSetId" resultType="DealInfo">
+		SELECT
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS fullName,
+			SIA.vin vin,
+			SIA.license_number licenseNumber,
+			SIP.paimai_name paimaiName,
+			SIAS.deal_time dealTime,
+			SIAS.deal_member dealMember,
+			SIAS.deal_mid dealMid,
+			SPCI.phone dealPhone,
+			SPCI.id_card dealIdCard,
+			SIAS.joint_price jointPrice,
+			SIAS.auction_start_time auctionStartTime,
+			SIAS.highest_price highestPrice,
+			SIAS.commission,
+			SIAS.other_price otherPrice,
+			SIAS.starting_price startingPrice,
+			SIAS.reserve_price reservePrice 
+		FROM 
+			car_pm_auction_set SIAS Left join car_pm_auction SIA ON SIAS.auction_id = SIA.id
+			Left join car_pm_paimai SIP ON SIAS.pmh_id = SIP.pmh_id
+			Left join sys_client SPCI ON SIAS.deal_mid = SPCI.id
+		WHERE
+			SIAS.id = #{auctionSetId}
+		AND 
+			SIAS.is_delete = 0
+		AND 
+			SIAS.is_history = 0
+		AND 
+			SIA.is_delete = 0
+		AND 
+			SIP.is_delete = 0
+	</select>
+</mapper>

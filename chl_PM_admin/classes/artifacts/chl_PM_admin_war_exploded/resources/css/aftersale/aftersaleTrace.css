@@ -1,0 +1,253 @@
+.content{
+	margin-top:20px;
+	margin-left:16px;
+}
+.table-body{
+	border-collapse: collapse; 
+	text-align: left; 
+	border: none;
+	width: 90%;
+	margin-top:20px;
+}
+.table-body td{
+	font-size: 14px;
+	padding: 1em 2em;
+    border:1px solid #dbdbdb;
+}
+.dealInfo-div span{
+	color: #666666;
+	margin-left: 5px;
+}
+.details-btn{
+	width: 120px;
+    color: #ffffff;
+    background: #1890ff;
+    border-radius: 4px;
+    font-size:14px;
+    height: 30px;
+    border: none;
+}
+/* 进度条 */
+.order_status {
+	height: 60px;
+	width: 100%;
+	margin: 60px 10px;
+}
+.order_status .s-step {
+	float: left;
+	width: 20%;
+	height: 60px;
+}
+.order_status .s-step>b {
+	display: block;
+	width: 10px;
+	height: 10px;
+	line-height: 10px;
+	border-radius: 10px;
+	background: #ddd;
+}
+.order_status .s-step>b.active {
+	background: #1890ff;
+}
+
+.order_status .s-step>p {
+	width: 95%;
+	height: 3px;
+	background: #ddd;
+	margin: -6px 12px;
+	
+}
+.order_status .s-step>p.active {
+	background: #1890ff;
+}
+.order_status .s-step .text {
+    color: #b7b7b7;
+    font-size: 12px;
+	font-style: normal;
+    text-align: left;
+    margin-left: -17px;
+    width: 130px;
+}
+.order_status .s-step>div {
+    font-size: 14px;
+    color: #c9c4c4;
+    width: 50px;
+    text-align: center;
+	margin: 30px -20px;
+    height: 0px;
+}
+.order_status .s-step>div.active {
+	color: #1890ff;
+}
+.btn{
+	width: 120px;
+    color: #505050;
+    background: #f2f2f2;
+    border-radius: 4px;
+    font-size:14px;
+    height: 35px;
+    border: none;
+}
+.text-body{
+	width: 90%;
+	height: auto;
+    min-height: 200px;
+	border: 1px solid #dbdbdb;
+	border-radius: 5px;
+	font-size:14px;
+}
+
+article,section,time,aside{display:block;}
+
+.point-time {
+  content: "";
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  top: 2px;
+  left: 20%;
+  background: #1c87bf;
+  margin-left: -6px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px #fff;
+}
+
+.text-green {
+  color: #009900;
+}
+
+.point-green {
+  background-color: #009900;
+}
+
+.time-div {
+  width: 970px;
+  margin: 40px 0px;
+}
+.time-div article {
+  position: relative;
+}
+.time-div article section {
+  padding: 0 0 17px;
+  position: relative;
+}
+.time-div article section:before {
+  content: "";
+  width: 1px;
+  top: 17px;
+  bottom: -17px;
+  left: 20%;
+  background: #009900;
+  position: absolute;
+}
+/* .time-div article section:last-child:before {
+  display: none;
+} */
+.time-div article section time {
+  width: 15%;
+  display: block;
+  position: absolute;
+}
+.time-div article section time > span {
+  display: block;
+  text-align: right;
+}
+.time-div article section aside {
+  color: #3a3a38;
+  margin-left: 25%;
+  padding-bottom: 15px;
+}
+.time-div article section .brief {
+  color: #9f9f9f;
+}
+.time-div article section p:not(:first-child) {
+  padding: 5px 0;
+}
+
+
+
+.takeCarBtn-Save{
+	width: 100px;
+	color: #ffffff;
+	background: #518fe0;
+	border-radius: 5px;
+	font-size:14px;
+	height: 32px;
+	border: none;
+}
+.takeCarBtn-Cannel{
+	width: 100px;
+	color: #000000;
+	background: #ffffff;
+	border-radius: 5px;
+	font-size:14px;
+	height: 32px;
+	border: 1px solid #e2e2e2;
+	margin-left: 20px;
+}
+.time-div article section aside div tr img:not(:first-child){
+	margin-left: 5px;
+}
+
+/* 上传图片 */
+@media (min-width: 992px){
+	.pic-single {
+	    width: 16.66666667%;
+    	display: inline-block;
+	}
+}
+.pic-single{
+	margin-bottom: 20px;
+	/* position: relative;
+    min-height: 1px; */
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.pic-box{
+	border: 1px solid #ddd;
+	display: block;
+    padding: 4px;
+    margin-bottom: 10px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border-radius: 4px;
+    transition: border .2s ease-in-out;
+    position: relative;
+}
+.input-pic-box{
+	border: 1px dashed #CCC;	
+}
+
+.pic-img {
+    width: 133px;
+    height: 77px;
+}
+.pic-img {
+    margin-right: auto;
+    margin-left: auto;
+    border: none;
+    display: block;
+    max-width: 100%;
+    vertical-align: middle;
+}
+.del-btn{
+    width: 21px;
+    height: 21px;
+    line-height: 28px;
+    display: inline-block;
+    font-size: 0.5em;
+    padding: 0;
+    border: 0;
+    text-align: center;
+    border-radius: 50px;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #F00;
+    color: #808000;
+    opacity: 0.7;
+}
+.pic-sort {
+    display: none;
+}

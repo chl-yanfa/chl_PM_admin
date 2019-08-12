@@ -1,0 +1,155 @@
+@charset "utf-8";
+html,body{margin:0;padding:0;}
+ul,li{list-style:none;margin:0;padding:0;}
+a img{border:none;}
+:focus{outline:0;}
+a{star:expression(this.onFocus=this.blur());cursor:pointer;color:#1a53e5;}
+a:link,a:visited{color:#000;text-decoration:none;}
+a:hover,a:active{color:#FF9600;text-decoration:none;}
+.clearfix:after{clear:both;display:block;visibility:hidden;height:0;line-height:0;content:'';}
+.clearfix{zoom:1;}
+
+
+.pop-info{margin:0 auto;padding:0;font-family:Arial;font-size:13px;color:#0d0d25;background-color:#fff;}
+.pop-info>li{float:left;width:48%;}
+.pop-info>li>h4,.pop-info>li>p{margin:0;padding:0;font-size:13px;line-height:28px;}
+.pop-info>li>p{margin-bottom:5px;}
+.pop-info>li>p>span{display:inline-block;width:130px;text-align:right;}
+.pop-info>li>p>samp{width:240px;font-family:Arial;margin-left:10px;}
+.pop-info>li>p.img-box{width:100px;height:100px;margin-bottom:0;} 
+.img-box img{width:200px;height:200px;margin-left:120px;}
+.put {width:30px;}
+.put1 {width:50px;}
+.brStyle {margin: 0;padding: 0;font-size:13px;line-height:28px}
+.floatStyle {display: inline-block;width: 130px;text-align:right;float:left}
+#tabs1{text-align:left;width:420px;}
+.menu1box{position:relative;height:22px;}
+#menu1{position:absolute;top:0;left:0;z-index:1;}
+#menu1 li{float:left;display:block;cursor:pointer;width:85px;text-align:center;line-height:21px;height:21px;}  
+#menu1 li.hover{background:#fff;border-left:1px solid #333;border-top:1px solid #333;border-right:1px solid #333;}  
+.main1box{clear:both;margin-top:-1px;border:1px solid #333;width:428px;height:402px;}
+#main1 ul{display: none;}
+#main1 ul.block{display: block;}
+.third{display:none}
+.third input{border:0;readonly}
+.ownself input{border:0;readonly}
+.ownself{border:0;readonly}
+.styleDivF div {width: 300px; float: left;height: 24px}
+.styleDivF input {border:0;font-size:14px;readonly}
+.styleDivF label {display: inline-block; width: 100px; text-align: right}
+/*提交按钮*/
+.subBtn {
+display: inline-block;
+width: 100px;
+height: 35px;
+line-height: 35px;
+font-size: 14px;
+text-align: center;
+color: #fff !important;
+text-shadow: 1px 2px 1px #FF7106;
+cursor: pointer;
+border-radius: 3px;
+border:none;
+background: #FB9400;
+font-family: "微软雅黑";
+}
+.subBtn span{
+	color:#FFF !important;
+}
+
+.searchBtn {
+display: inline-block;
+width: 60px;
+height: 30px;
+line-height: 30px;
+font-size: 14px;
+text-align: center;
+color: black !important;
+text-shadow: 1px 2px 1px #e8e8e8;
+cursor: pointer;
+border-radius: 3px;
+border:none;
+background: #e8e8e8;
+font-family: "微软雅黑";
+}
+
+
+/*取消按钮样式*/
+.cancleing{
+	display:inline-block;
+	width:100px;
+	height:40px;
+	line-height:40px;
+	text-align:center;
+	margin-left:5px;
+	color:#666 !important;
+	vertical-align: sub;
+}
+.violate .explain{
+  float: left;
+  font-size: 12px;
+  color: #333;
+  position: relative;   
+  margin-top: 10px;
+}
+.violate .explain textarea{
+  margin-left: 50px;
+  width: 260px;
+  height: 60px;
+  padding: 3px;
+  border:1px solid #dbdbdb;
+}
+.queexp{
+	text-align:center;
+}
+.violate .queexp input{
+display: inline-block;
+width: 160px;
+height: 35px;
+line-height: 35px;
+font-size: 14px;
+text-align: center;
+color: #fff !important;
+text-shadow: 1px 2px 1px #FF7106;
+cursor: pointer;
+border-radius: 3px;
+border:none;
+background: #FB9400;
+font-family: "微软雅黑";
+}
+.teants{width:604px;border:1px solid #cdcdcd; height: 100% !important; margin-bottom: 10px;  border-left:none; border-top:none;}
+.teants div{height: 32px !important;}
+.teants label{
+	height: 31px;
+	line-height: 31px;
+	color: #333;
+	text-align: center !important;
+	font-size: 12px;
+	border: 1px solid #CDCDCD;
+	background:#E6E6E6;
+	font-weight: bold;
+	float: left;
+}
+.teants input{border:none; background: none; margin-top: 5px;}
+.teants textarea{width:100%; height: 20px; text-align: left !important; margin-top: 5px;}
+.teants .inftea{
+	width: 190px;
+	height: 31px !important;
+	line-height: 31px;
+	color: #333;
+	padding-left: 10px;
+	float: right;
+	font-size: 12px;
+	border-bottom: 1px solid #CDCDCD;}
+.teants .inbeiz{
+	width:492px;
+	height: 31px !important;
+	line-height: 26px;
+	color: #333;
+	padding-left: 10px;
+	float: left;
+	font-size: 12px;
+	border-bottom: 1px solid #CDCDCD;
+}
+.teants .inbeiz input,.teants .inbeiz textarea{width:98%;}
+.teants .bordertop{border-top:1px solid #cdcdcd;}

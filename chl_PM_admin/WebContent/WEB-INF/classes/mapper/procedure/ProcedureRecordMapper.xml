@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.ProcedureRecordMapper">
+	<resultMap id="BaseResultMap" type="ProcedureRecord">
+		<id 	column="id"  					property="id" />
+		<result column="procedure_id"  			property="procedureId" />
+		<result column="applicant_id"  			property="applicantId" />
+		<result column="transfer_invoice_id"  	property="transferInvoiceId" />
+		<result column="registration_id"  		property="registrationId" />
+		<result column="province"  				property="province" />
+		<result column="province_id"  			property="provinceId" />
+		<result column="city"  					property="city" />
+		<result column="city_id"  				property="cityId" />
+		<result column="area"  					property="area" />
+		<result column="area_id"  				property="areaId" />
+		<result column="record_address"  		property="recordAddress" />
+		<result column="remark"  				property="remark" />
+		<result column="is_delete"  			property="isDelete" />
+		<result column="create_time" 			property="createTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, procedure_id, applicant_id,transfer_invoice_id,
+		registration_id,
+		province,province_id, city,city_id,area, area_id,
+		record_address, remark, is_delete, create_time
+	</sql>
+	<select id="getProcedureRecordById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_procedure_record
+		where id = #{id}
+	</select>
+	<select id="getProcedureRecordByProcedureId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_procedure_record
+		where procedure_id = #{procedureId}
+	</select>
+	<insert id="addProcedureRecord">
+		insert into car_pm_procedure_record 
+		(
+			id, procedure_id,
+			applicant_id, transfer_invoice_id,
+			registration_id,province, province_id,
+			city, city_id,area,area_id, record_address,
+			remark, is_delete, create_time
+		)
+		values (
+			#{id},
+			#{procedureId},
+			#{applicantId},
+			#{transferInvoiceId},
+			#{registrationId},
+			#{province},#{provinceId},
+			#{city}, #{cityId},
+			#{area},#{areaId},
+			#{recordAddress},
+			#{remark}, 0, now()
+		)
+	</insert>
+	<insert id="addProcedureRecordSelective">
+		insert into car_pm_procedure_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="procedureId != null">
+				procedure_id,
+			</if>
+			<if test="applicantId != null">
+				applicant_id,
+			</if>
+			<if test="transferInvoiceId != null">
+				transfer_invoice_id,
+			</if>
+			<if test="registrationId != null">
+				registration_id,
+			</if>
+			<if test="province != null">
+				province,
+			</if>
+			<if test="provinceId != null">
+				province_id,
+			</if>
+			<if test="city != null">
+				city,
+			</if>
+			<if test="cityId != null">
+				city_id,
+			</if>
+			<if test="area != null">
+				area,
+			</if>
+			<if test="areaId != null">
+				area_id,
+			</if>
+			<if test="recordAddress != null">
+				record_address,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			create_time,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="procedureId != null">
+				#{procedureId},
+			</if>
+			<if test="applicantId != null">
+				#{applicantId},
+			</if>
+			<if test="transferInvoiceId != null">
+				#{transferInvoiceId},
+			</if>
+			<if test="registrationId != null">
+				#{registrationId},
+			</if>
+			<if test="province != null">
+				#{province},
+			</if>
+			<if test="provinceId != null">
+				#{provinceId},
+			</if>
+			<if test="city != null">
+				#{city},
+			</if>
+			<if test="cityId != null">
+				#{cityId},
+			</if>
+			<if test="area != null">
+				#{area},
+			</if>
+			<if test="areaId != null">
+				#{areaId},
+			</if>
+			<if test="recordAddress != null">
+				#{recordAddress},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete},
+			</if>
+			now(),
+		</trim>
+	</insert>
+	<update id="updateProcedureRecordSelective">
+		update car_pm_procedure_record
+		<set>
+			<if test="procedureId != null">
+				procedure_id = #{procedureId},
+			</if>
+			<if test="applicantId != null">
+				applicant_id = #{applicantId},
+			</if>
+			<if test="transferInvoiceId != null">
+				transfer_invoice_id = #{transferInvoiceId},
+			</if>
+			<if test="registrationId != null">
+				registration_id = #{registrationId},
+			</if>
+			<if test="province != null">
+				province = #{province},
+			</if>
+			<if test="provinceId != null">
+				province_id = #{provinceId},
+			</if>
+			<if test="city != null">
+				city = #{city},
+			</if>
+			<if test="cityId != null">
+				city_id = #{cityId},
+			</if>
+			<if test="area != null">
+				area = #{area},
+			</if>
+			<if test="areaId != null">
+				area_id = #{areaId},
+			</if>
+			<if test="recordAddress != null">
+				record_address = #{recordAddress},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateProcedureRecord">
+		update car_pm_procedure_record
+		set 
+			procedure_id = #{procedureId},
+			applicant_id = #{applicantId},
+			transfer_invoice_id = #{transferInvoiceId},
+			registration_id = #{registrationId},
+			province = #{province},
+			province_id = #{provinceId},
+			city = #{city},
+			city_id = #{cityId},
+			area = #{area},
+			area_id = #{areaId},
+			record_address = #{recordAddress},
+			remark = #{remark},
+			is_delete = #{isDelete}
+		where id = #{id}
+	</update>
+</mapper>

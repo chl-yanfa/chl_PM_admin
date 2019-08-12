@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.ProcedureMapper">
+	<resultMap id="procedure" type="Procedure">
+		<id 	column="id" 					property="id" />
+		<result column="auction_id" 			property="auctionId" />
+		<result column="entrust_contract_no" 	property="entrustContractNo" />
+		<result column="handover_bill_no" 		property="handoverBillNo" />
+		<result column="province" 				property="province" />
+		<result column="province_id" 			property="provinceId" />
+		<result column="city" 					property="city" />
+		<result column="city_id" 				property="cityId" />
+		<result column="area" 					property="area" />
+		<result column="area_id" 				property="areaId" />
+		<result column="address" 				property="address" />
+		<result column="audit_state" 			property="auditState" />
+		<result column="is_record" 				property="isRecord" />
+		<result column="is_delete" 				property="isDelete" />
+		<result column="in_time" 				property="inTime" />
+		<result column="out_time" 				property="outTime" />
+		<result column="create_time" 			property="createTime" />
+		<result column="update_time" 			property="updateTime" />
+		<result column="version" 				property="version" />
+		<collection property="procedureFileList" ofType="ProcedureFileDto" column="procedure_id=id"
+			select="mapper.standard.ProcedureFileMapper.getProcedureFileCollection">
+		</collection>
+	</resultMap>
+	<sql id="Procedure_Column">
+		id, auction_id, entrust_contract_no, handover_bill_no, province,
+		province_id, city,
+		city_id, area, area_id, address,audit_state, is_record,is_delete,
+		in_time,out_time,
+		create_time, update_time,version
+	</sql>
+	<!-- getProcedureById 根据id查询 -->
+	<select id="getProcedureById" resultMap="procedure">
+		SELECT
+		<include refid="Procedure_Column" />
+		FROM CAR_PM_PROCEDURE
+		WHERE id = #{id}
+	</select>
+	<!-- getProcedureByAuctionId 根据id查询 -->
+	<select id="getProcedureByAuctionId" resultMap="procedure">
+		SELECT
+		<include refid="Procedure_Column" />
+		FROM CAR_PM_PROCEDURE
+		WHERE auction_id = #{auctionId}
+	</select>
+	<!-- addProcedure 新增手续入库 -->
+	<insert id="addProcedure">
+		INSERT INTO CAR_PM_PROCEDURE (
+			id, auction_id, entrust_contract_no,
+			handover_bill_no, province, province_id,
+			city, city_id, area,area_id, address,audit_state,is_record,
+			is_delete,in_time,out_time,version,
+			create_time
+		)VALUES (
+			#{id}, #{auctionId},
+			#{entrustContractNo},
+			#{handoverBillNo}, #{province},
+			#{provinceId},
+			#{city}, #{cityId}, #{area},
+			#{areaId}, #{address},
+			0,0,0,now(),#{outTime},#{version},
+			now()
+		)
+	</insert>
+	<!-- addProcedureSelective 新增手续入库（自由组合，为null的不插） -->
+	<insert id="addProcedureSelective">
+		INSERT INTO CAR_PM_PROCEDURE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="auctionId != null">
+				auction_id,
+			</if>
+			<if test="entrustContractNo != null">
+				entrust_contract_no,
+			</if>
+			<if test="handoverBillNo != null">
+				handover_bill_no,
+			</if>
+			<if test="province != null">
+				province,
+			</if>
+			<if test="provinceId != null">
+				province_id,
+			</if>
+			<if test="city != null">
+				city,
+			</if>
+			<if test="cityId != null">
+				city_id,
+			</if>
+			<if test="area != null">
+				area,
+			</if>
+			<if test="areaId != null">
+				area_id,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="version != null">
+				version,
+			</if>
+			audit_state,
+			is_record,
+			is_delete,
+			in_time,
+			create_time,
+		</trim>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="auctionId != null">
+				#{auctionId},
+			</if>
+			<if test="entrustContractNo != null">
+				#{entrustContractNo},
+			</if>
+			<if test="handoverBillNo != null">
+				#{handoverBillNo},
+			</if>
+			<if test="province != null">
+				#{province},
+			</if>
+			<if test="provinceId != null">
+				#{provinceId},
+			</if>
+			<if test="city != null">
+				#{city},
+			</if>
+			<if test="cityId != null">
+				#{cityId},
+			</if>
+			<if test="area != null">
+				#{area},
+			</if>
+			<if test="areaId != null">
+				#{areaId},
+			</if>
+			<if test="address != null">
+				#{address},
+			</if>
+			<if test="version != null">
+				#{version},
+			</if>
+			0,0,0,now(),now(),
+		</trim>
+	</insert>
+	<!--updateProcedureSelective 自定义修改（为null的不改） -->
+	<update id="updateProcedureSelective">
+		UPDATE CAR_PM_PROCEDURE
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="entrustContractNo != null">
+				entrust_contract_no = #{entrustContractNo},
+			</if>
+			<if test="handoverBillNo != null">
+				handover_bill_no = #{handoverBillNo},
+			</if>
+			<if test="province != null">
+				province = #{province},
+			</if>
+			<if test="provinceId != null">
+				province_id = #{provinceId},
+			</if>
+			<if test="city != null">
+				city = #{city},
+			</if>
+			<if test="cityId != null">
+				city_id = #{cityId},
+			</if>
+			<if test="area != null">
+				area = #{area},
+			</if>
+			<if test="areaId != null">
+				area_id = #{areaId},
+			</if>
+			<if test="address != null">
+				address = #{address},
+			</if>
+			<if test="auditState != null">
+				audit_state = #{auditState},
+			</if>
+			<if test="isRecord != null">
+				is_record = #{isRecord},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+			<if test="inTime != null">
+				in_time = #{inTime},
+			</if>
+			<if test="outTime != null">
+				out_time = #{outTime},
+			</if>
+			<if test="version != null">
+				version = #{version},
+			</if>
+			update_time = now(),
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--"updateProcedureAll" 修改,全部修改 -->
+	<update id="updateProcedureAll">
+		UPDATE CAR_PM_PROCEDURE
+		SET 
+		auction_id = #{auctionId},
+		entrust_contract_no = #{entrustContractNo},
+		handover_bill_no = #{handoverBillNo},
+		province = #{province},
+		province_id = #{provinceId},
+		city = #{city},
+		city_id = #{cityId},
+		area = #{area},
+		area_id = #{areaId},
+		address = #{address},
+		<!-- audit_state = #{auditState}, -->
+		is_delete = #{isDelete},
+		in_time = #{inTime},
+		out_time = #{outTime},
+		version = #{version},
+		update_time = now()
+		WHERE id = #{id}
+	</update>
+	<!--"updateProcedureState" 修改入库状态 -->
+	<update id="updateProcedureState">
+		UPDATE CAR_PM_PROCEDURE
+		SET 
+			audit_state = 0,
+			update_time = now()
+		WHERE auction_id = #{auctionId}
+	</update>
+</mapper>

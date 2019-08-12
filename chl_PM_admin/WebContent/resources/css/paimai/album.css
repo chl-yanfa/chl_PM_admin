@@ -1,0 +1,27 @@
+/*相册*/
+.album{width:510px;height:470px; float: left}
+.album_picture{width:510px;height:340px;position:relative;margin-bottom:20px;z-index:4;overflow:hidden}
+.album_picture_list{height:340px;position:absolute;margin-bottom:20px;z-index:1}
+.album_picture_list li{width:510px;height:340px;overflow:hidden;float:left}
+.album_picture_list img{width:510px;height:340px}
+.album_picture_zoom{position:absolute;right:30px;bottom:10px;height:24px;line-height:24px;padding:0 10px;color:#FFF;display:block;z-index:2;border-radius:15px;font-size:14px;background-color:rgba(0,0,0,.5);background-position:center;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F000000,endColorstr=#7F000000)}
+/* .album_picture_zoom:before{font-family:"SDIC";content:"\e60a"} */
+.album_thumbs{height:60px;position:relative;z-index:4}
+.album_thumbs_list{margin:auto;height:60px;position:relative;overflow:hidden;width:465px}
+.album_thumbs_list ul{height:60px;position:relative;left:0;list-style: none}
+.album_thumbs_list li{float:left;position:relative;cursor:pointer;margin-right:3px;*margin-right:2px}
+*,*:after,*:before{box-sizing:border-box}
+.album_thumbs_list li,.album_thumbs_list img,
+.album_thumbs_list li:after{width:90px;height:60px;overflow:hidden}
+.album_thumbs_list li.current:after{content:"";border:2px solid #E02;position:absolute;left:0;top:0}
+.album_thumbs_move{font-family:"SDIC";background-color:#EEE;position:absolute;bottom:0;width:20px;height:60px;line-height:60px;text-align: center; color:#666;border-radius:3px;display:inline-block;cursor:pointer}
+.album_thumbs_move:hover{background-color:#FEE;color:#E02}
+.album_thumbs_move.nohover{color:#CCCCCC;background-color:#F5F5F5}
+.album_thumbs_move.left{left:0}
+.album_thumbs_move.right{right:0}
+.album_other{height:25px;line-height: 25px; position:relative;font-size:14px;color:gray;font-family:"SDIC";margin-top: 15px;}
+.album_other span.current:before,.album_other span:hover{color:#E02}
+.album_other span{margin-right:30px;cursor: pointer}
+.album_other .collect:before{content:"\e630"}
+.album_other .collect.current:before{content:"\e632"}
+.album_other .share:before{content:"\e634"}

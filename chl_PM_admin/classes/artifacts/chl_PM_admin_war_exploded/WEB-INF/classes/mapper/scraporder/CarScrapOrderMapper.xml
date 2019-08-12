@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.CarScrapOrderMapper">
+	<resultMap id="carScrapOrderDto" 	type="CarScrapOrderDto">
+		<id 	column="id" 					property="id" />
+		<result column="order_no" 				property="orderNo" />
+		<result column="car_model_number" 		property="carModelNumber" />
+		<result column="car_frame_number" 		property="carFrameNumber" />
+		<result column="car_number" 			property="carNumber" />
+		<result column="order_areas_id" 		property="orderAreasId" />
+		<result column="order_areas" 			property="orderAreas" />
+		<association property="headImgPath" column="order_id=id" javaType="String" 
+			select="getHeadImg"/>
+	</resultMap>
+	<resultMap id="carScrapOrderAutopartsDto" 	type="CarScrapOrderAutopartsDto">
+		<id 	column="id" 					property="id" />
+		<result column="order_id" 				property="orderId" />
+		<result column="order_no" 				property="orderNo" />
+		<result column="parts_type" 			property="partsType" />
+		<result column="parts_name" 			property="partsName" />
+		<result column="parts_num" 				property="partsNum" />
+		<result column="car_model_number" 		property="carModelNumber" />
+		<result column="car_frame_number" 		property="carFrameNumber" />
+		<result column="car_number" 			property="carNumber" />
+		<association property="headImgPath" column="order_id=id" javaType="String" 
+			select="getHeadImg"/>
+	</resultMap>
+	
+	<!--  -->
+	<select id="getCarScrapOrderList" resultMap="carScrapOrderDto">
+		SELECT
+			CSO.id,CSO.order_no,CSO.car_model_number,
+			CSO.car_frame_number,CSO.car_number,
+			CSO.order_areas_id,SA.areas_name order_areas
+		FROM 
+			CAR_SCRAP_ORDER CSO LEFT JOIN SYS_AREAS SA on CSO.order_areas_id = SA.id
+		WHERE
+			CSO.isremove = 0
+			AND CSO.order_type = 1
+			<if test="orderStatus != null">
+				AND CSO.order_status = #{orderStatus}
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND (
+					CSO.car_model_number like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+					CSO.car_frame_number like CONCAT(CONCAT('%', #{keywords}),'%') OR
+					CSO.car_number like CONCAT(CONCAT('%', #{keywords}),'%') OR
+					CSO.order_no like CONCAT(CONCAT('%', #{keywords}),'%')
+				)
+	        </if>
+		ORDER BY CSO.operatortime DESC
+	</select>
+	<!--  -->
+	<select id="getCarScrapOrderListTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM 
+			CAR_SCRAP_ORDER CSO
+		WHERE
+			CSO.isremove = 0
+			AND CSO.order_type = 1
+			<if test="orderStatus != null">
+				AND CSO.order_status = #{orderStatus}
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND (
+					CSO.car_model_number like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+					CSO.car_frame_number like CONCAT(CONCAT('%', #{keywords}),'%') OR
+					CSO.car_number like CONCAT(CONCAT('%', #{keywords}),'%') OR
+					CSO.order_no like CONCAT(CONCAT('%', #{keywords}),'%')
+				)
+	        </if>
+	</select>
+	<!--  -->
+	<select id="getCarScrapOrderAutopartsList" resultMap="carScrapOrderAutopartsDto">
+		SELECT
+			CSOA.id,CSOA.order_id,CSOA.parts_type,TCP.parts_name,CSOA.parts_num,
+			CSO.order_no,CSO.car_model_number,
+			CSO.car_frame_number,CSO.car_number
+		FROM 
+			CAR_SCRAP_ORDER_AUTOPARTS CSOA LEFT JOIN CAR_SCRAP_ORDER CSO on CSOA.order_id = CSO.id AND CSO.order_type = 2 AND CSO.isremove = 0
+			LEFT JOIN TB_CAR_PARTS TCP on CSOA.parts_type = TCP.id
+		WHERE
+			CSOA.is_valid = 1
+			<if test="orderStatus != null">
+				AND CSOA.order_autoparts_status = #{orderStatus}
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND (
+					CSOA.parts_name like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+					CSOA.parts_num like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+					CSO.car_model_number like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+					CSO.car_frame_number like CONCAT(CONCAT('%', #{keywords}),'%') OR
+					CSO.car_number like CONCAT(CONCAT('%', #{keywords}),'%') OR
+					CSO.order_no like CONCAT(CONCAT('%', #{keywords}),'%')
+				)
+	        </if>
+		ORDER BY CSOA.operatortime DESC
+	</select>
+	<!--  -->
+	<select id="getCarScrapOrderAutopartsListTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM 
+			CAR_SCRAP_ORDER_AUTOPARTS CSOA LEFT JOIN CAR_SCRAP_ORDER CSO on CSOA.order_id = CSO.id AND CSO.order_type = 2 AND CSO.isremove = 0
+		WHERE
+			CSOA.is_valid = 1
+			<if test="orderStatus != null">
+				AND CSOA.order_autoparts_status = #{orderStatus}
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND (
+					CSOA.parts_name like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+					CSOA.parts_num like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+					CSO.car_model_number like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+					CSO.car_frame_number like CONCAT(CONCAT('%', #{keywords}),'%') OR
+					CSO.car_number like CONCAT(CONCAT('%', #{keywords}),'%') OR
+					CSO.order_no like CONCAT(CONCAT('%', #{keywords}),'%')
+				)
+	        </if>
+	</select>
+	<select id="getCarScrapOrderAutopartsListByAuctionId" resultMap="carScrapOrderAutopartsDto">
+		SELECT
+			CSOA.id,CSOA.order_id,CSOA.parts_type,TCP.parts_name,CSOA.parts_num,
+			CSO.order_no,CSO.car_model_number,
+			CSO.car_frame_number,CSO.car_number
+		FROM 
+			CAR_SCRAP_ORDER_AUTOPARTS CSOA LEFT JOIN CAR_SCRAP_ORDER CSO on CSOA.order_id = CSO.id AND CSO.order_type = 2 AND CSO.isremove = 0
+			LEFT JOIN TB_CAR_PARTS TCP on CSOA.parts_type = TCP.id
+		WHERE
+			CSOA.auction_id = #{auctionId}
+		AND
+			CSOA.is_valid = 1
+		ORDER BY CSOA.operatortime
+	</select>
+	<select id="getHeadImg" resultType="String">
+		select
+			ta.storage_path
+		from 
+			car_scrap_order_attachment csoa left join tb_attachment ta on csoa.attachment_id = ta.id
+		where 
+			csoa.order_id = #{order_id}
+		and 
+			csoa.isvalid = 1
+		and 
+			ta.isvalid = 1
+		limit 1
+	</select>
+	<select id="getOrderIdByAuctionId" resultType="String">
+		select
+			id
+		from 
+			car_scrap_order
+		where 
+			auction_id = #{auctionId}
+		and 
+			isremove = 0
+		limit 1
+	</select>
+	<update id="updateCarScrapOrder">
+		update car_scrap_order
+		<set>
+			order_status = #{orderStatus},
+			auction_id = #{auctionId},
+			operator = #{operator},
+			operatortime = #{operatortime},
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

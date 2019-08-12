@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/url.js"></script>
+<script type="text/javascript" src="../../js/dataFormat.js"></script>
+
+<title>查看详情</title>
+</head>
+<body>
+	<div class="easyui-tabs">
+		<!-- 车辆入库登记 -->
+		<div title="车辆入库登记" style="padding: 10px">
+			<div id="warehouseBody"></div>
+		</div>
+
+		<!-- 拍品信息 -->
+		<div title="拍品信息" style="padding: 10px">
+			<div id="vehicleBody"></div>
+		</div>
+		<!-- 拍品信息 -->
+
+	</div>
+	<script>
+	$(function() {
+		var _type = getParamValue("type");
+		var actionName='';
+		if(_type==1){
+			actionName='getAuctionWarehouseById';
+		}else if(_type==-1){
+			actionName='getAuctionSaveWarehouse';
+		}
+		$("#warehouseBody").load("warehouseTemp.html",function(){
+			$("#vehicleBody").load("../auction/auctionTemp.html",function(){
+				var id = getParamValue("id");
+				$.post("../../warehouse/"+actionName,{
+					auctionId : id,
+				},function(res) {
+					var auction=res.entity.auction;
+					var warehouse=res.entity.warehouse;
+					loadAuctionDetail("#vehicleInfo","#carPhotoUrl",auction);
+					initWarehouseData("#addWarehouse",auction,warehouse);
+				});
+			});
+		});
+	});
+	</script>
+</body>
+</html>

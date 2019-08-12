@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.AuctionMapper">
+	<resultMap id="auction" type="Auction">
+		<id 	column="id" 					property="id" />
+	    <result column="auction_type" 			property="auctionType" />
+	    <result column="auction_no" 			property="auctionNo" />
+	    <result column="full_name" 				property="fullName" />
+	    <result column="full_name_text" 		property="fullNameText" />
+	    <result column="vin" 					property="vin" />
+	    <result column="vehicle_brand" 			property="vehicleBrand" />
+	    <result column="vehicle_type" 			property="vehicleType" />
+	    <result column="vehicle_system" 		property="vehicleSystem" />
+	    <result column="license_number" 		property="licenseNumber" />
+	    <result column="lot_areas" 				property="lotAreas" />
+	    <result column="lot_areas_id" 			property="lotAreasId" />
+	    <result column="parts_count" 			property="partsCount" />
+	    <result column="parts_weight" 			property="partsWeight" />
+	    <result column="production_date" 		property="productionDate" />
+	    <result column="is_has_key" 			property="isHasKey" />
+	    <result column="description" 			property="description" />
+	    <result column="buy_requirement" 		property="buyRequirement" />
+	    <result column="look_contacts" 			property="lookContacts" />
+	    <result column="look_contact_number" 	property="lookContactNumber" />
+	    <result column="look_address" 			property="lookAddress" />
+	    <result column="look_coordinate" 		property="lookCoordinate" />
+	    <result column="bid_notice" 			property="bidNotice" />
+	    <result column="special_notice" 		property="specialNotice" />
+	    <result column="auction_state" 			property="auctionState" />
+	    <result column="audit_state" 			property="auditState" />
+	    <result column="set_state" 				property="setState" />
+	    <result column="auction_audit_state" 	property="auctionAuditState" />
+	    <result column="regist_state" 			property="registState" />
+	    <result column="procedure_state" 		property="procedureState" />
+	    <result column="stock_state" 			property="stockState" />
+	    <result column="aftersale_state" 		property="aftersaleState" />
+	    <result column="abortive_state" 		property="abortiveState" />
+	    <result column="is_delete" 				property="isDelete" />
+	    <result column="create_user" 			property="createUser" />
+	    <result column="create_time" 			property="createTime" />
+	    <result column="update_user" 			property="updateUser" />
+	    <result column="update_time" 			property="updateTime" />
+		<collection property="auctionFileList" ofType="AuctionFileDto" column="auctionId=id"
+			select="mapper.standard.AuctionFileMapper.getFileListByAuctionId">
+		</collection>
+		<collection property="autopartsList" ofType="CarScrapOrderAutopartsDto" column="auctionId=id"
+			select="mapper.standard.CarScrapOrderMapper.getCarScrapOrderAutopartsListByAuctionId">
+		</collection>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, auction_type, auction_no, full_name, vin, 
+		vehicle_brand, vehicle_type, vehicle_system,
+		license_number, lot_areas, lot_areas_id, parts_count, parts_weight,
+		production_date, is_has_key, description,
+		buy_requirement, look_contacts, look_contact_number, look_address, look_coordinate, 
+		bid_notice, special_notice,
+		auction_state, audit_state, set_state, auction_audit_state, regist_state,
+		procedure_state,
+		stock_state, aftersale_state, abortive_state, is_delete, create_user, create_time,
+		update_user, update_time
+	</sql>
+	<select id="getAuctionById" resultMap="auction">
+		SELECT
+			<include refid="Base_Column_List" />,
+			case auction_type when 0 then CONCAT('全车配件（',full_name,'）') 
+				when 1 then CONCAT('高价值配件（',full_name,'）') 
+				when 2 then CONCAT('大宗物资（',full_name,'）') end AS full_name_text
+		FROM 
+			car_pm_auction
+		WHERE 
+			id = #{id}
+	</select>
+
+	<insert id="insertAuction">
+		insert into car_pm_auction
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="auctionType != null">
+				auction_type,
+			</if>
+			<if test="auctionNo != null">
+				auction_no,
+			</if>
+			<if test="fullName != null">
+				full_name,
+			</if>
+			<if test="vin != null">
+				vin,
+			</if>
+			<if test="vehicleBrand != null">
+				vehicle_brand,
+			</if>
+			<if test="vehicleType != null">
+				vehicle_type,
+			</if>
+			<if test="vehicleSystem != null">
+				vehicle_system,
+			</if>
+			<if test="licenseNumber != null">
+				license_number,
+			</if>
+			<if test="lotAreas != null">
+				lot_areas,
+			</if>
+			<if test="lotAreasId != null">
+				lot_areas_id,
+			</if>
+			<if test="partsCount != null">
+				parts_count,
+			</if>
+			<if test="partsWeight != null">
+				parts_weight,
+			</if>
+			<if test="productionDate != null">
+				production_date,
+			</if>
+			<if test="isHasKey != null">
+				is_has_key,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="buyRequirement != null">
+				buy_requirement,
+			</if>
+			<if test="lookContacts != null">
+				look_contacts,
+			</if>
+			<if test="lookContactNumber != null">
+				look_contact_number,
+			</if>
+			<if test="lookAddress != null">
+				look_address,
+			</if>
+			<if test="lookCoordinate != null">
+				look_coordinate,
+			</if>
+			<if test="bidNotice != null">
+				bid_notice,
+			</if>
+			<if test="specialNotice != null">
+				special_notice,
+			</if>
+			<if test="auctionState != null">
+				auction_state,
+			</if>
+			<if test="registState != null">
+				regist_state,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			audit_state,set_state,auction_audit_state,
+			procedure_state,stock_state,aftersale_state,
+			abortive_state,is_delete,
+			create_time,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="auctionType != null">
+				#{auctionType},
+			</if>
+			<if test="auctionNo != null">
+				#{auctionNo},
+			</if>
+			<if test="fullName != null">
+				#{fullName},
+			</if>
+			<if test="vin != null">
+				#{vin},
+			</if>
+			<if test="vehicleBrand != null">
+				#{vehicleBrand},
+			</if>
+			<if test="vehicleType != null">
+				#{vehicleType},
+			</if>
+			<if test="vehicleSystem != null">
+				#{vehicleSystem},
+			</if>
+			<if test="licenseNumber != null">
+				#{licenseNumber},
+			</if>
+			<if test="lotAreas != null">
+				#{lotAreas},
+			</if>
+			<if test="lotAreasId != null">
+				#{lotAreasId},
+			</if>
+			<if test="partsCount != null">
+				#{partsCount},
+			</if>
+			<if test="partsWeight != null">
+				#{partsWeight},
+			</if>
+			<if test="productionDate != null">
+				#{productionDate},
+			</if>
+			<if test="isHasKey != null">
+				#{isHasKey},
+			</if>
+			<if test="description != null">
+				#{description},
+			</if>
+			<if test="buyRequirement != null">
+				#{buyRequirement},
+			</if>
+			<if test="lookContacts != null">
+				#{lookContacts},
+			</if>
+			<if test="lookContactNumber != null">
+				#{lookContactNumber},
+			</if>
+			<if test="lookAddress != null">
+				#{lookAddress},
+			</if>
+			<if test="lookCoordinate != null">
+				#{lookCoordinate},
+			</if>
+			<if test="bidNotice != null">
+				#{bidNotice},
+			</if>
+			<if test="specialNotice != null">
+				#{specialNotice},
+			</if>
+			<if test="auctionState != null">
+				#{auctionState},
+			</if>
+			<if test="registState != null">
+				#{registState},
+			</if>
+			<if test="createUser != null">
+				#{createUser},
+			</if>
+			0,0,0,0,0,0,0,0,now(),
+		</trim>
+	</insert>
+	<update id="updateAuctionSel">
+		update car_pm_auction
+		<set>
+			<if test="auctionType != null">
+				auction_type = #{auctionType},
+			</if>
+			<if test="auctionNo != null">
+				auction_no = #{auctionNo},
+			</if>
+			<if test="fullName != null">
+				full_name = #{fullName},
+			</if>
+			<if test="vin != null">
+				vin = #{vin},
+			</if>
+			<if test="vehicleBrand != null">
+				vehicle_brand = #{vehicleBrand},
+			</if>
+			<if test="vehicleType != null">
+				vehicle_type = #{vehicleType},
+			</if>
+			<if test="vehicleSystem != null">
+				vehicle_system = #{vehicleSystem},
+			</if>
+			<if test="licenseNumber != null">
+				license_number = #{licenseNumber},
+			</if>
+			<if test="lotAreas != null">
+				lot_areas = #{lotAreas},
+			</if>
+			<if test="lotAreasId != null">
+				lot_areas_id = #{lotAreasId},
+			</if>
+			<if test="partsCount != null">
+				parts_count = #{partsCount},
+			</if>
+			<if test="partsWeight != null">
+				parts_weight = #{partsWeight},
+			</if>
+			<if test="productionDate != null">
+				production_date = #{productionDate},
+			</if>
+			<if test="isHasKey != null">
+				is_has_key = #{isHasKey},
+			</if>
+			<if test="description != null">
+				description = #{description},
+			</if>
+			<if test="buyRequirement != null">
+				buy_requirement = #{buyRequirement},
+			</if>
+			<if test="lookContacts != null">
+				look_contacts = #{lookContacts},
+			</if>
+			<if test="lookContactNumber != null">
+				look_contact_number = #{lookContactNumber},
+			</if>
+			<if test="lookAddress != null">
+				look_address = #{lookAddress},
+			</if>
+			<if test="lookCoordinate != null">
+				look_coordinate = #{lookCoordinate},
+			</if>
+			<if test="bidNotice != null">
+				bid_notice = #{bidNotice},
+			</if>
+			<if test="specialNotice != null">
+				special_notice = #{specialNotice},
+			</if>
+			<if test="auctionState != null">
+				auction_state = #{auctionState},
+			</if>
+			<if test="registState != null">
+				regist_state = #{registState},
+			</if>
+			<if test="updateUser != null">
+				update_user = #{updateUser},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+			update_time = now(),
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateAuction">
+		update 
+			car_pm_auction
+		<set>
+			auction_type = #{auctionType},
+			auction_no = #{auctionNo},
+			full_name = #{fullName},
+			vin = #{vin},
+			vehicle_brand = #{vehicleBrand},
+			vehicle_type = #{vehicleType},
+			vehicle_system = #{vehicleSystem},
+			license_number = #{licenseNumber},
+			lot_areas = #{lotAreas},
+			lot_areas_id = #{lotAreasId},
+			parts_count = #{partsCount},
+			parts_weight = #{partsWeight},
+			production_date = #{productionDate},
+			is_has_key = #{isHasKey},
+			description = #{description},
+			buy_requirement = #{buyRequirement},
+			look_contacts = #{lookContacts},
+			look_contact_number = #{lookContactNumber},
+			look_address = #{lookAddress},
+			look_coordinate = #{lookCoordinate},
+			bid_notice = #{bidNotice},
+			special_notice = #{specialNotice},
+			update_user = #{updateUser},
+			update_time = now(),
+			<if test="auctionState != null">
+				auction_state = #{auctionState},
+			</if>
+			<if test="registState != null">
+				regist_state = #{registState},
+			</if>
+		</set>
+		where 
+			id = #{id}
+	</update>
+	<update id="updateAuctionState">
+		UPDATE car_pm_auction
+		<set>
+			<if test="setState != null">
+				set_state = #{setState},
+			</if>
+			<if test="auctionAuditState != null">
+				auction_audit_state = #{auctionAuditState},
+			</if>
+			<if test="auditState != null">
+				audit_state = #{auditState},
+			</if>
+			<if test="registState != null">
+				regist_state = #{registState},
+			</if>
+			<if test="auctionState != null">
+				auction_state = #{auctionState},
+			</if>
+			<if test="procedureState != null">
+				procedure_state = #{procedureState},
+			</if>
+			<if test="stockState != null">
+				stock_state = #{stockState},
+			</if>
+			<if test="aftersaleState != null">
+				aftersale_state = #{aftersaleState},
+			</if>
+			<if test="abortiveState != null">
+				abortive_state = #{abortiveState},
+			</if>
+			<if test="updateUser != null">
+				update_user = #{updateUser},
+			</if>
+			update_time = now(),
+		</set>
+		WHERE id = #{id}
+	</update>
+</mapper>

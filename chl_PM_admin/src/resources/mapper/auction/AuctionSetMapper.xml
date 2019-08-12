@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.AuctionSetMapper">
+	<resultMap id="BaseResultMap" type="AuctionSet">
+		<id 	column="id" 						property="id" />
+		<result column="order_no" 					property="orderNo" />
+		<result column="auction_id" 				property="auctionId" />
+		<result column="starting_price" 			property="startingPrice" />
+		<result column="reserve_price" 				property="reservePrice" />
+		<result column="auction_cash_deposit" 		property="auctionCashDeposit" />
+		<result column="commission" 				property="commission" />
+		<result column="other_price" 				property="otherPrice" />
+		<result column="remark" 					property="remark" />
+		<result column="pmh_id" 					property="pmhId" />
+	    <result column="pm_order" 					property="pmOrder" />
+		<result column="auction_start_time" 		property="auctionStartTime" />
+		<result column="auction_end_time" 			property="auctionEndTime" />
+		<result column="interval_time" 				property="intervalTime" />
+		<result column="single_time" 				property="singleTime" />
+		<result column="deal_time" 					property="dealTime" />
+		<result column="deal_type" 					property="dealType" />
+		<result column="deal_mid" 					property="dealMid" />
+		<result column="deal_member" 				property="dealMember" />
+		<result column="joint_price" 				property="jointPrice" />
+		<result column="highest_price" 				property="highestPrice" />
+		<result column="order_state" 				property="orderState" />
+		<result column="is_history" 				property="isHistory" />
+		<result column="is_delete" 					property="isDelete" />
+		<result column="create_user" 				property="createUser" />
+		<result column="create_time" 				property="createTime" />
+		<result column="update_user" 				property="updateUser" />
+		<result column="update_time" 				property="updateTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, order_no, auction_id, starting_price, reserve_price,
+		auction_cash_deposit, commission, other_price,
+		remark, pmh_id, pm_order, auction_start_time, auction_end_time,
+		interval_time, single_time, deal_time, 
+		deal_type, deal_mid, deal_member, 
+		joint_price, highest_price,
+		order_state, is_delete, is_history, create_user, create_time,
+		update_user, update_time
+	</sql>
+	<select id="getAuctionSetById" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_auction_set
+		WHERE 
+			id = #{id}
+	</select>
+	<select id="getToDealAuctionSet" resultMap="BaseResultMap">
+		SELECT
+			SIAS.id, SIAS.order_no, SIAS.auction_id, 
+			SIAS.starting_price, SIAS.reserve_price,
+			SIAS.auction_cash_deposit, SIAS.commission, SIAS.other_price,
+			SIAS.remark, SIAS.pmh_id, SIAS.pm_order, 
+			SIAS.auction_start_time, SIAS.auction_end_time,
+			SIAS.interval_time, SIAS.single_time, SIAS.deal_time, 
+			SIAS.deal_type, SIAS.deal_mid, SIAS.deal_member, 
+			SIAS.joint_price, SIAS.order_state, SIAS.is_delete, SIAS.is_history, 
+			SIAS.create_user, SIAS.create_time,
+			SIAS.update_user, SIAS.update_time, 
+			SPHB.MAXIMUM_PRICE highest_price
+		FROM 
+			car_pm_auction_set SIAS LEFT JOIN car_pm_highest_bid SPHB ON SPHB.ORDER_ID = SIAS.id
+		WHERE 
+			SIAS.id = #{id}
+	</select>
+	<select id="getAuctionSetByPmhId" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_auction_set
+		WHERE 
+			pmh_id = #{pmhId}
+		AND 
+			is_delete = 0
+		ORDER BY pm_order
+	</select>
+	<!-- 查询参拍设置通过auctionid -->
+	<select id="getAuctionSetByAuctionId" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_auction_set
+		WHERE 
+			auction_id = #{auctionId}
+		AND 
+			is_delete=0
+		AND 
+			is_history=0
+		ORDER BY 
+			create_time desc limit 1
+	</select>
+	<select id="getNextAuctionSet" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_auction_set
+		WHERE 
+			pmh_id = #{pmhId}
+		AND 
+			is_delete=0
+		AND 
+			is_history=0
+		AND 
+			order_state = '10'
+		ORDER BY pm_order LIMIT 1
+	</select>
+	<select id="getAuctioningSet" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_auction_set
+		WHERE 
+			pmh_id = #{pmhId}
+		AND 
+			is_delete=0
+		AND 
+			is_history=0
+		AND 
+			order_state in ('20','30')
+		ORDER BY pm_order LIMIT 1
+	</select>
+	
+	<select id="getPmOrderByPmhId" resultType="int">
+		SELECT
+			IFNULL(max(pm_order),0)+1
+		FROM 
+			car_pm_auction_set
+		WHERE 
+			pmh_id = #{pmhId}
+		AND 
+			is_delete=0
+		AND 
+			is_history=0
+		AND 
+			(order_state = '0' OR order_state = '10' OR order_state = '20')
+	</select>
+	<insert id="addAuctionSet">
+		insert into car_pm_auction_set
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="orderNo != null">
+				order_no,
+			</if>
+			<if test="auctionId != null">
+				auction_id,
+			</if>
+			<if test="startingPrice != null">
+				starting_price,
+			</if>
+			<if test="reservePrice != null">
+				reserve_price,
+			</if>
+			<if test="auctionCashDeposit != null">
+				auction_cash_deposit,
+			</if>
+			<if test="commission != null">
+				commission,
+			</if>
+			<if test="otherPrice != null">
+				other_price,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="pmhId != null">
+				pmh_id,
+			</if>
+			<if test="pmOrder != null">
+				pm_order,
+			</if>
+			<if test="auctionStartTime != null">
+				auction_start_time,
+			</if>
+			<if test="auctionEndTime != null">
+				auction_end_time,
+			</if>
+			<if test="intervalTime != null">
+				interval_time,
+			</if>
+			<if test="singleTime != null">
+				single_time,
+			</if>
+			<if test="dealTime != null">
+				deal_time,
+			</if>
+			<if test="dealType != null">
+				deal_type,
+			</if>
+			<if test="dealMid != null">
+				deal_mid,
+			</if>
+			<if test="dealMember != null">
+				deal_member,
+			</if>
+			<if test="jointPrice != null">
+				joint_price,
+			</if>
+			<if test="highestPrice != null">
+				highest_price,
+			</if>
+			<if test="orderState != null">
+				order_state,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			is_delete,is_history,create_time,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo},
+			</if>
+			<if test="auctionId != null">
+				#{auctionId},
+			</if>
+			<if test="startingPrice != null">
+				#{startingPrice},
+			</if>
+			<if test="reservePrice != null">
+				#{reservePrice},
+			</if>
+			<if test="auctionCashDeposit != null">
+				#{auctionCashDeposit},
+			</if>
+			<if test="commission != null">
+				#{commission},
+			</if>
+			<if test="otherPrice != null">
+				#{otherPrice},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="pmhId != null">
+				#{pmhId},
+			</if>
+			<if test="pmOrder != null">
+				#{pmOrder},
+			</if>
+			<if test="auctionStartTime != null">
+				#{auctionStartTime},
+			</if>
+			<if test="auctionEndTime != null">
+				#{auctionEndTime},
+			</if>
+			<if test="intervalTime != null">
+				#{intervalTime},
+			</if>
+			<if test="singleTime != null">
+				#{singleTime},
+			</if>
+			<if test="dealTime != null">
+				#{dealTime},
+			</if>
+			<if test="dealType != null">
+				#{dealType},
+			</if>
+			<if test="dealMid != null">
+				#{dealMid},
+			</if>
+			<if test="dealMember != null">
+				#{dealMember},
+			</if>
+			<if test="jointPrice != null">
+				#{jointPrice},
+			</if>
+			<if test="highestPrice != null">
+				#{highestPrice},
+			</if>
+			<if test="orderState != null">
+				#{orderState},
+			</if>
+			<if test="createUser != null">
+				#{createUser},
+			</if>
+			0,0,now(),
+		</trim>
+	</insert>
+	<update id="updateAuctionSetSelective">
+		update car_pm_auction_set
+		<set>
+			<if test="orderNo != null">
+				order_no = #{orderNo},
+			</if>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="startingPrice != null">
+				starting_price = #{startingPrice},
+			</if>
+			<if test="reservePrice != null">
+				reserve_price = #{reservePrice},
+			</if>
+			<if test="auctionCashDeposit != null">
+				auction_cash_deposit = #{auctionCashDeposit},
+			</if>
+			<if test="commission != null">
+				commission = #{commission},
+			</if>
+			<if test="otherPrice != null">
+				other_price = #{otherPrice},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="pmhId != null">
+				pmh_id = #{pmhId},
+			</if>
+			<if test="pmOrder != null">
+				pm_order = #{pmOrder},
+			</if>
+			<if test="auctionStartTime != null">
+				auction_start_time = #{auctionStartTime},
+			</if>
+			<if test="auctionEndTime != null">
+				auction_end_time = #{auctionEndTime},
+			</if>
+			<if test="intervalTime != null">
+				interval_time = #{intervalTime},
+			</if>
+			<if test="singleTime != null">
+				single_time = #{singleTime},
+			</if>
+			<if test="dealTime != null">
+				deal_time = #{dealTime},
+			</if>
+			<if test="dealType != null">
+				deal_type = #{dealType},
+			</if>
+			<if test="dealMid != null">
+				deal_mid = #{dealMid},
+			</if>
+			<if test="dealMember != null">
+				deal_member = #{dealMember},
+			</if>
+			<if test="jointPrice != null">
+				joint_price = #{jointPrice},
+			</if>
+			<if test="highestPrice != null">
+				highest_price = #{highestPrice},
+			</if>
+			<if test="orderState != null">
+				order_state = #{orderState},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+			<if test="isHistory != null">
+				is_history = #{isHistory},
+			</if>
+			<if test="updateUser != null">
+				update_user = #{updateUser},
+			</if>
+			update_time = now(),
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateAuctionSet">
+		update 
+			car_pm_auction_set
+		set 
+			order_no = #{orderNo},
+			auction_id = #{auctionId},
+			starting_price = #{startingPrice},
+			reserve_price = #{reservePrice},
+			auction_cash_deposit = #{auctionCashDeposit},
+			commission = #{commission},
+			other_price = #{otherPrice},
+			remark = #{remark},
+			pmh_id = #{pmhId},
+			pm_order = #{pmOrder},
+			auction_start_time = #{auctionStartTime},
+			auction_end_time = #{auctionEndTime},
+			interval_time = #{intervalTime},
+			single_time = #{singleTime},
+			deal_time = #{dealTime},
+			deal_type = #{dealType},
+			deal_mid = #{dealMid},
+			deal_member = #{dealMember},
+			joint_price = #{jointPrice},
+			highest_price = #{highestPrice},
+			order_state = #{orderState},
+			update_user = #{updateUser},
+			update_time = now()
+		where 
+			id = #{id}
+	</update>
+	<update id="updateAuctionSetPublish">
+		update car_pm_auction_set
+		<set>
+			auction_start_time = #{auctionStartTime},
+			auction_end_time = #{auctionEndTime},
+			interval_time = #{intervalTime},
+			single_time = #{singleTime},
+			order_state = #{orderState},
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateAuctionSetAdd">
+		update car_pm_auction_set
+		<set>
+			pmh_id = #{pmhId},
+			pm_order = #{pmOrder},
+			auction_start_time = #{auctionStartTime},
+			auction_end_time = #{auctionEndTime},
+			interval_time = #{intervalTime},
+			single_time = #{singleTime},
+			order_state = #{orderState},
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updatePmOrder">
+		update 
+			car_pm_auction_set
+		set 
+			pm_order = #{pmOrder}
+		where 
+			id = #{id}
+	</update>
+	<update id="clearAuctionSetPmh">
+		update 
+			car_pm_auction_set
+		set 
+			pmh_id = #{pmhId},
+			pm_order = #{pmOrder},
+			auction_start_time = #{auctionStartTime},
+			auction_end_time = #{auctionEndTime},
+			interval_time = #{intervalTime},
+			single_time = #{singleTime}
+		where id = #{id}
+	</update>
+	<update id="enterAuctionSet">
+		UPDATE 
+			car_pm_auction_set
+		SET
+			order_state = #{orderState},
+			joint_price = #{jointPrice},
+			deal_time = #{dealTime},
+			deal_mid = #{dealMid},
+			deal_member = #{dealMember},
+			highest_price = #{highestPrice}
+		where id = #{id}
+	</update>
+</mapper>

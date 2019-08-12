@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/aftersale/aftersaleTrace.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/lookpic/dist/zoomify.min.css" rel="stylesheet"/>
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../resources/lookpic/dist/zoomify.min.js"></script>
+<script type="text/javascript" src="../../js/controller/aftersale/aftersaleTrace.js"> </script>
+<title>售后跟踪</title>
+<style>
+.numberbox{
+  width:167px;height: 16px;
+}
+</style>
+</head>
+<body style="min-height: 2000px">
+	<div id="DIALOG"></div>
+	<div class="content">
+		<table class="table-body dealInfo-div">
+			<tr>
+				<td colspan="2" style="text-align: left;padding: 1.5em 0em;border: none;">
+					<p style="font-size: 18px; margin-left: 13px;">成交信息</p>
+				</td>
+				<td style="text-align: right;padding: 1.5em 0em;border: none;">
+					<button class="details-btn" onclick="getDetails()">查看车辆信息</button>
+				</td>
+			</tr>
+			<tr>
+				<td><label>拍品名称:</label><span col="fullName"></span></td>
+				<td><label>车架号(VIN码):</label><span col="vin"></span></td>
+				<td><label>车牌号:</label><span col="licenseNumber"></span></td>
+			</tr>
+			<tr>
+				<td><label>拍卖会名称:</label><span col="paimaiName"></span></td>
+				<td><label>买受人:</label><span col="dealMember"></span></td>
+				<td><label>买受人联系电话:</label><span col="dealPhone"></span></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<label>合手价:</label><span col="jointPrice"></span>
+					<label>(车款:<span col="highestPrice"></span>元   佣金:<span col="commission"></span>元   其他费用:<span col="otherPrice"></span>元  )</label>
+				</td>
+				<td><label>成交时间:</label><span col="dealTime"></span></td>
+			</tr>
+		</table>
+	</div>
+	<div class="content">
+		<div class="order_status">
+			<span class="s-step s-step0"> 
+				<b></b><p></p> 
+				<div class="s-tit">已成交</div>
+				<div class="text"></div>
+			</span> 
+			<span class="s-step s-step1"> 
+				<b></b><p></p> 
+				<div class="s-tit">待付款</div>
+				<div class="text"></div>
+			</span> 
+			<span class="s-step s-step2"> 
+				<b></b><p></p> 
+				<div class="s-tit">待提货</div>
+				<div class="text"></div>
+			</span> 
+			<span class="s-step s-step3"> 
+				<b></b><p style="width: 0px"></p> 
+				<div class="s-tit">完成</div>
+				<div class="text"></div>
+			</span> 
+		</div>
+	</div>
+	<div class="content" style="margin-top: 0px">
+		<p style="font-size: 14px;color: #323250;">进度说明:</p>
+		<span col="" style="font-size: 14px;color: #323250;">车辆已拍卖成交，请及时跟踪售后状态</span>
+	</div>
+	<div class="content payTrace" style="margin-top: 40px" hidden>
+		<button onclick="toPayTrace()" class="btn">付款跟踪</button>
+		<button onclick="applyPrice()" class="btn" style="margin-left: 10px;">申请调价</button>
+		<button onclick="applyBackCar()" class="btn" style="margin-left: 10px;">申请退货</button>
+		<button onclick="applyDefer()" class="btn" style="margin-left: 10px;">申请延期</button>
+	</div>
+	<div class="content takeCarTrace" style="margin-top: 40px" hidden>
+		<button onclick="toTakeCarTrace()" class="btn">提货跟踪</button>
+		<button onclick="applyDefer()" class="btn" style="margin-left: 10px;">申请延期</button>
+		<button onclick="applyBackCar()" class="btn" style="margin-left: 10px;">申请退货</button>
+		<button onclick="applyPrice()" class="btn" style="margin-left: 10px;">申请调价</button>
+	</div>
+	<div class="content" id="viewer">
+		<div class="text-body">
+			<div class="time-div">
+				<article></article>
+			</div>
+		</div>
+	</div>
+	<div id="takeCarDialog" class="easyui-dialog" title="提货跟踪" 
+		data-options="modal:true" closed="true"	
+		style="width:700px;height:auto;padding:10px">
+		<div style="margin: 40px 45px;">
+			<p style="text-align: left;font-size:14px;margin: 20px 0px;">上传图片：</p>
+			<div id="takeCar-div"></div>
+	        <p style="text-align: left;font-size:14px;margin: 20px 0px;">备注：</p>
+	        <textarea id="tc-remark" 
+	        	style="width: 100%;height:80px;font-size: 12px;resize:none;"
+	        	warp="virtual"
+	        	onKeyUp="checkWord(this,'tc-remark-check',200);" 
+				onMouseDown="checkWord(this,'tc-remark-check',200);"
+	        	></textarea>
+	        <p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="tc-remark-check">0</span>个字符 </p>
+		</div>
+		<div style="text-align: center;margin: 40px 45px;">
+			<button class="takeCarBtn-Save" onclick="addTakeCarTrack()">保存</button>
+			<button class="takeCarBtn-Cannel" onclick="closeTakeCarTraceBtn()">取消</button>
+		</div>
+	</div>
+</body>
+</html>

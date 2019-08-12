@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/procedure/procedureRecord.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/tcwErpDataGridView.js"></script>
+<script type="text/javascript" src="../../js/url.js"></script>
+<script type="text/javascript" src="../../js/dataFormat.js"></script>
+<script type="text/javascript" src="../../js/controller/procedure/procedureRecord.js"> </script>
+<title>完结归档</title>
+<style type="text/css">
+input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px white inset;}
+</style>
+</head>
+<body>
+	<div style="display: inline-block; font-size: 12px;">
+		<form id="procedureRecord">
+			<input id="id" name="id" class="easyui-textbox" hidden/> 
+			<div class="record-main">
+				<label>
+					<span style="color: red;">*</span>收取手续:
+				</label><br> 
+			</div>
+			<div class="record-main">
+				<ul id="pic-upload-row">
+					<li class="pic-single" id="li-file-0">
+	                    <div class="input-pic-box pic-box addpic">
+	                        <img class="pic-img" src="../../resources/images/addimg-bg.png" 
+	                        	onclick="addFile(0)" />
+	                        <span class="delpic"></span>
+	                        <input type="hidden" class="hiddenpicid" value="" />
+	                        <input style="display: none;" type="file" 
+	                        	accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" 
+	                        	class="upload-file-0" onchange="doUpload(0)" />
+	                    </div>
+	                    <p class="text-center">过户发票</p>
+	                </li>
+	                <li class="pic-single" id="li-file-1">
+	                    <div class="input-pic-box pic-box addpic">
+	                        <img class="pic-img" src="../../resources/images/addimg-bg.png" 
+	                        	onclick="addFile(1)" />
+	                        <span class="delpic"></span>
+	                        <input type="hidden" class="hiddenpicid" value="" />
+	                        <input style="display: none;" type="file" 
+	                        	accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" 
+	                        	class="upload-file-1" onchange="doUpload(1)" />
+	                    </div>
+	                    <p class="text-center">登记证复印件</p>
+	                </li>
+				</ul>
+			</div>
+			<div class="record-main">
+				<label>存档位置：</label> 
+				<input id="province" name="provinceId" class="easyui-combobox"/> 
+				<input id="city" name="cityId" class="easyui-combobox"/> 
+				<input id="area" name="areaId" class="easyui-combobox"/> 
+				<input id="recordAddress" class="easyui-validatebox addr" 
+					name="recordAddress" required="true"/>
+			</div>
+			<br>
+			<div class="record-main">
+				<p>备注:</p>
+				<textarea warp="virtual" id="remark"
+					name="remark" class="beizhu"
+					data-options="multiline:true"
+					onKeyUp="checkWord(this,'remark-check',200);" 
+					onMouseDown="checkWord(this,'remark-check',200);"
+					></textarea>
+				<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="remark-check">0</span>个字符 </p>
+			</div>
+		</form>
+		<div class="record-footer">
+			<button class="submitButton" onclick="addProcedureRecord()">提交</button>
+		</div>
+	</div>
+</body>
+</html>

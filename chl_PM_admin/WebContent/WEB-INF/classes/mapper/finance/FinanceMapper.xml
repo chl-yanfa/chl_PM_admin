@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.FinanceMapper">
+	<resultMap id="financeEntity" type="FinanceEntity">
+		<id 	column="id" 					property="id" />
+		<result column="auction_no" 			property="auctionNo" />
+		<result column="full_name" 				property="fullName" />
+		<result column="lot_areas" 				property="lotAreas" />
+		<result column="vehicle_brand" 			property="vehicleBrand" />
+	    <result column="vehicle_type" 			property="vehicleType" />
+	    <result column="vehicle_system" 		property="vehicleSystem" />
+	    <result column="license_number" 		property="licenseNumber" />
+		<result column="vehicle_state" 			property="vehicleState" />
+		<result column="deal_handler" 			property="dealHandler" />
+		<result column="deal_time" 				property="dealTime" />
+		<result column="pay_state" 				property="payState" />
+		<result column="pay_time" 				property="payTime" />
+		<result column="auction_type_flag" 		property="auctionTypeFlag" />
+		<association property="imgPath" column="auctionId=id" javaType="String" 
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+	</resultMap>
+	<sql id="ListIf">
+		<if test="auctionType != null">
+			AND SIA.auction_type = #{auctionType}
+		</if>
+		<if test="keywords != null and keywords != ''">
+			AND (SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%') 
+			OR SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%'))
+        </if>
+	</sql>
+	<!-- 获取列表 -->
+	<select id="getFinanceListByPage" resultMap="financeEntity">
+		SELECT
+			SIA.id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system,  
+		    SIA.license_number, 
+		    case SIA.auction_state when 5 then '已成交' end
+		    AS vehicle_state,		<!-- 拍品状态 -->
+		    SIAS.deal_time AS deal_time,
+		    SIAS.deal_handler AS deal_handler,
+		    case SIAS.pay_state when 0 then '未付款' when 1 then '已付款' when 2 then '延期付款' end
+		    AS pay_state,
+			SIAS.pay_time AS pay_time,
+		    SIA.auction_type auction_type_flag
+		FROM 
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0
+		AND 
+			SIA.auction_state = 5
+		AND
+			SIAS.is_history = 0
+		AND
+			SIAS.is_delete = 0
+		<include refid="ListIf" />
+		<if test="aftersaleState != null">
+			AND SIAS.pay_state = #{aftersaleState}
+		</if>
+		<!-- <if test="aftersaleState == null">
+			AND SIA.aftersale_state in (0,1,-1)
+		</if> -->
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- 获取列表总条数 -->
+	<select id="getFinanceListTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0
+		AND 
+			SIA.auction_state = 5
+		AND
+			SIAS.is_history = 0
+		AND
+			SIAS.is_delete = 0
+		<include refid="ListIf" />
+		<if test="aftersaleState != null">
+			AND SIAS.pay_state = #{aftersaleState}
+		</if>
+		<!-- <if test="aftersaleState == null">
+			AND SIA.aftersale_state in (0,1,-1)
+		</if> -->
+	</select>
+	<!-- getFinanceTab 列表TAB -->
+	<select id="getFinanceTab" parameterType="map" resultType="map">
+		SELECT 
+			'0' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE 
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+			AND SIAS.is_history = 0 AND SIAS.is_delete = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'1' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE 
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND 
+			SIAS.pay_state =0 AND SIAS.is_history = 0 AND SIAS.is_delete = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'2' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE 
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND 
+			SIAS.pay_state =1 AND SIAS.is_history = 0 AND SIAS.is_delete = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'3' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE 
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND 
+			SIAS.pay_state =2 AND SIAS.is_history = 0 AND SIAS.is_delete = 0
+		<include refid="ListIf" />
+	</select>
+</mapper>

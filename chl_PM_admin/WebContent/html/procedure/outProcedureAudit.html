@@ -1,0 +1,76 @@
+<!-- 手续出库申请审核 -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/procedure/outProcedureAudit.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/tcwErpDataGridView.js"></script>
+<script type="text/javascript" src="../../js/url.js"></script>
+<script type="text/javascript" src="../../js/dataFormat.js"></script>
+<script type="text/javascript" src="../../js/controller/procedure/outProcedureAudit.js"></script>
+<title>手续出库申请审核</title>
+</head>
+<body>
+	<div id="AUDIT_DIALOG"></div>
+	<div class="ee">
+		<form id="outProcedureAudit">
+			<input id="id" name="id" class="easyui-textbox" hidden />
+			<div class="all">手续出库申请</div>
+			<div class="shouxu">
+				<label class="hj">申请出库手续：</label> 
+				<input class="aa" id="fileNames" name="fileNames">
+			</div>
+			<br>
+			<div class="splid">
+				<div class="ee">
+					<label class="hj">申请人：</label>
+					<input id="proposer" name="proposer">
+				</div>
+				<div class="ee">
+					<label class="hj">申请时间：</label>
+					<input id="createTime" name="createTime">
+				</div>
+				<br>
+				<div class="ef">
+					<label class="hj">申请事由：</label><br>
+					<textarea style="border: none" clos=",50" rows="" warp="virtual" id="reason"
+						name="reason" class="easyui-textbox cc"
+						data-options="multiline:true"></textarea>
+				</div>
+			</div>
+			<br>
+			<div class="jj">
+				<label style="font-size: 12px;">备注：</label> <br>
+				<textarea style="border: none" clos=",50" rows="" warp="virtual"
+					id="remark" name="remark" class="easyui-textbox cc"
+					data-options="multiline:true"></textarea>
+			</div>
+			<input type="button" class="agreeBtn"  value="同意" onclick="auditAgree(0,'')">
+	    	<input type="button" class="rejectBtn" value="拒绝" onclick="openAuditReject()">
+		</form>
+	</div>
+	<div class="easyui-tabs">
+		<!-- 手续入库登记 -->
+		<div title="手续入库登记" style="padding: 10px">
+			<div id="procedureBody"></div>
+		</div>
+		<!-- 手续入库登记 -->
+		<!-- 拍品信息  -->
+		<div title="拍品信息" style="padding: 10px">
+			<div id="vehicleBody"></div>
+		</div>
+		<!-- 拍品信息 -->
+	</div>
+</body>
+</html>

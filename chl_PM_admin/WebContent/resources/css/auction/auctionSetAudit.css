@@ -1,0 +1,77 @@
+/* 参拍设置 */
+.title{
+	width:200px;
+	line-height:40px;
+	border:1px solid red;
+	color:red;
+	font-size:18px;
+	margin-left: 20px;
+}
+.setInfoTop{
+	margin: 20px 20px;
+	font-size: 16px;
+}
+.setInfoTop input{
+	text-align: center;
+	border:none;
+}
+.table-body{
+	border-collapse: collapse; 
+	text-align: center; 
+	width: 100%;
+	border: none;
+}
+.table-body td{
+	padding: 1em;
+}
+.set-main{
+	margin-top:20px;
+	width: 80%;
+}
+.set-footer{
+	margin-top:20px;
+	text-align: center;
+	width: 80%;
+}
+.e-text{
+	width: 146px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #dbdbdb;
+}
+.combo-text{
+	width: 100px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #dbdbdb;
+}
+.agreeBtn{
+    width: 89px;
+    line-height: 32px;
+    color: #FFFFFF;
+    background-color: #00A2D4;
+    border-radius: 4px;
+    font-size:16px;
+    height: 35px;
+    border: none;
+}
+.rejectBtn{
+	margin-left: 40px;
+    width: 89px;
+    line-height: 32px;
+    color: #FFFFFF;
+    background-color: #00A2D4;
+    border-radius: 4px;
+    font-size:16px;
+    height: 35px;
+    border: none;
+}
+.s-line{
+	background: #E9E9E9;
+    height: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.suf-money{
+	margin-left: 10px;
+}

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.PaimaiWholeMapper">
+	<resultMap id="pmAuction" type="PmAuction">
+		<id 	column="auction_id" 			property="auctionId" />
+		<result column="auction_set_id" 		property="auctionSetId" />
+		<result column="auction_no" 			property="auctionNo" />
+		<result column="full_name" 				property="fullName" />
+		<result column="lot_areas" 				property="lotAreas" />
+		<result column="vehicle_brand" 			property="vehicleBrand" />
+	    <result column="vehicle_type" 			property="vehicleType" />
+	    <result column="vehicle_system" 		property="vehicleSystem" />
+	    <result column="license_number"			property="licenseNumber" />
+		<result column="procedure_state" 		property="procedureState" />
+		<result column="stock_state" 			property="stockState" />
+		<result column="vehicle_state" 			property="vehicleState" />
+		<result column="starting_price" 		property="startingPrice" />
+		<result column="auction_type_flag" 		property="auctionTypeFlag" />
+		<association property="imgPath" column="auctionId=auction_id" javaType="String" 
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+	</resultMap>
+	<!-- 拍卖会中的参拍车辆 -->
+	<resultMap id="auctionCar" type="AuctionCar">
+		<id 	column="auction_id" 			property="auctionId" />
+		<result column="auction_set_id" 		property="auctionSetId" />
+		<result column="auction_no" 			property="auctionNo" />
+		<result column="full_name" 				property="fullName" />
+		<result column="lot_areas" 				property="lotAreas" />
+		<result column="vehicle_brand" 			property="vehicleBrand" />
+	    <result column="vehicle_type" 			property="vehicleType" />
+	    <result column="vehicle_system" 		property="vehicleSystem" />
+	    <result column="license_number" 		property="licenseNumber" />
+		<result column="pmh_id" 				property="pmhId" />
+		<result column="pm_order" 				property="pmOrder" />
+		<result column="order_state_s" 			property="orderStateS" />
+		<result column="order_state" 			property="orderState" />
+		<result column="deal_mid" 				property="dealMid" />
+		<result column="deal_member" 			property="dealMember" />
+		<result column="starting_price" 		property="startingPrice" />
+		<result column="cur_price" 				property="curPrice" />
+		<result column="reserve_price" 			property="reservePrice" />
+		<result column="auction_cash_deposit" 	property="auctionCashDeposit" />
+		<result column="auction_type_flag" 		property="auctionTypeFlag" />
+		<result column="vin" 					property="vin" />
+	    <result column="park_address" 			property="parkAddress" />
+	    <result column="phone" 					property="phone" />
+	    <result column="id_card" 				property="idCard" />
+		<result column="joint_price" 			property="jointPrice" />
+		<result column="highest_price" 			property="highestPrice" />
+		<result column="other_price" 			property="otherPrice" />
+	    <result column="commission" 			property="commission" />
+	    <result column="total_price" 			property="totalPrice" />
+		<association property="imgPath" column="auctionId=auction_id" javaType="String" 
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+	</resultMap>
+	<sql id="ListIf">
+		<if test="auctionType != null">
+			AND SIA.auction_type = #{auctionType}
+		</if>
+		<if test="keywords != null and keywords != ''">
+			AND (SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%') 
+			OR SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%'))
+        </if>
+	</sql>
+	<!-- 获取拍品管理列表 -->
+	<select id="getPmAuctionListByPage" resultMap="pmAuction">
+		SELECT
+			SIA.id AS auction_id,
+			SIAS.id AS auction_set_id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system,  
+		    SIA.license_number, 
+		    case SIA.procedure_state when 0 then '待提交' when 1 then '已提交' when 2 then '已出库' when 3 then '已驳回' end
+		    AS procedure_state,		<!-- 手续状态 -->
+		    case SIA.stock_state when 0 then '待入库' when 1 then '已入库' when 2 then '已出库' when 3 then '已驳回' end
+		    AS stock_state,			<!-- 库存状态 -->
+		    case SIA.auction_state when 1 then '未上拍' when 10 then '未上拍' when 2 then '进入拍卖会' when 3 then '待发布' when 4 then '拍卖中' when 5 then '成交' when 8 then '流拍' end
+		    AS vehicle_state,		<!-- 拍品状态 -->
+		    SIAS.starting_price AS starting_price,
+		    SIA.auction_type auction_type_flag
+		FROM 
+			car_pm_auction_set SIAS left join car_pm_auction SIA ON SIA.id=SIAS.auction_id
+		WHERE
+			SIAS.order_state = '0'
+		AND 
+			SIAS.is_delete = 0
+		AND 
+			SIAS.is_history = 0
+		AND 
+			SIA.is_delete = 0
+		AND 
+			SIA.auction_state = 10
+		<include refid="ListIf" />
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- 获取拍品管理列表总条数 -->
+	<select id="getPmAuctionListTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM 
+			car_pm_auction_set SIAS left join car_pm_auction SIA ON SIA.id=SIAS.auction_id
+		WHERE
+			SIAS.order_state = '0'
+		AND 
+			SIAS.is_delete = 0
+		AND 
+			SIAS.is_history = 0
+		AND 
+			SIA.is_delete = 0
+		AND 
+			SIA.auction_state = 10
+		<include refid="ListIf" />
+	</select>
+	<!-- 获取拍卖会中参拍车辆 -->
+	<select id="getAuctionCarList" resultMap="auctionCar">
+		(SELECT * FROM 
+			(SELECT
+				<include refid="getAuctionCarListSQL" />,
+				SPHB.MAXIMUM_PRICE highest_price,
+				(SPHB.MAXIMUM_PRICE+SIAS.commission+SIAS.other_price) total_price
+			FROM 
+				car_pm_auction_set SIAS LEFT JOIN car_pm_auction SIA  ON SIAS.auction_id = SIA.id AND SIA.is_delete = 0
+				LEFT JOIN car_pm_highest_bid SPHB ON SPHB.ORDER_ID = SIAS.id
+				LEFT JOIN sys_client SPCI ON SPCI.id = SIAS.deal_mid
+			WHERE
+				SIAS.is_delete = 0
+			AND 
+				SIAS.is_history = 0
+			AND 
+				SIAS.pmh_id = #{pmhId}
+			AND 
+				SIAS.order_state = '30'
+			ORDER BY SIAS.update_time DESC) AS list1)
+		UNION
+		(SELECT * FROM 
+			(SELECT
+				<include refid="getAuctionCarListSQL" />,
+				SPHB.MAXIMUM_PRICE highest_price,
+				(SPHB.MAXIMUM_PRICE+SIAS.commission+SIAS.other_price) total_price
+			FROM 
+				car_pm_auction_set SIAS LEFT JOIN car_pm_auction SIA  ON SIAS.auction_id = SIA.id AND SIA.is_delete = 0
+				LEFT JOIN car_pm_highest_bid SPHB ON SPHB.ORDER_ID = SIAS.id
+				LEFT JOIN sys_client SPCI ON SPCI.id = SIAS.deal_mid
+			WHERE
+				SIAS.is_delete = 0
+			AND 
+				SIAS.is_history = 0
+			AND 
+				SIAS.pmh_id = #{pmhId}
+			AND 
+				SIAS.order_state = '20'
+			ORDER BY SIAS.pm_order) AS list2)
+		UNION
+		(SELECT * FROM 
+			(SELECT
+				<include refid="getAuctionCarListSQL" />,
+				0 highest_price,
+				(0+SIAS.commission+SIAS.other_price) total_price
+			FROM 
+				car_pm_auction_set SIAS LEFT JOIN car_pm_auction SIA  ON SIAS.auction_id = SIA.id AND SIA.is_delete = 0
+				LEFT JOIN sys_client SPCI ON SPCI.id = SIAS.deal_mid
+			WHERE
+				SIAS.is_delete = 0
+			AND 
+				SIAS.is_history = 0
+			AND 
+				SIAS.pmh_id = #{pmhId}
+			AND 
+				SIAS.order_state in ('0','10')
+			ORDER BY SIAS.pm_order) AS list3)
+		UNION
+		(SELECT * FROM 
+			(SELECT
+				<include refid="getAuctionCarListSQL" />,
+				SIAS.highest_price,
+				(SIAS.highest_price+SIAS.commission+SIAS.other_price) total_price
+			FROM 
+				car_pm_auction_set SIAS LEFT JOIN car_pm_auction SIA  ON SIAS.auction_id = SIA.id AND SIA.is_delete = 0
+				LEFT JOIN car_pm_highest_bid SPHB ON SPHB.ORDER_ID = SIAS.id
+				LEFT JOIN sys_client SPCI ON SPCI.id = SIAS.deal_mid
+			WHERE
+				SIAS.is_delete = 0
+			AND 
+				SIAS.pmh_id = #{pmhId}
+			AND 
+				SIAS.order_state in ('40','50','60','80','-8','-9','-10')
+			ORDER BY SIAS.update_time DESC) AS list4)
+	</select>
+	<sql id="getAuctionCarListSQL">
+		SIA.id AS auction_id,
+	    SIAS.id auction_set_id,
+		SIA.auction_no,
+		case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+			when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+			when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+		SIA.lot_areas,
+		SIA.vehicle_brand, 
+	    SIA.vehicle_type,
+	    SIA.vehicle_system,  
+	    SIA.license_number, 
+	    SIAS.pmh_id,
+	    SIAS.pm_order,
+	    case SIAS.order_state when '0' then '待发布' when '10' then '待竞拍' when '20' then '竞拍中' when '30' then '待处理' when '40' then '流拍' when '-8' then '已复拍' when '-9' then '撤拍' when '-10' then '已退货' else '已成交' end
+	    AS order_state_s,
+	    SIAS.order_state,
+	    SIAS.starting_price,
+	    SIAS.reserve_price,
+	    SIAS.auction_cash_deposit,
+	    SIAS.deal_mid,
+	    SIAS.deal_member,
+	    SIA.vin,
+	    SIA.auction_type auction_type_flag,
+	    SPCI.phone,
+	    SPCI.id_card,
+	    SIAS.joint_price,
+	    SIAS.commission,
+	    SIAS.other_price,
+	    SIA.look_address park_address
+	</sql>
+</mapper>

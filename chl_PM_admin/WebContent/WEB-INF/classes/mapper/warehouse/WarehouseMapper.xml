@@ -1,0 +1,1352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.WarehouseMapper">
+	<resultMap id="BaseResultMap" type="Warehouse">
+		<id 	column="id" 				property="id" />
+		<result column="auction_id" 		property="auctionId" />
+		<result column="car_card" 			property="carCard" />
+		<result column="cc_province" 		property="ccProvince" />
+	    <result column="cc_province_id" 	property="ccProvinceId" />
+	    <result column="cc_city" 			property="ccCity" />
+	    <result column="cc_city_id" 		property="ccCityId" />
+	    <result column="cc_area" 			property="ccArea" />
+	    <result column="cc_area_id" 		property="ccAreaId" />
+		<result column="car_card_address" 	property="carCardAddress" />
+		<result column="key" 				property="key" />
+		<result column="spare_key" 			property="spareKey" />
+		<result column="k_province" 		property="kProvince" />
+	    <result column="k_province_id" 		property="kProvinceId" />
+	    <result column="k_city" 			property="kCity" />
+	    <result column="k_city_id" 			property="kCityId" />
+	    <result column="k_area" 			property="kArea" />
+	    <result column="k_area_id" 			property="kAreaId" />
+		<result column="key_address" 		property="keyAddress" />
+		<result column="key_remark" 		property="keyRemark" />
+		<result column="s_province" 		property="sProvince" />
+	    <result column="s_province_id" 		property="sProvinceId" />
+	    <result column="s_city" 			property="sCity" />
+	    <result column="s_city_id" 			property="sCityId" />
+	    <result column="s_area" 			property="sArea" />
+	    <result column="s_area_id" 			property="sAreaId" />
+		<result column="store_address" 		property="storeAddress" />
+		<result column="store_space" 		property="storeSpace" />
+		<result column="store_time" 		property="storeTime" />
+		<result column="trailer_cost" 		property="trailerCost" />
+		<result column="trailer_cost_pay" 	property="trailerCostPay" />
+		<result column="voucher_id" 		property="voucherId" />
+		<result column="voucher_path" 		property="voucherPath" />
+		<result column="voucher_name" 		property="voucherName" />
+		<result column="trailer_phone" 		property="trailerPhone" />
+		<result column="origin_province" 	property="originProvince" />
+		<result column="origin_province_id" property="originProvinceId" />
+		<result column="origin_city" 		property="originCity" />
+		<result column="origin_city_id" 	property="originCityId" />
+		<result column="origin_address" 	property="originAddress" />
+		<result column="distance" 			property="distance" />
+		<result column="destination_province" 		property="destinationProvince" />
+		<result column="destination_province_id" 	property="destinationProvinceId" />
+		<result column="destination_city" 			property="destinationCity" />
+		<result column="destination_city_id" 		property="destinationCityId" />
+		<result column="destination_address" 		property="destinationAddress" />
+		<result column="car_status" 				property="carStatus" />
+		<result column="gearbox_type" 				property="gearboxType" />
+		<result column="car_mileage" 				property="carMileage" />
+		<result column="vin_is_damage" 				property="vinIsDamage" />
+		<result column="engine" 					property="engine" />
+		<result column="gearbox" 					property="gearbox" />
+		<result column="waterbox" 					property="waterbox" />
+		<result column="condenser" 					property="condenser" />
+		<result column="battery" 					property="battery" />
+		<result column="aircondition_pump" 			property="airconditionPump" />
+		<result column="motor" 						property="motor" />
+		<result column="power_steering_pump" 		property="powerSteeringPump" />
+		<result column="dynamo" 					property="dynamo" />
+		<result column="ABS_pump" 					property="absPump" />
+		<result column="three_way_catalytic_converter" 	property="threeWayCatalyticConverter" />
+		<result column="exhaust_pipe" 					property="exhaustPipe" />
+		<result column="compressor" 					property="compressor" />
+		<result column="right_front_headlight" 			property="rightFrontHeadlight" />
+		<result column="right_mirror" 					property="rightMirror" />
+		<result column="right_front_door" 				property="rightFrontDoor" />
+		<result column="right_rear_door" 				property="rightRearDoor" />
+		<result column="right_rear_tail_light" 			property="rightRearTailLight" />
+		<result column="left_front_headlight" 			property="leftFrontHeadlight" />
+		<result column="left_mirror" 					property="leftMirror" />
+		<result column="left_front_door" 				property="leftFrontDoor" />
+		<result column="left_rear_door" 				property="leftRearDoor" />
+		<result column="left_rear_tail_light" 			property="leftRearTailLight" />
+		<result column="trunk" 							property="trunk" />
+		<result column="spare_tire" 					property="spareTire" />
+		<result column="vehicle_tools" 					property="vehicleTools" />
+		<result column="triangle_indicator" 			property="triangleIndicator" />
+		<result column="trim" 							property="trim" />
+		<result column="dashboard" 						property="dashboard" />
+		<result column="seat" 							property="seat" />
+		<result column="DVD_CD" 						property="DVDCD" />
+		<result column="voicebox" 						property="voicebox" />
+		<result column="engine_computer" 				property="engineComputer" />
+		<result column="gearbox_computer" 				property="gearboxComputer" />
+		<result column="driving_computer" 				property="drivingComputer" />
+		<result column="burglar_computer" 				property="burglarComputer" />
+		<result column="gasbag_computer" 				property="gasbagComputer" />
+		<result column="entertainment_computer" 		property="entertainmentComputer" />
+		<result column="trouble_description" 			property="troubleDescription" />
+		<result column="maintenance_manual" 			property="maintenanceManual" />
+		<result column="operating_manual" 				property="operatingManual" />
+		<result column="tyre_num" 						property="tyreNum" />
+		<result column="dismantling" 					property="dismantling" />
+		<result column="dismantling_part" 				property="dismantlingPart" />
+		<result column="two_accidents" 					property="twoAccidents" />
+		<result column="two_accidents_remark" 			property="twoAccidentsRemark" />
+		<result column="refit" 							property="refit" />
+		<result column="refit_part" 					property="refitPart" />
+		<result column="check_part" 					property="checkPart" />
+		<result column="no_check_park" 					property="noCheckPark" />
+		<result column="receiving_part" 				property="receivingPart" />
+		<result column="remark" 						property="remark" />
+		<result column="salesman" 						property="salesman" />
+		<result column="audit_state" 					property="auditState" />
+		<result column="is_warehouse" 					property="isWarehouse" />
+		<result column="is_print" 						property="isPrint" />
+		<result column="out_stock_time" 				property="outStockTime" />
+		<result column="is_delete" 						property="isDelete" />
+		<result column="create_time" 					property="createTime" />
+		<result column="update_time" 					property="updateTime" />
+		<collection property="warehouseFileList" ofType="WarehousePhotoDto" column="stockId=id"
+			select="mapper.standard.WarehouseFileMapper.getCollectionByStockId">
+		</collection>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, auction_id,car_card,cc_province, cc_province_id, 
+		cc_city, cc_city_id, cc_area, cc_area_id, car_card_address,
+		`key`, spare_key,k_province, k_province_id, k_city, 
+    	k_city_id, k_area, k_area_id, key_address, key_remark,
+    	s_province, s_province_id, s_city, 
+    	s_city_id, s_area, s_area_id,store_address,
+		store_space, store_time, trailer_cost, trailer_cost_pay, 
+		voucher_id,trailer_phone,
+		origin_province, origin_province_id, origin_city, origin_city_id,
+		origin_address,
+		distance, destination_province, destination_province_id, destination_city,
+		destination_city_id,
+		destination_address, car_status, gearbox_type, car_mileage, vin_is_damage,
+		engine, gearbox, waterbox, condenser, battery, aircondition_pump,
+		motor, power_steering_pump,
+		dynamo, ABS_pump, three_way_catalytic_converter, exhaust_pipe, compressor,
+		right_front_headlight,
+		right_mirror, right_front_door, right_rear_door, right_rear_tail_light,
+		left_front_headlight,
+		left_mirror, left_front_door, left_rear_door, left_rear_tail_light, trunk,
+		spare_tire,
+		vehicle_tools, triangle_indicator, trim, dashboard, seat, DVD_CD, voicebox,
+		engine_computer,
+		gearbox_computer, driving_computer, burglar_computer, gasbag_computer,
+		entertainment_computer,
+		trouble_description, maintenance_manual, operating_manual, tyre_num, dismantling,
+		dismantling_part, two_accidents, two_accidents_remark, refit,
+		refit_part, check_part,
+		no_check_park, receiving_part, remark, salesman,
+		audit_state,is_warehouse,is_print,out_stock_time, is_delete, create_time,update_time
+	</sql>
+	<select id="getWarehouseById" resultMap="BaseResultMap">
+		select
+			cpw.*,ta.storage_path voucher_path,ta.original_name voucher_name
+		from 
+			car_pm_warehouse cpw left join tb_attachment ta on cpw.voucher_id = ta.id
+		where 
+			cpw.id = #{id}
+	</select>
+	<select id="getWarehouseByAuctionId" resultMap="BaseResultMap">
+		select
+			cpw.*,ta.storage_path voucher_path,ta.original_name voucher_name
+		from 
+			car_pm_warehouse cpw left join tb_attachment ta on cpw.voucher_id = ta.id
+		where 
+			cpw.auction_id = #{auctionId}
+		AND 
+			cpw.is_warehouse=1
+		and 
+			cpw.is_delete = 0
+	</select>
+	<select id="getSaveWarehouseByAuctionId" resultMap="BaseResultMap">
+		select
+			cpw.*,ta.storage_path voucher_path,ta.original_name voucher_name
+		from 
+			car_pm_warehouse cpw left join tb_attachment ta on cpw.voucher_id = ta.id
+		where 
+			cpw.auction_id = #{auctionId}
+		AND 
+			cpw.is_warehouse=-1
+		and 
+			cpw.is_delete = 0
+	</select>
+	<insert id="addWarehouse">
+		insert into car_pm_warehouse 
+		(
+			id,auction_id, car_card,cc_province, cc_province_id,
+			cc_city, cc_city_id, cc_area, cc_area_id, car_card_address,
+			`key`, spare_key,k_province, k_province_id, k_city, k_city_id, 
+			k_area, k_area_id, key_address,
+			key_remark,s_province, s_province_id, s_city, s_city_id, 
+			s_area, s_area_id, store_address, store_space,
+			store_time, trailer_cost, trailer_cost_pay,
+			voucher_id, trailer_phone, origin_province,
+			origin_province_id, origin_city, origin_city_id,
+			origin_address, distance, destination_province,
+			destination_province_id, destination_city,
+			destination_city_id, destination_address,
+			car_status, gearbox_type,
+			car_mileage, vin_is_damage, engine,
+			gearbox, waterbox, condenser,
+			battery, aircondition_pump, motor,
+			power_steering_pump, dynamo, ABS_pump,
+			three_way_catalytic_converter, exhaust_pipe,
+			compressor, right_front_headlight, right_mirror,
+			right_front_door, right_rear_door, right_rear_tail_light,
+			left_front_headlight, left_mirror, left_front_door,
+			left_rear_door, left_rear_tail_light, trunk,
+			spare_tire, vehicle_tools, triangle_indicator,
+			trim, dashboard, seat,
+			DVD_CD, voicebox, engine_computer,
+			gearbox_computer, driving_computer, burglar_computer,
+			gasbag_computer, entertainment_computer,
+			trouble_description, maintenance_manual,
+			operating_manual, tyre_num, dismantling,
+			dismantling_part, two_accidents, two_accidents_remark,
+			refit, refit_part, check_part,
+			no_check_park, receiving_part, remark,salesman,
+			audit_state,is_warehouse,is_delete, create_time
+		)
+		values (
+			#{id},#{auctionId}, 
+			#{carCard},#{ccProvince}, 
+			#{ccProvinceId}, #{ccCity}, 
+      		#{ccCityId}, #{ccArea}, 
+      		#{ccAreaId},
+			#{carCardAddress},
+			#{key}, #{spareKey},
+			#{kProvince}, #{kProvinceId}, 
+			#{kCity}, #{kCityId}, 
+			#{kArea}, #{kAreaId},  
+			#{keyAddress},
+			#{keyRemark},
+			#{sProvince}, #{sProvinceId}, 
+			#{sCity}, #{sCityId}, 
+			#{sArea}, #{sAreaId},
+			#{storeAddress},
+			#{storeSpace},
+			#{storeTime}, #{trailerCost}, #{trailerCostPay},
+			#{voucherId}, #{trailerPhone},
+			#{originProvince},
+			#{originProvinceId}, #{originCity},
+			#{originCityId},
+			#{originAddress}, #{distance},
+			#{destinationProvince},
+			#{destinationProvinceId},
+			#{destinationCity},
+			#{destinationCityId},
+			#{destinationAddress},
+			#{carStatus},
+			#{gearboxType},
+			#{carMileage}, #{vinIsDamage}, #{engine},
+			#{gearbox}, #{waterbox},
+			#{condenser},
+			#{battery}, #{airconditionPump}, #{motor},
+			#{powerSteeringPump}, #{dynamo},
+			#{absPump},
+			#{threeWayCatalyticConverter},
+			#{exhaustPipe},
+			#{compressor}, #{rightFrontHeadlight},
+			#{rightMirror},
+			#{rightFrontDoor}, #{rightRearDoor},
+			#{rightRearTailLight},
+			#{leftFrontHeadlight},
+			#{leftMirror}, #{leftFrontDoor},
+			#{leftRearDoor},
+			#{leftRearTailLight}, #{trunk},
+			#{spareTire}, #{vehicleTools},
+			#{triangleIndicator},
+			#{trim}, #{dashboard}, #{seat},
+			#{DVDCD}, #{voicebox},
+			#{engineComputer},
+			#{gearboxComputer},
+			#{drivingComputer},
+			#{burglarComputer},
+			#{gasbagComputer},
+			#{entertainmentComputer},
+			#{troubleDescription},
+			#{maintenanceManual},
+			#{operatingManual}, #{tyreNum},
+			#{dismantling},
+			#{dismantlingPart}, #{twoAccidents},
+			#{twoAccidentsRemark},
+			#{refit}, #{refitPart}, #{checkPart},
+			#{noCheckPark}, #{receivingPart},
+			#{remark},#{salesman},
+			0,#{isWarehouse}, 0, now()
+		)
+	</insert>
+	<insert id="addWarehouseSelective">
+		insert into car_pm_warehouse
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="auctionId != null">
+				auction_id,
+			</if>
+			<if test="carCard != null">
+				car_card,
+			</if>
+			<if test="ccProvince != null">
+				cc_province,
+		      </if>
+			<if test="ccProvinceId != null">
+				cc_province_id,
+			</if>
+			<if test="ccCity != null">
+				cc_city,
+			</if>
+			<if test="ccCityId != null">
+				cc_city_id,
+			</if>
+			<if test="ccArea != null">
+				cc_area,
+			</if>
+			<if test="ccAreaId != null">
+				cc_area_id,
+			</if>
+			<if test="carCardAddress != null">
+				car_card_address,
+			</if>
+			<if test="key != null">
+				`key`,
+			</if>
+			<if test="spareKey != null">
+				spare_key,
+			</if>
+			<if test="kProvince != null">
+				k_province,
+			</if>
+			<if test="kProvinceId != null">
+				k_province_id,
+			</if>
+			<if test="kCity != null">
+				k_city,
+			</if>
+			<if test="kCityId != null">
+				k_city_id,
+			</if>
+			<if test="kArea != null">
+				k_area,
+			</if>
+			<if test="kAreaId != null">
+				k_area_id,
+			</if>
+			<if test="keyAddress != null">
+				key_address,
+			</if>
+			<if test="keyRemark != null">
+				key_remark,
+			</if>
+			<if test="sProvince != null">
+				s_province,
+			</if>
+			<if test="sProvinceId != null">
+				s_province_id,
+			</if>
+			<if test="sCity != null">
+				s_city,
+			</if>
+			<if test="sCityId != null">
+				s_city_id,
+			</if>
+			<if test="sArea != null">
+				s_area,
+			</if>
+			<if test="sAreaId != null">
+				s_area_id,
+			</if>
+			<if test="storeAddress != null">
+				store_address,
+			</if>
+			<if test="storeSpace != null">
+				store_space,
+			</if>
+			<if test="storeTime != null">
+				store_time,
+			</if>
+			<if test="trailerCost != null">
+				trailer_cost,
+			</if>
+			<if test="trailerCostPay != null">
+				trailer_cost_pay,
+			</if>
+			<if test="voucherId != null">
+				voucher_id,
+			</if>
+			<if test="trailerPhone != null">
+				trailer_phone,
+			</if>
+			<if test="originProvince != null">
+				origin_province,
+			</if>
+			<if test="originProvinceId != null">
+				origin_province_id,
+			</if>
+			<if test="originCity != null">
+				origin_city,
+			</if>
+			<if test="originCityId != null">
+				origin_city_id,
+			</if>
+			<if test="originAddress != null">
+				origin_address,
+			</if>
+			<if test="distance != null">
+				distance,
+			</if>
+			<if test="destinationProvince != null">
+				destination_province,
+			</if>
+			<if test="destinationProvinceId != null">
+				destination_province_id,
+			</if>
+			<if test="destinationCity != null">
+				destination_city,
+			</if>
+			<if test="destinationCityId != null">
+				destination_city_id,
+			</if>
+			<if test="destinationAddress != null">
+				destination_address,
+			</if>
+			<if test="carStatus != null">
+				car_status,
+			</if>
+			<if test="gearboxType != null">
+				gearbox_type,
+			</if>
+			<if test="carMileage != null">
+				car_mileage,
+			</if>
+			<if test="vinIsDamage != null">
+				vin_is_damage,
+			</if>
+			<if test="engine != null">
+				engine,
+			</if>
+			<if test="gearbox != null">
+				gearbox,
+			</if>
+			<if test="waterbox != null">
+				waterbox,
+			</if>
+			<if test="condenser != null">
+				condenser,
+			</if>
+			<if test="battery != null">
+				battery,
+			</if>
+			<if test="airconditionPump != null">
+				aircondition_pump,
+			</if>
+			<if test="motor != null">
+				motor,
+			</if>
+			<if test="powerSteeringPump != null">
+				power_steering_pump,
+			</if>
+			<if test="dynamo != null">
+				dynamo,
+			</if>
+			<if test="absPump != null">
+				ABS_pump,
+			</if>
+			<if test="threeWayCatalyticConverter != null">
+				three_way_catalytic_converter,
+			</if>
+			<if test="exhaustPipe != null">
+				exhaust_pipe,
+			</if>
+			<if test="compressor != null">
+				compressor,
+			</if>
+			<if test="rightFrontHeadlight != null">
+				right_front_headlight,
+			</if>
+			<if test="rightMirror != null">
+				right_mirror,
+			</if>
+			<if test="rightFrontDoor != null">
+				right_front_door,
+			</if>
+			<if test="rightRearDoor != null">
+				right_rear_door,
+			</if>
+			<if test="rightRearTailLight != null">
+				right_rear_tail_light,
+			</if>
+			<if test="leftFrontHeadlight != null">
+				left_front_headlight,
+			</if>
+			<if test="leftMirror != null">
+				left_mirror,
+			</if>
+			<if test="leftFrontDoor != null">
+				left_front_door,
+			</if>
+			<if test="leftRearDoor != null">
+				left_rear_door,
+			</if>
+			<if test="leftRearTailLight != null">
+				left_rear_tail_light,
+			</if>
+			<if test="trunk != null">
+				trunk,
+			</if>
+			<if test="spareTire != null">
+				spare_tire,
+			</if>
+			<if test="vehicleTools != null">
+				vehicle_tools,
+			</if>
+			<if test="triangleIndicator != null">
+				triangle_indicator,
+			</if>
+			<if test="trim != null">
+				trim,
+			</if>
+			<if test="dashboard != null">
+				dashboard,
+			</if>
+			<if test="seat != null">
+				seat,
+			</if>
+			<if test="DVDCD != null">
+				DVD_CD,
+			</if>
+			<if test="voicebox != null">
+				voicebox,
+			</if>
+			<if test="engineComputer != null">
+				engine_computer,
+			</if>
+			<if test="gearboxComputer != null">
+				gearbox_computer,
+			</if>
+			<if test="drivingComputer != null">
+				driving_computer,
+			</if>
+			<if test="burglarComputer != null">
+				burglar_computer,
+			</if>
+			<if test="gasbagComputer != null">
+				gasbag_computer,
+			</if>
+			<if test="entertainmentComputer != null">
+				entertainment_computer,
+			</if>
+			<if test="troubleDescription != null">
+				trouble_description,
+			</if>
+			<if test="maintenanceManual != null">
+				maintenance_manual,
+			</if>
+			<if test="operatingManual != null">
+				operating_manual,
+			</if>
+			<if test="tyreNum != null">
+				tyre_num,
+			</if>
+			<if test="dismantling != null">
+				dismantling,
+			</if>
+			<if test="dismantlingPart != null">
+				dismantling_part,
+			</if>
+			<if test="twoAccidents != null">
+				two_accidents,
+			</if>
+			<if test="twoAccidentsRemark != null">
+				two_accidents_remark,
+			</if>
+			<if test="refit != null">
+				refit,
+			</if>
+			<if test="refitPart != null">
+				refit_part,
+			</if>
+			<if test="checkPart != null">
+				check_part,
+			</if>
+			<if test="noCheckPark != null">
+				no_check_park,
+			</if>
+			<if test="receivingPart != null">
+				receiving_part,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="salesman != null">
+				salesman,
+			</if>
+			<if test="isWarehouse != null">
+				is_warehouse,
+			</if>
+			audit_state,
+			is_delete,
+			create_time,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="auctionId != null">
+				#{auctionId},
+			</if>
+			<if test="carCard != null">
+				#{carCard},
+			</if>
+			<if test="ccProvince != null">
+				#{ccProvince},
+			</if>
+			<if test="ccProvinceId != null">
+				#{ccProvinceId},
+			</if>
+			<if test="ccCity != null">
+				#{ccCity},
+			</if>
+			<if test="ccCityId != null">
+				#{ccCityId},
+			</if>
+			<if test="ccArea != null">
+				#{ccArea},
+			</if>
+			<if test="ccAreaId != null">
+				#{ccAreaId},
+			</if>
+			<if test="carCardAddress != null">
+				#{carCardAddress},
+			</if>
+			<if test="key != null">
+				#{key},
+			</if>
+			<if test="spareKey != null">
+				#{spareKey},
+			</if>
+			<if test="kProvince != null">
+				#{kProvince},
+			</if>
+			<if test="kProvinceId != null">
+				#{kProvinceId},
+			</if>
+			<if test="kCity != null">
+				#{kCity},
+			</if>
+			<if test="kCityId != null">
+				#{kCityId},
+			</if>
+			<if test="kArea != null">
+				#{kArea},
+			</if>
+			<if test="kAreaId != null">
+				#{kAreaId},
+			</if>
+			<if test="keyAddress != null">
+				#{keyAddress},
+			</if>
+			<if test="keyRemark != null">
+				#{keyRemark},
+			</if>
+			<if test="sProvince != null">
+				#{sProvince},
+			</if>
+			<if test="sProvinceId != null">
+				#{sProvinceId},
+			</if>
+			<if test="sCity != null">
+				#{sCity},
+			</if>
+			<if test="sCityId != null">
+				#{sCityId},
+			</if>
+			<if test="sArea != null">
+				#{sArea},
+			</if>
+			<if test="sAreaId != null">
+				#{sAreaId},
+			</if>
+			<if test="storeAddress != null">
+				#{storeAddress},
+			</if>
+			<if test="storeSpace != null">
+				#{storeSpace},
+			</if>
+			<if test="storeTime != null">
+				#{storeTime},
+			</if>
+			<if test="trailerCost != null">
+				#{trailerCost},
+			</if>
+			<if test="trailerCostPay != null">
+				#{trailerCostPay},
+			</if>
+			<if test="voucherId != null">
+				#{voucherId},
+			</if>
+			<if test="trailerPhone != null">
+				#{trailerPhone},
+			</if>
+			<if test="originProvince != null">
+				#{originProvince},
+			</if>
+			<if test="originProvinceId != null">
+				#{originProvinceId},
+			</if>
+			<if test="originCity != null">
+				#{originCity},
+			</if>
+			<if test="originCityId != null">
+				#{originCityId},
+			</if>
+			<if test="originAddress != null">
+				#{originAddress},
+			</if>
+			<if test="distance != null">
+				#{distance},
+			</if>
+			<if test="destinationProvince != null">
+				#{destinationProvince},
+			</if>
+			<if test="destinationProvinceId != null">
+				#{destinationProvinceId},
+			</if>
+			<if test="destinationCity != null">
+				#{destinationCity},
+			</if>
+			<if test="destinationCityId != null">
+				#{destinationCityId},
+			</if>
+			<if test="destinationAddress != null">
+				#{destinationAddress},
+			</if>
+			<if test="carStatus != null">
+				#{carStatus},
+			</if>
+			<if test="gearboxType != null">
+				#{gearboxType},
+			</if>
+			<if test="carMileage != null">
+				#{carMileage},
+			</if>
+			<if test="vinIsDamage != null">
+				#{vinIsDamage},
+			</if>
+			<if test="engine != null">
+				#{engine},
+			</if>
+			<if test="gearbox != null">
+				#{gearbox},
+			</if>
+			<if test="waterbox != null">
+				#{waterbox},
+			</if>
+			<if test="condenser != null">
+				#{condenser},
+			</if>
+			<if test="battery != null">
+				#{battery},
+			</if>
+			<if test="airconditionPump != null">
+				#{airconditionPump},
+			</if>
+			<if test="motor != null">
+				#{motor},
+			</if>
+			<if test="powerSteeringPump != null">
+				#{powerSteeringPump},
+			</if>
+			<if test="dynamo != null">
+				#{dynamo},
+			</if>
+			<if test="absPump != null">
+				#{absPump},
+			</if>
+			<if test="threeWayCatalyticConverter != null">
+				#{threeWayCatalyticConverter},
+			</if>
+			<if test="exhaustPipe != null">
+				#{exhaustPipe},
+			</if>
+			<if test="compressor != null">
+				#{compressor},
+			</if>
+			<if test="rightFrontHeadlight != null">
+				#{rightFrontHeadlight},
+			</if>
+			<if test="rightMirror != null">
+				#{rightMirror},
+			</if>
+			<if test="rightFrontDoor != null">
+				#{rightFrontDoor},
+			</if>
+			<if test="rightRearDoor != null">
+				#{rightRearDoor},
+			</if>
+			<if test="rightRearTailLight != null">
+				#{rightRearTailLight},
+			</if>
+			<if test="leftFrontHeadlight != null">
+				#{leftFrontHeadlight},
+			</if>
+			<if test="leftMirror != null">
+				#{leftMirror},
+			</if>
+			<if test="leftFrontDoor != null">
+				#{leftFrontDoor},
+			</if>
+			<if test="leftRearDoor != null">
+				#{leftRearDoor},
+			</if>
+			<if test="leftRearTailLight != null">
+				#{leftRearTailLight},
+			</if>
+			<if test="trunk != null">
+				#{trunk},
+			</if>
+			<if test="spareTire != null">
+				#{spareTire},
+			</if>
+			<if test="vehicleTools != null">
+				#{vehicleTools},
+			</if>
+			<if test="triangleIndicator != null">
+				#{triangleIndicator},
+			</if>
+			<if test="trim != null">
+				#{trim},
+			</if>
+			<if test="dashboard != null">
+				#{dashboard},
+			</if>
+			<if test="seat != null">
+				#{seat},
+			</if>
+			<if test="DVDCD != null">
+				#{DVDCD},
+			</if>
+			<if test="voicebox != null">
+				#{voicebox},
+			</if>
+			<if test="engineComputer != null">
+				#{engineComputer},
+			</if>
+			<if test="gearboxComputer != null">
+				#{gearboxComputer},
+			</if>
+			<if test="drivingComputer != null">
+				#{drivingComputer},
+			</if>
+			<if test="burglarComputer != null">
+				#{burglarComputer},
+			</if>
+			<if test="gasbagComputer != null">
+				#{gasbagComputer},
+			</if>
+			<if test="entertainmentComputer != null">
+				#{entertainmentComputer},
+			</if>
+			<if test="troubleDescription != null">
+				#{troubleDescription},
+			</if>
+			<if test="maintenanceManual != null">
+				#{maintenanceManual},
+			</if>
+			<if test="operatingManual != null">
+				#{operatingManual},
+			</if>
+			<if test="tyreNum != null">
+				#{tyreNum},
+			</if>
+			<if test="dismantling != null">
+				#{dismantling},
+			</if>
+			<if test="dismantlingPart != null">
+				#{dismantlingPart},
+			</if>
+			<if test="twoAccidents != null">
+				#{twoAccidents},
+			</if>
+			<if test="twoAccidentsRemark != null">
+				#{twoAccidentsRemark},
+			</if>
+			<if test="refit != null">
+				#{refit},
+			</if>
+			<if test="refitPart != null">
+				#{refitPart},
+			</if>
+			<if test="checkPart != null">
+				#{checkPart},
+			</if>
+			<if test="noCheckPark != null">
+				#{noCheckPark},
+			</if>
+			<if test="receivingPart != null">
+				#{receivingPart},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="salesman != null">
+				#{salesman},
+			</if>
+			<if test="isWarehouse != null">
+				#{isWarehouse},
+			</if>
+			0,
+			0,
+			now()
+		</trim>
+	</insert>
+	<update id="updateWarehouseSelective">
+		update car_pm_warehouse
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="carCard != null">
+				car_card = #{carCard},
+			</if>
+			<if test="ccProvince != null">
+				cc_province = #{ccProvince},
+			</if>
+			<if test="ccProvinceId != null">
+				cc_province_id = #{ccProvinceId},
+			</if>
+			<if test="ccCity != null">
+				cc_city = #{ccCity},
+			</if>
+			<if test="ccCityId != null">
+				cc_city_id = #{ccCityId},
+			</if>
+			<if test="ccArea != null">
+				cc_area = #{ccArea},
+			</if>
+			<if test="ccAreaId != null">
+				cc_area_id = #{ccAreaId},
+			</if>
+			<if test="carCardAddress != null">
+				car_card_address = #{carCardAddress},
+			</if>
+			<if test="key != null">
+				`key` = #{key},
+			</if>
+			<if test="spareKey != null">
+				spare_key = #{spareKey},
+			</if>
+			<if test="kProvince != null">
+				k_province = #{kProvince},
+			</if>
+			<if test="kProvinceId != null">
+				k_province_id = #{kProvinceId},
+			</if>
+			<if test="kCity != null">
+				k_city = #{kCity},
+			</if>
+			<if test="kCityId != null">
+				k_city_id = #{kCityId},
+			</if>
+			<if test="kArea != null">
+				k_area = #{kArea},
+			</if>
+			<if test="kAreaId != null">
+				k_area_id = #{kAreaId},
+			</if>
+			<if test="keyAddress != null">
+				key_address = #{keyAddress},
+			</if>
+			<if test="keyRemark != null">
+				key_remark = #{keyRemark},
+			</if>
+			<if test="sProvince != null">
+				s_province = #{sProvince},
+			</if>
+			<if test="sProvinceId != null">
+				s_province_id = #{sProvinceId},
+			</if>
+			<if test="sCity != null">
+				s_city = #{sCity},
+			</if>
+			<if test="sCityId != null">
+				s_city_id = #{sCityId},
+			</if>
+			<if test="sArea != null">
+				s_area = #{sArea},
+			</if>
+			<if test="sAreaId != null">
+				s_area_id = #{sAreaId},
+			</if>
+			<if test="storeAddress != null">
+				store_address = #{storeAddress},
+			</if>
+			<if test="storeSpace != null">
+				store_space = #{storeSpace},
+			</if>
+			<if test="storeTime != null">
+				store_time = #{storeTime},
+			</if>
+			<if test="trailerCost != null">
+				trailer_cost = #{trailerCost},
+			</if>
+			<if test="trailerCostPay != null">
+				trailer_cost_pay = #{trailerCostPay},
+			</if>
+			<if test="voucherId != null">
+				voucher_id = #{voucherId},
+			</if>
+			<if test="trailerPhone != null">
+				trailer_phone = #{trailerPhone},
+			</if>
+			<if test="originProvince != null">
+				origin_province = #{originProvince},
+			</if>
+			<if test="originProvinceId != null">
+				origin_province_id = #{originProvinceId},
+			</if>
+			<if test="originCity != null">
+				origin_city = #{originCity},
+			</if>
+			<if test="originCityId != null">
+				origin_city_id = #{originCityId},
+			</if>
+			<if test="originAddress != null">
+				origin_address = #{originAddress},
+			</if>
+			<if test="distance != null">
+				distance = #{distance},
+			</if>
+			<if test="destinationProvince != null">
+				destination_province = #{destinationProvince},
+			</if>
+			<if test="destinationProvinceId != null">
+				destination_province_id = #{destinationProvinceId},
+			</if>
+			<if test="destinationCity != null">
+				destination_city = #{destinationCity},
+			</if>
+			<if test="destinationCityId != null">
+				destination_city_id = #{destinationCityId},
+			</if>
+			<if test="destinationAddress != null">
+				destination_address = #{destinationAddress},
+			</if>
+			<if test="carStatus != null">
+				car_status = #{carStatus},
+			</if>
+			<if test="gearboxType != null">
+				gearbox_type = #{gearboxType},
+			</if>
+			<if test="carMileage != null">
+				car_mileage = #{carMileage},
+			</if>
+			<if test="vinIsDamage != null">
+				vin_is_damage = #{vinIsDamage},
+			</if>
+			<if test="engine != null">
+				engine = #{engine},
+			</if>
+			<if test="gearbox != null">
+				gearbox = #{gearbox},
+			</if>
+			<if test="waterbox != null">
+				waterbox = #{waterbox},
+			</if>
+			<if test="condenser != null">
+				condenser = #{condenser},
+			</if>
+			<if test="battery != null">
+				battery = #{battery},
+			</if>
+			<if test="airconditionPump != null">
+				aircondition_pump = #{airconditionPump},
+			</if>
+			<if test="motor != null">
+				motor = #{motor},
+			</if>
+			<if test="powerSteeringPump != null">
+				power_steering_pump = #{powerSteeringPump},
+			</if>
+			<if test="dynamo != null">
+				dynamo = #{dynamo},
+			</if>
+			<if test="absPump != null">
+				ABS_pump = #{absPump},
+			</if>
+			<if test="threeWayCatalyticConverter != null">
+				three_way_catalytic_converter = #{threeWayCatalyticConverter},
+			</if>
+			<if test="exhaustPipe != null">
+				exhaust_pipe = #{exhaustPipe},
+			</if>
+			<if test="compressor != null">
+				compressor = #{compressor},
+			</if>
+			<if test="rightFrontHeadlight != null">
+				right_front_headlight = #{rightFrontHeadlight},
+			</if>
+			<if test="rightMirror != null">
+				right_mirror = #{rightMirror},
+			</if>
+			<if test="rightFrontDoor != null">
+				right_front_door = #{rightFrontDoor},
+			</if>
+			<if test="rightRearDoor != null">
+				right_rear_door = #{rightRearDoor},
+			</if>
+			<if test="rightRearTailLight != null">
+				right_rear_tail_light = #{rightRearTailLight},
+			</if>
+			<if test="leftFrontHeadlight != null">
+				left_front_headlight = #{leftFrontHeadlight},
+			</if>
+			<if test="leftMirror != null">
+				left_mirror = #{leftMirror},
+			</if>
+			<if test="leftFrontDoor != null">
+				left_front_door = #{leftFrontDoor},
+			</if>
+			<if test="leftRearDoor != null">
+				left_rear_door = #{leftRearDoor},
+			</if>
+			<if test="leftRearTailLight != null">
+				left_rear_tail_light = #{leftRearTailLight},
+			</if>
+			<if test="trunk != null">
+				trunk = #{trunk},
+			</if>
+			<if test="spareTire != null">
+				spare_tire = #{spareTire},
+			</if>
+			<if test="vehicleTools != null">
+				vehicle_tools = #{vehicleTools},
+			</if>
+			<if test="triangleIndicator != null">
+				triangle_indicator = #{triangleIndicator},
+			</if>
+			<if test="trim != null">
+				trim = #{trim},
+			</if>
+			<if test="dashboard != null">
+				dashboard = #{dashboard},
+			</if>
+			<if test="seat != null">
+				seat = #{seat},
+			</if>
+			<if test="DVDCD != null">
+				DVD_CD = #{DVDCD},
+			</if>
+			<if test="voicebox != null">
+				voicebox = #{voicebox},
+			</if>
+			<if test="engineComputer != null">
+				engine_computer = #{engineComputer},
+			</if>
+			<if test="gearboxComputer != null">
+				gearbox_computer = #{gearboxComputer},
+			</if>
+			<if test="drivingComputer != null">
+				driving_computer = #{drivingComputer},
+			</if>
+			<if test="burglarComputer != null">
+				burglar_computer = #{burglarComputer},
+			</if>
+			<if test="gasbagComputer != null">
+				gasbag_computer = #{gasbagComputer},
+			</if>
+			<if test="entertainmentComputer != null">
+				entertainment_computer = #{entertainmentComputer},
+			</if>
+			<if test="troubleDescription != null">
+				trouble_description = #{troubleDescription},
+			</if>
+			<if test="maintenanceManual != null">
+				maintenance_manual = #{maintenanceManual},
+			</if>
+			<if test="operatingManual != null">
+				operating_manual = #{operatingManual},
+			</if>
+			<if test="tyreNum != null">
+				tyre_num = #{tyreNum},
+			</if>
+			<if test="dismantling != null">
+				dismantling = #{dismantling},
+			</if>
+			<if test="dismantlingPart != null">
+				dismantling_part = #{dismantlingPart},
+			</if>
+			<if test="twoAccidents != null">
+				two_accidents = #{twoAccidents},
+			</if>
+			<if test="twoAccidentsRemark != null">
+				two_accidents_remark = #{twoAccidentsRemark},
+			</if>
+			<if test="refit != null">
+				refit = #{refit},
+			</if>
+			<if test="refitPart != null">
+				refit_part = #{refitPart},
+			</if>
+			<if test="checkPart != null">
+				check_part = #{checkPart},
+			</if>
+			<if test="noCheckPark != null">
+				no_check_park = #{noCheckPark},
+			</if>
+			<if test="receivingPart != null">
+				receiving_part = #{receivingPart},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="salesman != null">
+				salesman = #{salesman},
+			</if>
+			<if test="auditState != null">
+				audit_state = #{auditState},
+			</if>
+			<if test="isWarehouse != null">
+				is_warehouse = #{isWarehouse},
+			</if>
+			<if test="isPrint != null">
+				is_print = #{isPrint},
+			</if>
+			<if test="outStockTime != null">
+				out_stock_time = #{outStockTime},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+			update_time = now(),
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateWarehouse">
+		update car_pm_warehouse
+		set
+			auction_id =#{auctionId},
+			car_card = #{carCard},
+			cc_province = #{ccProvince},
+			cc_province_id =#{ccProvinceId},
+			cc_city = #{ccCity},
+			cc_city_id = #{ccCityId},
+			cc_area =#{ccArea},
+			cc_area_id = #{ccAreaId},
+			car_card_address = #{carCardAddress},
+			`key` =#{key},
+			spare_key = #{spareKey},
+			k_province = #{kProvince},
+			k_province_id = #{kProvinceId},
+			k_city = #{kCity},
+			k_city_id = #{kCityId},
+			k_area = #{kArea},
+			k_area_id = #{kAreaId},
+			key_address =#{keyAddress},
+			key_remark =#{keyRemark},
+			s_province = #{sProvince},
+			s_province_id = #{sProvinceId},
+			s_city = #{sCity},
+			s_city_id = #{sCityId},
+			s_area = #{sArea},
+			s_area_id = #{sAreaId},
+			store_address =#{storeAddress},
+			store_space =#{storeSpace},
+			store_time =#{storeTime},
+			trailer_cost =#{trailerCost},
+			trailer_cost_pay =#{trailerCostPay},
+			voucher_id =#{voucherId},
+			trailer_phone =#{trailerPhone},
+			origin_province =#{originProvince},
+			origin_province_id =#{originProvinceId},
+			origin_city =#{originCity},
+			origin_city_id =#{originCityId},
+			origin_address =#{originAddress},
+			distance =#{distance},
+			destination_province =#{destinationProvince},
+			destination_province_id =#{destinationProvinceId},
+			destination_city =#{destinationCity},
+			destination_city_id =#{destinationCityId},
+			destination_address =#{destinationAddress},
+			car_status =#{carStatus},
+			gearbox_type =#{gearboxType},
+			car_mileage =#{carMileage},
+			vin_is_damage =#{vinIsDamage},
+			engine = #{engine},
+			gearbox = #{gearbox},
+			waterbox =#{waterbox},
+			condenser = #{condenser},
+			battery = #{battery},
+			aircondition_pump =#{airconditionPump},
+			motor = #{motor},
+			power_steering_pump = #{powerSteeringPump},
+			dynamo =#{dynamo},
+			ABS_pump = #{absPump},
+			three_way_catalytic_converter =#{threeWayCatalyticConverter},
+			exhaust_pipe =#{exhaustPipe},
+			compressor =#{compressor},
+			right_front_headlight =#{rightFrontHeadlight},
+			right_mirror =#{rightMirror},
+			right_front_door =#{rightFrontDoor},
+			right_rear_door =#{rightRearDoor},
+			right_rear_tail_light =#{rightRearTailLight},
+			left_front_headlight =#{leftFrontHeadlight},
+			left_mirror =#{leftMirror},
+			left_front_door =#{leftFrontDoor},
+			left_rear_door =#{leftRearDoor},
+			left_rear_tail_light =#{leftRearTailLight},
+			trunk =#{trunk},
+			spare_tire = #{spareTire},
+			vehicle_tools = #{vehicleTools},
+			triangle_indicator =#{triangleIndicator},
+			trim = #{trim},
+			dashboard = #{dashboard},
+			seat =#{seat},
+			DVD_CD = #{DVDCD},
+			voicebox =#{voicebox},
+			engine_computer =#{engineComputer},
+			gearbox_computer =#{gearboxComputer},
+			driving_computer =#{drivingComputer},
+			burglar_computer =#{burglarComputer},
+			gasbag_computer =#{gasbagComputer},
+			entertainment_computer =#{entertainmentComputer},
+			trouble_description =#{troubleDescription},
+			maintenance_manual =#{maintenanceManual},
+			operating_manual =#{operatingManual},
+			tyre_num =#{tyreNum},
+			dismantling =#{dismantling},
+			dismantling_part =#{dismantlingPart},
+			two_accidents =#{twoAccidents},
+			two_accidents_remark =#{twoAccidentsRemark},
+			refit =#{refit},
+			refit_part = #{refitPart},
+			check_part = #{checkPart},
+			no_check_park =#{noCheckPark},
+			receiving_part =#{receivingPart},
+			remark = #{remark},
+			salesman = #{salesman},
+			audit_state = #{auditState},
+			is_warehouse =#{isWarehouse},
+			out_stock_time =#{outStockTime},
+			update_time = now()
+		where id =#{id}
+	</update>
+	<update id="updateWarehouseState">
+		update car_pm_warehouse
+		set
+			audit_state = 0,
+			update_time = now()
+		where auction_id =#{auctionId}
+	</update>
+</mapper>

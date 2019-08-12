@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.standard.AreasMapper">
+
+	<select id="getAreas" resultType="Areas">
+		select 
+			id,areas_code areasCode,areas_name areasName
+		from 
+			sys_areas
+		where 
+			status = 1
+		and 
+			is_virtual_field = 0
+	</select>
+
+</mapper>

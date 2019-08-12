@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.PayMapper">
+	<resultMap id="BaseResultMap" type="Pay">
+		<id 	column="id" 						property="id" />
+	    <result column="auction_id" 				property="auctionId" />
+	    <result column="auction_set_id" 			property="auctionSetId" />
+	    <result column="type" 						property="type" />
+	    <result column="mid" 						property="mid" />
+	    <result column="pay_handle" 				property="payHandle" />
+	    <result column="pay_bank" 					property="payBank" />
+	    <result column="pay_opening_bank" 			property="payOpeningBank" />
+	    <result column="pay_account" 				property="payAccount" />
+	    <result column="pay_money" 					property="payMoney" />
+	    <result column="pay_contact_phone" 			property="payContactPhone" />
+	    <result column="highest_price" 				property="highestPrice" />
+	    <result column="commission" 				property="commission" />
+	    <result column="other_price" 				property="otherPrice" />
+	    <result column="pay_voucher_id" 			property="payVoucherId" />
+	    <result column="remark" 					property="remark" />
+	    <result column="create_time" 				property="createTime" />
+	    <result column="is_delete" 					property="isDelete" />
+	    <association property="payVoucherPath" column="id=pay_voucher_id" javaType="String" 
+			select="getImgPath"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, auction_id, auction_set_id,type, mid, pay_handle, 
+		pay_bank, pay_opening_bank, pay_account, pay_money, pay_contact_phone,
+		highest_price, commission, other_price, 
+	    pay_voucher_id, remark,
+	    create_time, is_delete
+	</sql>
+	<select id="getImgPath" resultType="String">
+		SELECT
+			storage_path
+		FROM 
+			tb_attachment
+		WHERE 
+			id = #{id}
+	</select>
+	<select id="getPayById" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_finance_pay
+		WHERE 
+			id = #{id}
+	</select>
+	<!-- getMemberPay 获取用户的付款信息 根据 auction_set_id member_code-->
+	<select id="getMemberPay" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_finance_pay
+		WHERE 
+			auction_set_id = #{auctionSetId}
+		AND 
+			mid = #{mid}
+		AND 
+			type = 'PAY'
+	</select>
+	<select id="getPayByAuctionSetId" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_finance_pay
+		WHERE 
+			auction_set_id = #{auctionSetId}
+		AND 
+			type = 'PAY'
+		AND 
+			is_delete=0
+	</select>
+	<select id="getRefundByAuctionSetId" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_finance_pay
+		WHERE 
+			auction_set_id = #{auctionSetId}
+		AND 
+			type = 'REF'
+		AND 
+			is_delete=0
+	</select>
+	<insert id="addPay">
+		insert into car_pm_finance_pay
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="auctionId != null">
+				auction_id,
+			</if>
+			<if test="auctionSetId != null">
+				auction_set_id,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="mid != null">
+				mid,
+			</if>
+			<if test="payHandle != null">
+				pay_handle,
+			</if>
+			<if test="payBank != null">
+				pay_bank,
+			</if>
+			<if test="payOpeningBank != null">
+				pay_opening_bank,
+			</if>
+			<if test="payAccount != null">
+				pay_account,
+			</if>
+			<if test="payMoney != null">
+				pay_money,
+			</if>
+			<if test="payContactPhone != null">
+				pay_contact_phone,
+			</if>
+			<if test="highestPrice != null">
+				highest_price,
+			</if>
+			<if test="commission != null">
+				commission,
+			</if>
+			<if test="otherPrice != null">
+				other_price,
+			</if>
+			<if test="payVoucherId != null">
+				pay_voucher_id,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			is_delete,
+			create_time,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="auctionId != null">
+				#{auctionId},
+			</if>
+			<if test="auctionSetId != null">
+				#{auctionSetId},
+			</if>
+			<if test="type != null">
+				#{type},
+			</if>
+			<if test="mid != null">
+				#{mid},
+			</if>
+			<if test="payHandle != null">
+				#{payHandle},
+			</if>
+			<if test="payBank != null">
+				#{payBank},
+			</if>
+			<if test="payOpeningBank != null">
+				#{payOpeningBank},
+			</if>
+			<if test="payAccount != null">
+				#{payAccount},
+			</if>
+			<if test="payMoney != null">
+				#{payMoney},
+			</if>
+			<if test="payContactPhone != null">
+				#{payContactPhone},
+			</if>
+			<if test="highestPrice != null">
+				#{highestPrice},
+			</if>
+			<if test="commission != null">
+				#{commission},
+			</if>
+			<if test="otherPrice != null">
+				#{otherPrice},
+			</if>
+			<if test="payVoucherId != null">
+				#{payVoucherId},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="createUser != null">
+				#{createUser},
+			</if>
+			0,now(),
+		</trim>
+	</insert>
+	<update id="updatePaySelective">
+		update car_pm_finance_pay
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="auctionSetId != null">
+				auction_set_id = #{auctionSetId},
+			</if>
+			<if test="type != null">
+				type = #{type},
+			</if>
+			<if test="mid != null">
+				mid = #{mid},
+			</if>
+			<if test="payHandle != null">
+				pay_handle = #{payHandle},
+			</if>
+			<if test="payBank != null">
+				pay_bank = #{payBank},
+			</if>
+			<if test="payOpeningBank != null">
+				pay_opening_bank = #{payOpeningBank},
+			</if>
+			<if test="payAccount != null">
+				pay_account = #{payAccount},
+			</if>
+			<if test="payMoney != null">
+				pay_money = #{payMoney},
+			</if>
+			<if test="payContactPhone != null">
+				pay_contact_phone = #{payContactPhone},
+			</if>
+			<if test="highestPrice != null">
+				highest_price = #{highestPrice},
+			</if>
+			<if test="commission != null">
+				commission = #{commission},
+			</if>
+			<if test="otherPrice != null">
+				other_price = #{otherPrice},
+			</if>
+			<if test="payVoucherId != null">
+				pay_voucher_id = #{payVoucherId},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

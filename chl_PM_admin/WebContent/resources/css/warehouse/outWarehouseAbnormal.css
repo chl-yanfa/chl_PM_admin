@@ -1,0 +1,41 @@
+#applyStore{
+	margin-top:70px;
+	margin-left:60px;
+	display:inline-block;
+	font-size:12px;
+}
+.cattype{
+	display:inline-block;
+	font-size:12px;
+}
+.apply-1{
+	margin-right:20px;
+}
+.apply-3{
+	border:none;
+}
+.apply-4{
+	margin-right:10px;
+}
+.apply-5{
+	margin-right:118px;
+}
+.cattypes{
+	display:inline-block;
+	font-size:12px;
+	margin-top:12px;
+}
+.applybeizhu{
+    width:350px;
+	height:100px;
+	font-size: 12px;
+	color: black;
+	line-height: 22px;
+	resize:none;
+	margin-left: 74px;
+    margin-top: -12px;
+}
+#amount{
+	width:350px;
+	height:24px !important;
+}

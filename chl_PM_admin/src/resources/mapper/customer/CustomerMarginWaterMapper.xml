@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.CustomerMarginWaterMapper">
+	<resultMap id="BaseResultMap" type="CustomerMarginWater">
+		<id 	column="id" 				property="id" />
+		<result column="mid" 				property="mid" />
+		<result column="operator_cash" 		property="operatorCash" />
+		<result column="memo" 				property="memo" />
+		<result column="order_id" 			property="orderId" />
+		<result column="order_no" 			property="orderNo" />
+		<result column="auction_no" 		property="auctionNo" />
+		<result column="operator_type" 		property="operatorType" />
+		<result column="charge_order" 		property="chargeOrder" />
+		<result column="charge_source" 		property="chargeSource" />
+		<result column="pay_voucher_id" 	property="payVoucherId" />
+		<result column="is_refund" 			property="isRefund" />
+		<result column="is_delete" 			property="isDelete" />
+		<result column="create_time" 		property="createTime" />
+		<result column="create_user" 		property="createUser" />
+		<result column="update_time" 		property="updateTime" />
+		<result column="update_user" 		property="updateUser" />
+	</resultMap>
+	<resultMap id="customerMarginWaterDto" extends="BaseResultMap" type="CustomerMarginWaterDto">
+		<result column="login_name" 		property="loginName" />
+		<result column="user_name" 			property="userName" />
+		<result column="pay_voucher_path" 	property="payVoucherPath" />
+		<result column="operator_type_s" 	property="operatorTypeS" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, mid, operator_cash, memo, 
+		order_id, order_no, auction_no, operator_type,
+		charge_order, charge_source, is_refund, is_delete, create_time, create_user
+	</sql>
+	<!-- getMarginWaterList 获取流水列表-->
+	<select id="getMarginWaterList" resultMap="customerMarginWaterDto">
+		SELECT
+			SPCMW.id,SPCMW.mid,SPCMW.operator_cash,SPCMW.memo,
+			SPCMW.operator_type,
+			SPCMW.charge_source,SPCMW.order_id,SPCMW.order_no,SPCMW.auction_no,
+			SPCI.login_name,SPCI.user_name,
+			CASE SPCMW.operator_type WHEN '1' THEN '冻结' WHEN '2' THEN '解冻' WHEN '4' THEN '充值' WHEN '5' THEN '退款' END
+			AS operator_type_s,
+			SPCMW.is_refund,
+			SPCMW.create_time,SU.login_name create_user
+		FROM 
+			car_pm_customer_margin_water SPCMW LEFT JOIN sys_client SPCI ON SPCMW.mid = SPCI.ID
+			LEFT JOIN sys_user SU ON SPCMW.create_user = SU.ID
+		WHERE 
+			SPCMW.is_delete = 0
+		<if test="mid != null and mid != ''">
+			AND SPCMW.mid = #{mid}
+        </if>
+        <if test="operatorType != null and operatorType != ''">
+			AND SPCMW.OPERATOR_TYPE = #{operatorType}
+        </if>
+		ORDER BY SPCMW.create_time DESC
+	</select>
+	
+	<!-- getMarginWaterListTotal 获取流水列表总条数-->
+	<select id="getMarginWaterListTotal" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM 
+			car_pm_customer_margin_water SPCMW LEFT JOIN sys_client SPCI ON SPCMW.mid = SPCI.ID
+		WHERE 
+			SPCMW.is_delete = 0
+		<if test="mid != null and mid != ''">
+			AND SPCMW.mid = #{mid}
+        </if>
+        <if test="operatorType != null and operatorType != ''">
+			AND SPCMW.OPERATOR_TYPE = #{operatorType}
+        </if>
+	</select>
+	
+	<select id="getCustomerMarginWaterById" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_customer_margin_water
+		WHERE 
+			ID = #{id}
+	</select>
+	<select id="getCustomerMarginWaterByParam" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_customer_margin_water
+		WHERE 
+			ORDER_ID = #{orderId}
+		AND 
+			OPERATOR_TYPE = #{operatorType}
+		AND 
+			is_delete = 0
+		ORDER BY create_time DESC limit 1
+	</select>
+	<insert id="addCustomerMarginWater">
+		insert into car_pm_customer_margin_water
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="mid != null">
+				mid,
+			</if>
+			<if test="operatorCash != null">
+				operator_cash,
+			</if>
+			<if test="memo != null">
+				memo,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="orderNo != null">
+				order_no,
+			</if>
+			<if test="auctionNo != null">
+				auction_no,
+			</if>
+			<if test="operatorType != null">
+				operator_type,
+			</if>
+			<if test="chargeOrder != null">
+				charge_order,
+			</if>
+			<if test="chargeSource != null">
+				charge_source,
+			</if>
+			<if test="payVoucherId != null">
+				pay_voucher_id,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="updateUser != null">
+				update_user,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			is_refund,
+			is_delete,
+			create_time,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="mid != null">
+				#{mid},
+			</if>
+			<if test="operatorCash != null">
+				#{operatorCash},
+			</if>
+			<if test="memo != null">
+				#{memo},
+			</if>
+			<if test="orderId != null">
+				#{orderId},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo},
+			</if>
+			<if test="auctionNo != null">
+				#{auctionNo},
+			</if>
+			<if test="operatorType != null">
+				#{operatorType},
+			</if>
+			<if test="chargeOrder != null">
+				#{chargeOrder},
+			</if>
+			<if test="chargeSource != null">
+				#{chargeSource},
+			</if>
+			<if test="payVoucherId != null">
+				#{payVoucherId},
+			</if>
+			<if test="createUser != null">
+				#{createUser},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime},
+			</if>
+			0,0,now(),
+		</trim>
+	</insert>
+	<!-- updateRefundState 更新退款状态 -->
+	<update id="updateRefundState">
+		UPDATE 
+        	car_pm_customer_margin_water
+        SET
+        	IS_REFUND = 1
+        WHERE 
+        	id = #{id}
+	</update>
+</mapper>

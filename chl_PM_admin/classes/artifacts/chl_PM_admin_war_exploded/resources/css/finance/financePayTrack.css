@@ -1,0 +1,146 @@
+.title{
+	width: 150px;
+    line-height: 40px;
+    border: 1px solid red;
+    color: red;
+    font-size: 20px;
+    text-align: center;
+}
+.content-top,.content{
+	margin-top:20px;
+	margin-left: 10px;
+	font-size: 13px;
+}
+.auctionDiv{
+	margin: 40px 0px;
+}
+.auctionDiv label:not(:first-child){
+	margin-left:100px;
+}
+.dealInfo-div span{
+	color: #666666;
+	margin-left: 5px;
+}
+.pay-table{
+	border-collapse: collapse; 
+	text-align: center; 
+	width: 80%;
+	margin-top:20px;
+}
+.pay-table td{
+	padding: 1em;
+    border:1px solid #dbdbdb;
+    font-size: 12px;
+}
+.pay-table input{
+	text-align: center;
+	border:1px solid #dbdbdb;
+}
+.form-table{
+	border-collapse: collapse; 
+	text-align: center; 
+	width: 80%;
+	margin-top:20px;
+}
+.form-table td{
+	padding: 1em;
+    font-size: 12px;
+}
+.form-table input{
+	text-align: center;
+	border:1px solid #dbdbdb;
+}
+.tit{
+	text-align: right;
+	padding: 1em 2em;
+}
+.beizhu{
+	width: 100%;
+	height:80px;
+	font-size: 12px;
+	resize:none;
+}
+.saveBtn{
+	width: 100px;
+	color: #ffffff;
+	background: #518fe0;
+	border-radius: 5px;
+	font-size:14px;
+	height: 32px;
+	border: none;
+}
+.saveBtn:hover{
+	background: #1890ff;
+}
+
+.carMain{
+	margin-top:20px;
+	margin-left:16px;
+}
+.table-body{
+	border-collapse: collapse; 
+	text-align: center; 
+	width: 100%;
+}
+.table-body td{
+	padding: 1em;
+    border:1px solid #dbdbdb;
+}
+.table-body input{
+	text-align: center;
+	border:none;
+}
+/* 上传图片 */
+@media (min-width: 992px){
+	.pic-box {
+	    width: 16.66666667%;
+	}
+}
+
+.pic-box{
+	border: 1px solid #ddd;
+	display: block;
+    padding: 4px;
+    margin-bottom: 10px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border-radius: 4px;
+    transition: border .2s ease-in-out;
+    position: relative;
+}
+.input-pic-box{
+	border: 1px dashed #CCC;	
+}
+
+.pic-img {
+    width: 133px;
+    height: 77px;
+}
+.pic-img {
+    margin-right: auto;
+    margin-left: auto;
+    border: none;
+    display: block;
+    max-width: 100%;
+    vertical-align: middle;
+}
+.del-btn{
+    width: 21px;
+    height: 21px;
+    line-height: 28px;
+    display: inline-block;
+    font-size: 0.5em;
+    padding: 0;
+    border: 0;
+    text-align: center;
+    border-radius: 50px;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #F00;
+    color: #808000;
+    opacity: 0.7;
+}
+.text-center {
+    text-align: center;
+}

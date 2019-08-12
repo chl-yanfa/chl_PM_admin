@@ -1,0 +1,37 @@
+<body>
+	<div class="trailer-body">
+		<form id="trailerCompany">
+			<input id="id" name="id" hidden />
+			<div class="company">
+				<p class="namexing">*公司名称</p>
+				<input required="required" id="companyName" name="companyName"
+					class="easyui-textbox easyui-validatebox">
+			</div>
+			<div class="companys">
+				<p class="namexing">*联系人</p>
+				<input required="required" id="contactPerson" name="contactPerson"
+					class="easyui-textbox easyui-validatebox">
+			</div>
+			<div class="companys">
+				<p class="namexing">*联系电话</p>
+				<input required="required" id="contactPhone" name="contactPhone"
+					class="easyui-textbox easyui-validatebox">
+			</div>
+			<div class="companys" id="comps">
+				<p class="namexing">*所属区域</p>
+				<input class="easyui-combobox straile" id="areasId" name="areasId"/>
+				<input id="areas" name="areas" class="easyui-textbox" hidden>
+			</div>
+			<div class="companys" style="margin-top: 20px;">
+				<p class="namexing">备注</p>
+				<textarea warp="virtual" id="remark"
+					name="remark" class="trailer"
+					data-options="multiline:true"
+					onKeyUp="checkWord(this,'remark-check',200);" 
+					onMouseDown="checkWord(this,'remark-check',200);"
+					></textarea>
+				<p style="text-align: right;color: #666666;margin-bottom: 20px;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="remark-check">0</span>个字符 </p>
+			</div>
+		</form>
+	</div>
+</body>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/aftersale/apply.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../js/controller/aftersale/apply.js"></script>
+<title>跟踪申请</title>
+<style>
+.numberbox{
+  width:100px;height: 20px;
+}
+</style>
+</head>
+<body style="min-height: 2000px">
+	<div id="DIALOG"></div>
+	<div class="content">
+		<div class="content-top">
+			<label style="margin-right: 40px;">申请类型:</label>
+			<input id="at-0" name="applyType" value="延期" type="radio"/>
+			<label for="at-0" style="margin-right: 40px;">延期</label>
+			<input id="at-1" name="applyType" value="调价" type="radio"/>
+			<label for="at-1" style="margin-right: 40px;">调价</label>
+			<input id="at-2" name="applyType" value="退货" type="radio"/>
+			<label for="at-2">退货</label>
+		</div>
+	</div>
+	<div class="content deferDIV v-hide">
+		<form id="deferForm">
+			<table class="table-body" style="width: 45%;margin-left: 30px;">
+				<input id="deferType" name="deferType" hidden/>
+				<tr>
+					<td class="r-td"><label><span class="deferName">提货</span>截止时间:</label></td>
+					<td>
+						<input id="deadline" name="deadline"/>
+					</td>
+					<td class="r-td"><label><span class="deferName">提货</span>时间延期至:</label></td>
+					<td>
+						<input id="deferTime" name="deferTime"/>
+					</td>
+				</tr>
+			</table>
+			<div id="deferUpload" style="width: 70%;margin-left: 30px;">
+				<p class="title">上传图片:</p>
+				<!-- 图片上传 -->
+				<ul id="defer-upload-row">
+					<li class="pic-single">
+	                    <div class="input-pic-box pic-box">
+	                        <img class="pic-img" src="../../resources/images/addimg-bg.png" onclick="addPic('upload-defer')" />
+	                        <input style="display: none;" type="file" accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" id="upload-defer" class="upload-defer" onchange="doUpload('upload-defer',3)" />
+	                    </div>
+	                </li>
+				</ul>
+			</div>
+			<table class="table-body" style="width: 70%;margin-left: 30px;">
+				<tr><td>备注:</td></tr>
+				<tr><td>
+						<textarea warp="virtual" name="remark" id="defer-remark"
+							class="beizhu" data-options="multiline:true"
+							onKeyUp="checkWord(this,'defer-remark-check',200);" 
+							onMouseDown="checkWord(this,'defer-remark-check',200);"
+							></textarea>
+						<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="defer-remark-check">200</span>个字符 </p>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="content priceDIV v-hide">
+		<form id="priceForm">
+			<table class="table-body" style="width: 55%;margin-left: 30px;">
+				<tr>
+					<td colspan="5">
+						<label style="margin-right: 10px;margin-left: 20px;">合手价:</label>
+						<span col=""></span>
+						<label style="margin-right: 40px;">元</label>
+						<label style="margin-right: 10px;">车款:</label>
+						<span col=""></span>
+						<label style="margin-right: 40px;">元</label>
+						<label style="margin-right: 10px;">佣金:</label>
+						<span col=""></span>
+						<label style="margin-right: 40px;">元</label>
+						<label style="margin-right: 10px;">其他费用:</label>
+						<span col=""></span>
+						<label>元</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="r-td"><label>车款减免:</label></td>
+					<td>
+						<input id="cpt-0" name="carPriceType" value="车款百分比" type="radio"/>
+						<label for="cpt-0" style="margin-right: 30px;">车款百分比</label> 
+						<input id="cpt-1" name="carPriceType" value="固定值" type="radio"/>
+						<label for="cpt-1">固定值</label> 
+					</td>
+					<td>
+						<input name="carPriceValue" class="easyui-numberbox"/>
+						<span id="cpt-type"></span>
+					</td>
+					<td class="r-td"><label>减免后金额:</label></td>
+					<td><input name="carPriceAfter" class="easyui-numberbox"/>元</td>
+				</tr>
+				<tr>
+					<td class="r-td"><label>佣金打折:</label></td>
+					<td>
+						<input id="ct-0" name="commissionType" value="佣金百分比" type="radio"/>
+						<label for="ct-0" style="margin-right: 30px;">车款百分比</label> 
+						<input id="ct-1" name="commissionType" value="固定值" type="radio"/>
+						<label for="ct-1">固定值</label> 
+					</td>
+					<td>
+						<input name="commissionValue" class="easyui-numberbox"/>
+						<span id="ct-type"></span>
+					</td>
+					<td class="r-td"><label>减免后金额:</label></td>
+					<td><input name="commissionAfter" class="easyui-numberbox"/>元</td>
+				</tr>
+			</table>
+			<div id="priceUpload" style="width: 69%;margin:20px 50px;">
+				<p class="title">上传图片:</p>
+				<!-- 图片上传 -->
+				<ul id="price-upload-row">
+					<li class="pic-single">
+	                    <div class="input-pic-box pic-box">
+	                        <img class="pic-img" src="../../resources/images/addimg-bg.png" onclick="addPic('upload-price')" />
+	                        <input style="display: none;" type="file" accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" id="upload-price" class="upload-price" onchange="doUpload('upload-price',4)" />
+	                    </div>
+	                </li>
+				</ul>
+			</div>
+			<table class="table-body" style="width: 70%;margin-left: 40px;">
+				<tr><td>备注:</td></tr>
+				<tr>
+					<td>
+						<textarea warp="virtual" name="remark" id="price-remark"
+							class="beizhu" data-options="multiline:true"
+							onKeyUp="checkWord(this,'price-remark-check',200);" 
+							onMouseDown="checkWord(this,'price-remark-check',200);"
+							></textarea>
+						<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="price-remark-check">200</span>个字符 </p>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="content backCarDIV v-hide">
+		<form id="backCarForm">
+			<div id="backCarUpload" style="width: 69%;margin:20px 40px;">
+				<p class="title">上传图片:</p>
+				<!-- 图片上传 -->
+				<ul id="backCar-upload-row">
+					<li class="pic-single">
+	                    <div class="input-pic-box pic-box">
+	                        <img class="pic-img" src="../../resources/images/addimg-bg.png" onclick="addPic('upload-backCar')" />
+	                        <input style="display: none;" type="file" accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" id="upload-backCar" class="upload-backCar" onchange="doUpload('upload-backCar',5)" />
+	                    </div>
+	                </li>
+				</ul>
+			</div>
+			<table class="table-body" style="width: 70%;margin-left: 30px;">
+				<tr><td>备注:</td></tr>
+				<tr><td>
+						<textarea warp="virtual" name="remark" id="backCar-remark"
+							class="beizhu" data-options="multiline:true"
+							onKeyUp="checkWord(this,'backCar-remark-check',200);" 
+							onMouseDown="checkWord(this,'backCar-remark-check',200);"
+							></textarea>
+						<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="backCar-remark-check">200</span>个字符 </p>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="content-footer">
+		<button class="submitBtn" onclick="addApply()">提交</button>
+		<button class="cancelBtn" onclick="cancel()">取消</button>
+	</div>
+	
+</body>
+</html>

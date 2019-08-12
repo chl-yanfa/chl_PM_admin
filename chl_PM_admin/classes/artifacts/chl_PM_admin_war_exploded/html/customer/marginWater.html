@@ -1,0 +1,98 @@
+<body style="min-height: 1000px">
+	<table id="marginWaterList"></table>
+<script type="text/javascript">
+var toolbarType = [
+	'操作类型','',{id :'water-tb-operatorType'},'',
+	{text : '查询',id : 'water-iconSearch'},'&nbsp;'
+];
+//初始化数据表格
+function initWaterDateGrid(id){
+	$("#marginWaterList").datagrid({
+    	loadMsg : "数据加载中,请稍后……",
+        nowrap : true,
+        striped : true,
+        fit : false,
+        fitColumns : true,
+        url : URLMODULE.getMarginWaterList,
+        method : 'post',
+        autoLoad:false,
+        idField : 'id',
+        view:tcwOrderInfoView,
+        columns : [[
+                {title : '商户名称', field : 'userName', width : 30, align : 'center', halign:'center',formatter:function(value,row,index){
+                	if(value==null){
+                		return row.loginName;
+                	}
+                	return value;
+                }},
+                {title : '操作金额', field : 'operatorCash', width : 30, align:'center', halign:'center'},
+                {title : '操作类型', field : 'operatorTypeS', width: 30, align:'center', halign:'center'},
+                {title : '描述', field : 'memo', width : 120, align:'left', halign:'center'},
+                {title : '操作人', field : 'createUser', width : 30, align:'center', halign:'center'},
+                {title : '操作时间', field : 'createTime', width : 50, align:'center', halign:'center'},
+                {title : '操作', field : 'id', width : 40, align : 'center', halign:'center',formatter:function(value,row,index){
+					var marginWaterId = value;
+					var mid = row.mid;
+					var operatorCash = row.operatorCash;
+					var operatorType = row.operatorType;
+					var isRefund = row.isRefund;
+					var refund="refund('"+marginWaterId+"','"+mid+"','"+operatorCash+"','"+id+"')";
+					var optionStr = '';
+					var styleStr='href="javascript:void(0);" style="font-size: 14px;color: #4EA2FF;"';
+					if(operatorType == '4' && isRefund == 0){
+						optionStr += '<a '+styleStr+' onclick="'+refund+'">申请退款</a><br>';						
+					}
+					return optionStr;
+               }}
+              ]],
+        toolbar : toolbarType,
+        pagination : true,
+        singleSelect : true,
+        fitStyle : true
+    });
+	//操作类型
+	$('#water-tb-operatorType').combobox({
+    	editable : false,
+    	width : 150,
+		valueField:'id',
+		textField:'value',
+		data: [{id:"1",value: "冻结"},{id:"2",value: "解冻"},{id:"4",value: "充值"},{id:"5",value: "退款"}],
+		panelHeight:"auto"
+	});
+	$('#water-iconSearch').click(function() {
+		reLoadWaterData(0,id);
+		$('#water-tb-operatorType').combobox('clear');
+	});
+	reLoadWaterData(0,id);
+}
+
+//重新加载表格数据
+function reLoadWaterData(type,id){
+	var loadType = type==1?"reload":"load";
+	$("#marginWaterList").datagrid(loadType, {
+		mid:id,
+		operatorType:$('#water-tb-operatorType').combobox('getValue')
+    });
+}
+
+function refund(marginWaterId,mid,operatorCash,id){
+	$.messager.confirm('提示', '确定要申请退款吗?', function(r){
+		if (r){
+			$.post('../../customer/applyRefund',{
+				id:marginWaterId,
+				mid:mid,
+				operatorCash:operatorCash
+			},function(res) {
+				reLoadWaterData(1,id);
+				if(res.returnCode=='000000'){
+					$.messager.alert('提示', '退款成功','info');	
+				}else{
+					$.messager.alert('提示', res.returnMsg,'info');
+				}
+			});
+		}
+	});
+	
+}
+</script>
+</body>

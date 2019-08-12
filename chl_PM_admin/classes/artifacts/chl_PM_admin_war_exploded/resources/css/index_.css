@@ -1,0 +1,239 @@
+
+ *{
+	
+	margin:0;
+	padding:0
+}
+
+
+html{
+	
+	font-size:100px;
+}
+
+@media screen and (max-width: 1920px){
+   
+   html{
+	
+		font-size:100px;
+
+   }
+}
+
+@media screen and (max-width: 1600px){
+   
+    html{
+	
+		font-size:83px;
+
+   }
+
+}
+
+@media screen and (max-width: 1440px){
+    html{
+	
+		font-size:75px;
+
+   }
+}
+
+@media screen and (max-width: 1366px){
+     html{
+	
+		font-size:69px;
+
+   }
+}
+
+
+@media screen and (max-width: 1280px){
+     html{
+	
+		font-size:66px;
+
+   }
+}
+
+
+@media screen and (max-width: 1240px){
+     html{
+	
+		font-size:64px;
+
+   }
+}
+
+@media screen and (max-width: 1200px){
+     html{
+	
+		font-size:62.5px;
+
+   }
+}
+
+
+@media screen and (max-width: 1050px){
+     html{
+	
+		font-size:55px;
+
+   }
+}
+
+
+@media screen and (max-width: 1024px){
+     html{
+	
+		font-size:53px;
+
+   }
+}
+
+
+
+@media screen and (max-width: 940px){
+     html{
+	
+		font-size:48px;
+
+   }
+}
+
+
+@media screen and (max-width:869px){
+     html{
+	
+		font-size:45px;
+
+   }
+}
+
+
+.header {
+    width: 100%;
+    height:118px;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+    background-color: #3a83e6;
+}
+
+
+.index_primNav {
+    height:118px;
+    line-height:118px;
+    float: left;
+}
+
+#primNavWrap img {
+    width:247px;
+    height:57px;
+    margin-top:28px;
+    margin-left:70px;
+}
+
+.indexWarp .index_top {
+    width:auto;
+    height:60px;
+    float: right;
+    margin-right:64px;
+    line-height:60px;
+    margin-left:100px;
+    margin-top:27px;
+}
+
+
+.top_nav ul.nav_main {
+    height:60px;
+    float: right;
+}
+
+
+.top_nav ul.nav_main li{
+	float: left;
+	position: relative;
+	padding-left:10px;
+}
+
+
+ul.nav_main li a {
+    font-size:12px;
+    display: block;
+    float: left;
+    color: #FFF;
+}
+
+.index_twoNav {
+    height: 118px;
+    line-height:118px;
+    float:right;
+}
+
+.index_twoNav .twoNav_main a {
+    padding: 0 10px 0 10px;
+    display: block;
+    float: left;
+    text-align: center;
+    font-size:16px;
+    margin-right:10px;
+    color: #FFF;
+}
+
+#btnEp:hover{
+	background:#3485FB;
+	border-radius: 5px;
+	
+}
+.index_content{
+	width:100%;
+	height:auto;
+}
+
+.index_content   img{
+	width:1200px;;
+	display:block;
+	margin:0 auto;
+	overfloat:hidden;
+}
+.l-btn:hover{
+	/* background:#3485FB; */
+	border-radius: 5px;
+}
+#btnCancel:hover{
+	background:#3485FB;
+	border-radius: 5px;
+	
+}
+.index_twoNav .twoNav_main a.Cur{
+	border-bottom:2px solid #FFF;
+	color:#FFF;
+	height:80px;
+	font-weight: bold;
+}
+
+.inProcedure{
+	font-size:12px;
+}
+.inProcedure .proce-div{
+	margin: 0 8px;
+	display: inline-block;
+}
+.inProcedure .redCircle{
+	border-radius: 50%;
+	height: 15px;
+	width: 15px;
+	display: inline-block;
+	background: red;
+}
+.inProcedure .sline{
+	display: inline-block;
+	display: block;
+	color: #ffffff;
+	line-height: 10px;
+	text-align: center;
+	font-weight: bold;
+    font-size: 20px;
+}
+.inProcedure label{
+	margin: 0 2px;
+}
+ 

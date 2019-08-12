@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../js/lib/eui/themes/icon.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/lib/eui/tcwErpDataGridView.js"></script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"></script>
+<script type="text/javascript" src="../../js/controller/customer/customerList.js"></script>
+<title>用户管理列表</title>
+<style type="text/css">
+.content-main{
+	margin-top:20px;
+	margin-left:16px;
+}
+.content-footer{
+	margin-top:40px;
+	text-align: center;
+}
+.table-body{
+	border-collapse: collapse; 
+	text-align: center; 
+	border: none;
+	width: 90%;
+}
+.table-body th{
+	font-size: 12px;
+	font-weight: bold;
+}
+.table-body td{
+	font-size: 12px;
+	padding: 5px;
+}
+.easyui-textbox {
+	height: 28px;
+	width: 100%;
+}
+</style>
+</head>
+<body style="min-height: 1000px">
+	<div id="DIALOG"></div>
+	<table id="list"></table>
+</body>
+<script type="text/javascript">
+var toolbarType = [
+	{id:'searchText'},'&nbsp;',
+	{text : '查询',id : 'iconSearch'},'&nbsp;'
+];
+</script>
+</html>

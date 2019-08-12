@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.AftersaleFileMapper">
+	<resultMap id="BaseResultMap" type="AftersaleFileDto">
+		<id 	column="id" 			property="id" />
+		<result column="file_type" 		property="fileType" />
+		<result column="parent_id" 		property="parentId" />
+		<result column="attachment_id" 	property="attachmentId" />
+		<result column="sort" 			property="sort" />
+		<result column="is_delete" 		property="isDelete" />
+		<result column="create_user" 	property="createUser" />
+		<result column="create_time" 	property="createTime" />
+		<result column="img_path" 		property="imgPath" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, file_type, parent_id, attachment_id, sort, is_delete, create_user, create_time
+	</sql>
+	<select id="getFileById" resultMap="BaseResultMap">
+		select
+			cpaf.*,ta.storage_path img_path
+		from 
+			car_pm_aftersale_file cpaf left join tb_attachment ta on cpaf.attachment_id = ta.id
+		where 
+			cpaf.id = #{id}
+	</select>
+	<select id="getCollection" resultMap="BaseResultMap">
+		select
+			cpaf.*,ta.storage_path img_path
+		from 
+			car_pm_aftersale_file cpaf left join tb_attachment ta on cpaf.attachment_id = ta.id
+		where 
+			cpaf.file_type = #{fileType}
+		AND 
+			cpaf.parent_id = #{parentId}
+	</select>
+	<insert id="addFile">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">  
+			SELECT LAST_INSERT_ID()  
+		</selectKey>
+		insert into car_pm_aftersale_file (
+			file_type, parent_id, attachment_id, sort, 
+			is_delete, create_user, create_time
+		)values (
+			#{fileType}, #{parentId}, #{attachmentId},#{sort},
+			0, #{createUser}, now()
+		)
+	</insert>
+	<insert id="addFileBatch" parameterType="java.util.List">
+		insert into car_pm_aftersale_file (
+			file_type, parent_id, attachment_id, sort, 
+			is_delete, create_user, create_time
+		)values
+		<foreach collection="list" item="item" index="index" separator=",">
+		(
+			#{item.fileType}, #{item.parentId}, 
+			#{item.attachmentId},#{item.sort},
+			0, #{item.createUser}, now()
+		)
+		</foreach>
+	</insert>
+	<update id="updateFile">
+		update car_pm_aftersale_file
+		<set>
+			<if test="fileType != null">
+				file_type = #{fileType},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId},
+			</if>
+			<if test="attachmentId != null">
+				attachment_id = #{attachmentId},
+			</if>
+			<if test="sort != null">
+				sort = #{sort},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

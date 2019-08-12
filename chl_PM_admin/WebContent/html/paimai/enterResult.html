@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/icon.css" rel="stylesheet" type="text/css" />
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/viewtemplate/template.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/lookpic/dist/zoomify.min.css" rel="stylesheet"/>
+<link href="../../resources/css/paimai/enterResult.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/paimai/album.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../resources/lookpic/dist/zoomify.min.js"></script>
+<script type="text/javascript" src="../../js/controller/paimai/enterResult.js"></script>
+<title>查看拍卖结果</title>
+<style>
+.numberbox{
+  width:100px;height: 20px;
+}
+</style>
+</head>
+<body style="min-height:auto">
+	<div id="AUDIT_DIALOG"></div>
+	<div class="easyui-tabs">
+		<div title="拍卖信息">
+			<div class="content paimaiInfo-div">
+				<div class="c-header">
+					<label>拍卖会ID：</label><span col="pmhId"></span>
+					<label>拍卖会名称：</label><span col="paimaiName"></span>
+				</div>
+				<div class="c-header">
+					<label>拍品名称：</label><span col="fullName"></span>
+					<label>拍品序号：</label><span col="paimaiOrder"></span>
+				</div>
+			</div>
+			<div class="content" style="width:100%;height:470px;">
+				<!--商品概要-->
+				<div class="album" id="album-div">
+					<div class="album_picture" id="viewer">
+						<ul id="album_picture_list" class="album_picture_list"></ul>
+						<div class="album_picture_zoom" id="imgTotal"></div>
+					</div>
+					<div class="album_thumbs">
+						<div class="album_thumbs_list">
+							<ul id="album_thumbs_list"></ul>
+						</div>
+						<span id="move_left" class="album_thumbs_move left">〈</span>
+						<span id="move_right" class="album_thumbs_move right">〉</span>
+					</div>
+				</div>
+				<div class="car-deal-div" style="margin-left:15px;width:300px;height:470px; float: left">
+					<div>
+						<p id="carInfo" style="font-size:16px;font-weight: bold;"></p>
+					</div>
+					<div class="cartemp-div" style="font-size:16px;margin-top:15px;display: none;">
+						<p><span>出厂日期&nbsp;&nbsp;</span><span col="productionDate">--</span></p>
+						<p><span>VIN&nbsp;&nbsp;</span><span col="vin">--</span></p>
+						<p><span>钥匙&nbsp;&nbsp;</span><span col="isHasKey">--</span></p>
+					</div>
+					<div class="vpartstemp-div" style="font-size:16px;margin-top:15px;display: none;">
+						<p><span>数量&nbsp;&nbsp;</span><span col="partsCount">--</span></p>
+					</div>
+					<div class="apartstemp-div" style="font-size:16px;margin-top:15px;display: none;">
+						<p><span>数量&nbsp;&nbsp;</span><span col="partsCount">--</span></p>
+						<p><span>重量&nbsp;&nbsp;</span><span col="partsWeight">--</span></p>
+					</div>
+					<div class="result-div">
+						<div class="to-auct-info" hidden>
+							<h4 style="font-weight: bold;color: #555;">等待竞拍</h4>
+						</div>
+						<div class="auct-ing-info" hidden>
+							<h4 style="font-weight: bold;color: #555;">竞拍中</h4>
+						</div>
+						<div class="auct-ed-info" hidden>
+							<h4 style="font-weight: bold;color: #555;">待处理</h4>
+						</div>
+						<div class="deal-info" hidden>
+							<span>成交时间&nbsp;&nbsp;</span><span col="dealTime"></span><br/>
+							<span>买受人&nbsp;&nbsp;</span><span col="dealMember"></span><br/>
+							<span>联系方式&nbsp;&nbsp;</span><span col="dealPhone"></span><br/>
+							<span>身份证号&nbsp;&nbsp;</span><span col="dealIdCard"></span>
+						</div>
+						<div class="fail-info" hidden>
+							<h4 style="font-weight: bold;color: #555;">竞拍失败，已流拍</h4>
+						</div>
+						<div class="fail-8-info" hidden>
+							<h4 style="font-weight: bold;color: #555;">竞拍失败，已复拍</h4>
+						</div>
+						<div class="fail-10-info" hidden>
+							<h4 style="font-weight: bold;color: #555;">已退货</h4>
+						</div>
+					</div>
+				</div>
+				<div style="margin-left:15px;width:300px;height:470px; float: left">
+					<table class="table-body priceTable">
+						<tr>
+							<td style="width: 30%;">起拍价</td>
+							<td style="width: 70%;" col="startingPrice"></td>
+						</tr>
+						<tr>
+							<td>保留价</td><td col="reservePrice"></td>
+						</tr>
+						<tr>
+							<td>成交价</td><td col="highestPrice"></td>
+						</tr>
+						<tr>
+							<td>其他费用</td><td col="otherPrice"></td>
+						</tr>
+						<tr>
+							<td>合手价</td><td col="jointPrice"></td>
+						</tr>
+					</table>
+				</div>
+				<!--商品概要 结束-->
+			</div>
+			<div class="content">
+				<p style="font-size: 16px;font-weight: bold;margin: 20px 20px;">出价记录</p>
+				<table class="table-body cjTable" style="width:60%;">
+					<tr>
+						<td style="width: 30%;">姓名</td>
+						<td style="width: 40%;">时间</td>
+						<td style="width: 30%;">金额</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div title="参拍信息">
+			<div id="auctionSetBody"></div>
+		</div>
+		<div title="拍品信息">
+			<div id="vehicleBody"></div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.PayTrackMapper">
+	<resultMap id="BaseResultMap" type="PayTrack">
+		<id 	column="id"  			property="id" />
+		<result column="auction_id"  	property="auctionId" />
+		<result column="auction_set_id" property="auctionSetId" />
+		<result column="track_message"  property="trackMessage" />
+		<result column="operator"  		property="operator" />
+		<result column="create_time"  	property="createTime" />
+		<result column="is_delete"  	property="isDelete" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, auction_id, auction_set_id, track_message, operator, create_time, is_delete
+	</sql>
+	<select id="getPayTrackById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_pay_track
+		where id = #{id}
+	</select>
+	<select id="getPayTrackByAuctionSetId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_pay_track
+		where auction_set_id = #{auctionSetId}
+		AND is_delete=0
+		order By create_time
+	</select>
+	<insert id="addPayTrack">
+		insert into car_pm_aftersale_pay_track (
+			id, auction_id, auction_set_id, track_message,operator,create_time, is_delete
+		)values (
+			#{id}, #{auctionId}, #{auctionSetId},
+			#{trackMessage},
+			#{operator},
+			now(), 0
+		)
+	</insert>
+	<insert id="addPayTrackSelective">
+		insert into car_pm_aftersale_pay_track
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="auctionId != null">
+				auction_id,
+			</if>
+			<if test="auctionSetId != null">
+				auction_set_id,
+			</if>
+			<if test="trackMessage != null">
+				track_message,
+			</if>
+			<if test="operator != null">
+				operator,
+			</if>
+			create_time,
+			is_delete,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="auctionId != null">
+				#{auctionId},
+			</if>
+			<if test="auctionSetId != null">
+				#{auctionSetId},
+			</if>
+			<if test="trackMessage != null">
+				#{trackMessage},
+			</if>
+			<if test="operator != null">
+				#{operator},
+			</if>
+			now(),0,
+		</trim>
+	</insert>
+	<update id="updatePayTrackSelective">
+		update car_pm_aftersale_pay_track
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="auctionSetId != null">
+				auction_set_id = #{auctionSetId},
+			</if>
+			<if test="trackMessage != null">
+				track_message = #{trackMessage},
+			</if>
+			<if test="operator != null">
+				operator = #{operator},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updatePayTrack">
+		update 
+			car_pm_aftersale_pay_track
+		set 
+			auction_id = #{auctionId},
+			auction_set_id = #{auctionSetId},
+			track_message = #{trackMessage},
+			operator = #{operator},
+			is_delete = #{isDelete}
+		where 
+			id = #{id}
+	</update>
+</mapper>

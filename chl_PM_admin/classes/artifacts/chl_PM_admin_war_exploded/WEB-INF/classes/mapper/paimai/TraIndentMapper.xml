@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.standard.TraIndentMapper">
+
+	<select id="findTraIndent" parameterType="map" resultType="TraIndent">
+		SELECT
+			id as id,
+			auction_id as auctionId,
+			order_state as orderState
+		FROM 
+			car_pm_auction_set
+		where
+			is_delete = 0
+		and 
+			is_history = 0
+		<if test="carCode !=null">
+			AND auction_id = #{carCode}
+		</if>
+	</select>
+
+	<update id="updateTraIndent">
+		update car_pm_auction_set
+		<set>
+			<if test="dealMember !=null">
+				deal_member = #{dealMember},
+			</if>
+			<if test="dealTime !=null">
+				deal_time =#{dealTime}
+			</if>
+			<if test="dealMid !=null">
+				deal_mid =#{dealMid}
+			</if>
+			<if test="orderState !=null">
+				order_state =#{orderState}
+			</if>
+			<if test="jointPrice !=null">
+				joint_price =#{jointPrice}
+			</if>
+		</set>
+		where id =#{orderId}
+	</update>
+
+	<select id="getConfirmSendData" resultType="TraIndent">
+		SELECT
+			CONCAT(aias.auction_id,'|',
+			IFNULL(aias.deal_mid,''),'|',
+			IFNULL(aias.order_no,''), '|',
+			IFNULL(aias.joint_price,0) ,'|',
+			IFNULL(aias.order_state,''),'|'
+			) as dataStr
+		FROM
+			car_pm_auction_set aias
+		WHERE
+			aias.id=#{orderId}
+	</select>
+
+</mapper>

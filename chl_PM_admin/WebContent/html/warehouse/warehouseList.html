@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../js/lib/eui/themes/icon.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/warehouse/outWarehouse.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/warehouse/outWarehouseAbnormal.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/jquery.cookie.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/lib/eui/tcwErpDataGridView.js"></script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../js/controller/warehouse/warehouseList.js"></script>
+<title>入库列表</title>
+<style type="text/css">
+.textEllipsis {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.textEllipsis:hover {
+	text-decoration: none;
+}
+</style>
+</head>
+<body style="min-height: 1000px">
+	<div id="tabs" class="easyui-tabs"></div>
+	<table id="wareList"></table>
+	<div id="OUT-DIALOG"></div>
+</body>
+<script type="text/javascript">
+var toolbarType = [ 
+	'拍品类型','',{id :'tb-auctionType'},'',
+	'分公司审核状态','',{id :'tb-subCompanyAudit'},'',
+	'拍卖时间','',{id :'tb-paimaiDateStart'},'&nbsp;到',{id :'tb-paimaiDateEnd'},'|',
+	'入库时间','',{id :'tb-inStockDate'},'',
+	'出库时间','',{id :'tb-outStockDate'},'',
+	{id:'searchText'},'&nbsp;',
+	{text : '查询',id : 'iconSearch'},'&nbsp;',
+	{text : '重置',id : 'iconReset'}
+	
+];
+</script>
+</html>

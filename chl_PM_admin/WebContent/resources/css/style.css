@@ -1,0 +1,439 @@
+@charset "utf-8";
+
+/*审核代码*/
+.examine{
+  height: auto;
+  overflow: hidden;
+  padding: 1px;
+  background: #fff;
+}
+.examine .exTitle{
+  height: 30px;
+  line-height: 30px;
+  color: #fff;
+  padding:0 15px 0 15px;
+  position: relative;
+  background: #6f8abd;
+}
+.exTitle a.close{
+  width: 11px;
+  height: 10px;
+  display: block;
+  text-indent: -9999px;
+  position: absolute;
+  top:10px;
+  right: 15px;
+  background: url(../images/close.png) no-repeat;
+}
+.examine .exContent{
+  height: auto;
+  overflow: hidden;
+  margin:18px 20px;
+}
+.exContent .exConleft{
+  float: left;
+}
+.exConleft table{
+  width: 386px;
+  border:1px solid #cdcdcd;
+  border-bottom: none;
+}
+.exConleft table tr td{
+  height: 32px;
+  line-height: 32px;
+  color: #333;
+  text-align: center;
+  font-size: 12px;
+  border-bottom:1px solid #cdcdcd;
+}
+.exConleft table tr td.tatile{
+  background: #e6e6e6; 
+  font-weight: bold; 
+  border-right:1px solid #cdcdcd;
+}
+.exConleft table tr td.tamain{
+  text-align: left !important;
+  padding-left: 10px;
+  word-break:break-all;
+}
+.inputLoad{
+	border:0;
+	width:220px;
+	font-size: 12px;
+	font-family: "微软雅黑","Helvetica Neue","HelveticaNeue",Helvetica,Arial,"Lucida Grande",sans-serif;	
+}
+.inputLoad2{
+	border:0;
+	width:55px;
+	font-size: 12px;
+	font-family: "微软雅黑","Helvetica Neue","HelveticaNeue",Helvetica,Arial,"Lucida Grande",sans-serif;	
+}
+.exConleft .exleftbox{
+  margin: 11px 0 0 50px;
+}
+.exConleft .exleftbox input.through{
+  width: 138px;
+  height: 28px;
+  line-height: 22px;
+  font-size: 14px;
+  text-align: center;
+  color: #fff;
+  border:1px solid #00a175;
+  background: #15c394;
+  cursor:pointer;
+}
+.exConleft input.chakan{
+  width:80px;
+  height: 24px;
+  line-height: 22px;
+  color: #fff;
+  font-size: 12px;
+  border:1px solid #00a175;
+  background: #15c394;
+  cursor:pointer;
+}
+.exConleft .exleftbox input.modify{
+  width: 138px;
+  height: 28px;
+  line-height: 22px;
+  font-size: 14px;
+  text-align: center;
+  color: #fff;
+  border:1px solid #e11c1c;
+  background: #ff4343;
+  cursor:pointer;
+}
+.exContent .exConright{
+  float: left;
+  padding-left: 10px;
+  border-left:1px dashed #cdcdcd;
+  margin-left: 10px;
+}
+.exConright ul li,
+.refer-left ul li,
+.reference .refer-right ul li,
+.fillin-left ul li,
+.fillin-right ul li{
+  height: auto;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.exConright ul li em,
+.refer-left ul li em,
+.reference .refer-right ul li em,
+.fillin-left ul li em,
+.fillin-right ul li em{
+  display: block;
+  text-align: right;
+  float: left;
+  color: #333;
+  font-size: 12px;
+  font-weight: bold;
+  font-style:normal;
+  margin-top: 3px;
+  margin-right: 10px;
+}
+.exConright ul li em{width: 120px;}
+.refer-left ul li em{width:80px;}
+.reference .refer-right ul li em{width:75px;}
+.fillin-left ul li em{width:90px;}
+.fillin-right ul li em{width:110px;}
+.exConright ul li .fune,
+.violate .fune,
+.refer-left .fune,
+.reference .refer-right .fune,
+.fillin-left .fune,
+.fillin-right .fune{
+  float: left;
+  color: #333;
+  font-size: 12px;
+  line-height: 24px;
+}
+.exConright ul li label,
+.violate .fune label,
+.refer-left label,
+.reference .refer-right label,
+.fillin-left label,
+.fillin-right label{
+  color: #333;
+  font-size: 12px;
+  margin-right: 12px;
+}
+.exConright ul li input.difvist[type=text],
+.exConright ul li input.difvitwo[type=text],
+.exConright ul li input.difvithree[type=text],
+.refer-left ul li input.difvist[type=text],
+.refer-left ul li input.difvitwo[type=text],
+.refer-left ul li input.difvithree[type=text],
+.refer-right ul li input.difvist[type=text],
+.refer-right ul li input.difvitwo[type=text],
+.refer-right ul li input.difvithree[type=text],
+.fillin-left ul li input.difvist[type=text],
+.fillin-left ul li input.difvitwo[type=text],
+.fillin-left ul li input.difvithree[type=text],
+.fillin-right ul li input.difvist[type=text],
+.fillin-right ul li input.difvitwo[type=text],
+.fillin-right ul li input.difvithree[type=text]{
+  height: 18px;
+  /*border:1px solid #1c5180;*/
+  border:1px solid #dbdbdb;
+  border
+  margin-right: 5px;
+  padding:3px;
+}
+.exConright ul li input.difvist[type=text],
+.refer-left ul li input.difvist[type=text],
+.refer-right ul li input.difvist[type=text],
+.fillin-left ul li input.difvist[type=text],
+.fillin-right ul li input.difvist[type=text]{
+  width: 50px !important;
+}
+.exConright ul li input.difvitwo[type=text],
+.refer-left ul li input.difvitwo[type=text],
+.refer-right ul li input.difvitwo[type=text],
+.fillin-left ul li input.difvitwo[type=text],
+.fillin-right ul li input.difvitwo[type=text]{
+   width: 80px !important;
+}
+.exConright ul li input.difvithree[type=text],
+.refer-left ul li input.difvithree[type=text],
+.refer-right ul li input.difvithree[type=text],
+.fillin-left ul li input.difvithree[type=text],
+.fillin-right ul li input.difvithree[type=text]{
+  width: 126px !important;
+}
+.exConright ul li select,
+.refer-left ul li select,
+.refer-right ul li select,
+.fillin-left ul li select,
+.fillin-right ul li select{
+  width: 116px;
+  border:1px solid #dbdbdb;
+  margin-right: 10px;
+}
+.exConright ul li.tibox{margin-left: 130px; *margin-left: 65px; margin-top: 20px;}
+.exConright ul li.tibox input{
+display: inline-block;
+width: 160px;
+height: 35px;
+line-height: 35px;
+font-size: 14px;
+text-align: center;
+color: #fff !important;
+text-shadow: 1px 2px 1px #FF7106;
+cursor: pointer;
+border-radius: 3px;
+border:none;
+background: #FB9400;
+font-family: "微软雅黑";
+}
+.exConright ul li .fune textarea,
+.refer-right ul li .fune textarea{
+  width:234px;
+  height: 50px;
+  padding: 3px;
+  border:1px solid #cdcdcd;
+}
+
+.clinch table{
+  border:1px solid #cdcdcd;
+  border-right: none;
+  border-bottom: none;
+  margin-bottom: 20px;
+}
+.clinch table tr th{
+    border-bottom: 1px solid #cdcdcd;
+    border-right: 1px solid #cdcdcd;
+    color: #333;
+    font-size: 12px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    background:#e6e6e6;
+}
+.clinch table tr td{
+    height: 32px;
+    line-height: 32px;
+    color: #333;
+    font-size: 12px;
+    padding-left: 10px;
+    border-right: 1px solid #cdcdcd;
+    border-bottom: 1px solid #cdcdcd;
+}
+.clinch table tr th.coltwo{
+  background:#fff2bc;
+}
+.clinch table tr th.colthree{
+  background:#d6eeff;
+}
+
+.examine .seller tr th{
+  border-bottom: 1px solid #cdcdcd;
+    border-right: 1px solid #cdcdcd;
+    color: #333;
+    font-size: 12px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    background:#e6e6e6;
+}
+.examine .seller tr td{
+    height: 32px;
+    line-height: 32px;
+    color: #333;
+    font-size: 12px;
+    padding-left: 10px;
+    text-align: center;
+    border-right: 1px solid #cdcdcd;
+    border-bottom: 1px solid #cdcdcd;
+}
+.confirmation{
+	text-align:center;
+}
+.confirmation input{
+    width: 180px;
+    height: 28px;
+    line-height: 26px;
+   /*  margin: 25px 0 100px 350px; */
+    text-align: center;
+    color: #fff;
+     cursor: pointer;
+    border:1px solid #da6c00;
+    background: #ff9f09;
+    font-family: "微软雅黑";
+}
+
+.violate .explain{
+  float: left;
+  font-size: 12px;
+  color: #333;
+  position: relative;   
+  margin-top: 10px;
+}
+.violate .explain span{
+  position: absolute;
+  top:0;
+  left:0;
+}
+.violate .explain textarea{
+  margin-left: 50px;
+  width: 268px;
+  height: 60px;
+  padding: 3px;
+  border:1px solid #cdcdcd;
+  /*margin-bottom: 10px;*/
+}
+.violate .queexp input{
+  /*float: left;*/
+  width:178px;
+  height: 28px;
+  line-height: 24px;
+  text-align: center;
+  font-family: "微软雅黑";
+  border:1px solid #da6c00;
+  background: #ff9f09;
+  color: #fff;
+  margin-left: 80px;
+  margin-top: 30px;
+  cursor: pointer;
+}
+/*撮合新样式*/
+.examine .act{
+  border:1px solid #cdcdcd;
+  border-right: none;
+  border-bottom: none;
+  margin-bottom: 10px;
+  margin: 15px 50px 15px 50px;
+}
+.examine .act th{
+  border-bottom: 1px solid #cdcdcd;
+  border-right: 1px solid #cdcdcd;
+  color: #333;
+  font-size: 12px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  background:#e6e6e6;
+}
+.examine .act td{
+  height: 32px;
+  line-height: 32px;
+  color: #333;
+  font-size: 12px;
+  padding-left: 10px;
+  border-right: 1px solid #cdcdcd;
+  border-bottom: 1px solid #cdcdcd;
+}
+.examine .reference,
+.examine .fillin{
+  width:793px;
+  height: auto;
+  overflow: hidden;
+  padding:15px 0;
+  border:1px solid #cdcdcd;
+  margin-left: 50px;
+  margin-bottom: 15px;
+}
+.examine .fillin{padding-bottom: 0 !important;}
+.reference .refer-left{
+  width:400px;
+  float: left;
+}
+.reference .refer-right{
+  width:380px;
+  float: left;
+  padding-left: 10px;
+  border-left:1px dashed #CDCDCD;
+}
+.fillin p{
+  color: #f26010;
+  padding-left: 20px;
+  font-size: 12px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  background: url(../images/fillpic.png) no-repeat;
+}
+.fillin .fillin-left{
+  width: 380px;
+  float: left;
+  margin-left: 10px;
+}
+.fillin .fillin-right{
+  width:380px;
+  float: left;
+  padding-left: 20px;
+  border-left:1px dashed #CDCDCD;
+}
+
+.through .picsmain img{
+  width: 80px;
+  height: 50px;
+}
+.through .picsmain p{margin-top: 5px; line-height:20px !important;}
+.uploading{position:relative; margin-bottom: 10px;margin-top:10px;}
+.uploading input{
+  width:55px;
+  height: 25px;
+  position:absolute; 
+  top:0; 
+  left:0;
+  filter:alpha(opacity=0);
+  -moz-opacity:0;
+  opacity:0;
+}
+.uploading a.uploadfont{
+  width: 55px;
+  height: 25px;
+  line-height: 23px;
+  text-align: center;
+  font-size: 14px;
+  display: block;
+  background: #4164a2;
+  color: #fff;
+
+}
+
+.subBtnlink {width: 80px; height: 35px; line-height: 35px; font-size: 12px; text-align: center; color: #FFF !important; text-shadow: 1px 2px 1px #0b86e8; cursor: pointer; border-radius: 3px; border: medium none; background: none repeat scroll 0% 0% #0b86e8; font-family: "微软雅黑";display: inline-block;text-decoration:none;}
+
+/*字体颜色*/
+.color_blue{color:#008FFA !important;}

@@ -1,0 +1,76 @@
+<body>
+	<div id="edit-div" style="display: none;">
+		<div class="content-main">
+			<form id="editForm">
+				<input name="id" class="easyui-textbox" hidden/>
+				<table class="table-body">
+					<tr>
+						<th style="width: 20%;">姓名：</th>
+						<td style="width: 80%;">
+							<input required="required" name="userName"
+								class="easyui-textbox easyui-validatebox">
+						</td>
+					</tr>
+					<tr>
+						<th>手机号：</th>
+						<td>
+							<input required="required" name="phone"
+								class="easyui-textbox easyui-validatebox">
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<div class="content-footer">
+			<button class="saveBtn" onclick="editCustomer()">保存</button>
+		</div>
+	</div>
+	
+	<div id="resetpwd-div" style="display: none;">
+		<div class="content-main">
+			<form id="resetPwdForm">
+				<input name="id" class="easyui-textbox" hidden/>
+				<table class="table-body">
+					<tr>
+						<th style="width: 20%;">密码：</th>
+						<td style="width: 80%;">
+							<input required="required" name="password" type="password"
+								class="easyui-textbox easyui-validatebox">
+						</td>
+					</tr>
+					<tr>
+						<th>确认密码：</th>
+						<td>
+							<input required="required" name="password2" type="password"
+								class="easyui-textbox easyui-validatebox">
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<div class="content-footer">
+			<button class="saveBtn" onclick="resetPwd()">保存</button>
+		</div>
+	</div>
+	<div id="chargemargin-div" style="display: none;">
+		<div class="content-main">
+			<form id="chargeMarginForm">
+				<input name="id" class="easyui-textbox" hidden/>
+				<table class="table-body">
+					<tr>
+						<th style="width: 30%;">请输入金额：</th>
+						<td style="width: 70%;">
+							<input required="required" name="margin"
+								onkeyup="validNumber(this)"
+								onblur="validNumber(this)"
+								class="easyui-textbox easyui-validatebox">
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<div class="content-footer">
+			<button class="saveBtn" onclick="chargeMargin()">保存</button>
+		</div>
+	</div>
+</body>

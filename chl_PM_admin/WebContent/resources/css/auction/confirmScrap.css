@@ -1,0 +1,71 @@
+.top-title{
+	width: 150px;
+    line-height: 40px;
+    border: 1px solid red;
+    color: red;
+    font-size: 20px;
+    text-align: center;
+}
+.content-top,.content{
+	margin-top:20px;
+	margin-left: 10px;
+	font-size: 13px;
+}
+.scrapDiv{
+	margin: 40px 0px;
+}
+.scrapDiv label:not(:first-child){
+	margin-left:100px;
+}
+.beizhu{
+	width: 90%;
+	height:80px;
+	font-size: 12px;
+	resize:none;
+	margin: 10px 0px;
+}
+.saveBtn{
+	width: 100px;
+	color: #ffffff;
+	background: #66b1ff;
+	border-radius: 3px;
+	font-size:14px;
+	height: 35px;
+	border: none;
+}
+.saveBtn:hover{
+	background: #1890ff;
+}
+
+.carMain{
+	margin-top:20px;
+	margin-left:16px;
+}
+.table-body{
+	border-collapse: collapse; 
+	text-align: center; 
+	width: 100%;
+}
+.table-body td{
+	padding: 1em;
+    border:1px solid #dbdbdb;
+}
+.table-body input{
+	text-align: center;
+	border:none;
+}
+.car32{
+	font-size:14px;
+	display:inline-block;
+	float:left;
+	margin-left: 46px;
+}
+.car34{
+	margin-left:50px;
+	color:red;
+}
+.item {
+	float: left;
+	position: relative;
+	margin: 28px;
+}

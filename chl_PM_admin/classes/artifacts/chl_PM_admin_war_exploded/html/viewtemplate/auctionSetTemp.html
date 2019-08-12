@@ -1,0 +1,154 @@
+<div id="auctionSetDiv" class="carMain">
+	<table class="table-body">
+		<tr>
+			<td style="width: 80px;">
+				<div style="width: 80px;"><label>结算方式</label></div>
+			</td>
+			<td colspan="5">
+				<span col="settlementMethod"></span>
+			</td>
+		</tr>
+		<tr>
+			<td><label>接受委托价格</label></td>
+			<td colspan="5">
+				<span col="entrustPrice"></span>
+				<label class="suf-money">元</label>
+			</td>
+		</tr>
+		<tr>
+			<td><label>起拍价</label></td>
+			<td colspan="3">
+				<span col="startingPrice"></span>
+				<label class="suf-money">元</label>
+				<span>（*注意：只能输入100的倍数的金额）</span>
+			</td>
+			<td style="width: 60px;"></td>
+			<td style="width: 60px;"></td>
+		</tr>
+		<tr>
+			<td><label>保留价</label></td>
+			<td colspan="3">
+				<span col="reservePrice"></span>
+				<label class="suf-money">元</label>
+			</td>
+			<td><label>参拍保证金</label></td>
+			<td>
+				<span col="auctionCashDeposit"></span>
+				<label class="suf-money">元</label>
+			</td>
+		</tr>
+		<tr>
+			<td><label>佣金类型</label></td>
+			<td style="width: 80px;">
+				<span col="commissionType"></span>
+			</td>
+			<td style="width: 60px;"><label>佣金</label></td>
+			<td style="width: 60px;">
+				<span col="commission"></span>
+				<span id="cs-type"></span>
+			</td>
+			<td colspan="2"></td>
+		</tr>
+		<tr>
+			<td><label>过户保证金</label></td>
+			<td>
+				<span col="transferDepositType"></span>
+			<td><label>金额</label></td>
+			<td>
+				<span col="transferDepositMoney"></span>
+				<span id="tdt-type"></span> 
+			</td>
+			<td colspan="2"></td>
+		</tr>
+		<tr>
+			<td colspan="6" style="background: gainsboro;text-align: left">
+				其他费用
+			</td>
+		</tr>
+		<tr>
+			<td><label>委托前费用</label></td>
+			<td>
+				<span col="entrustFrontCost"></span>
+				<label class="suf-money">元</label>
+			</td>
+			<td>应支付给：
+				<span col="entrustCostPay"></span>
+			</td>
+			<td><label>代收费用</label></td>
+			<td>
+				<span col="collectionCost"></span>
+				<label class="suf-money">元</label>
+			</td>
+			<td>应支付给：
+				<span col="collectionCostPay"></span>
+			</td>
+		</tr>
+		<tr>
+			<td><label>施救费</label></td>
+			<td>
+				<span col="rescueCost"></span>
+				<label class="suf-money">元</label>
+			</td>
+			<td>应支付给：
+				<span col="rescueCostPay"></span>
+			</td>
+			<td><label>叉车费</label></td>
+			<td>
+				<span col="forkliftCost"></span>
+				<label class="suf-money">元</label>
+			</td>
+			<td>应支付给：
+				<span col="forkliftCostPay"></span>
+			</td>
+		</tr>
+		<tr>
+			<td><label>拆解费</label></td>
+			<td>
+				<span col="dismantlingCost"></span>
+				<label class="suf-money">元</label>
+			</td>
+			<td>应支付给：
+				<span col="dismantlingCostPay"></span>
+			</td>
+			<td><label>停车费</label></td>
+			<td>
+				<span col="parkingCost"></span>
+				<label class="suf-money">元</label>
+			</td>
+			<td>应支付给：
+				<span col="parkingCostPay"></span>
+			</td>
+		</tr>
+		<tr>
+			<td><label>拖车费</label></td>
+			<td>
+				<span col="trailerCost"></span>
+				<label class="suf-money">元</label>
+			</td>
+			<td>应支付给：
+				<span col="trailerCostPay"></span>
+			</td>
+			<td><label>其他费用</label></td>
+			<td>
+				<span col="otherCost"></span>
+				<label class="suf-money">元</label>
+			</td>
+			<td>应支付给：
+				<span col="otherCostPay"></span>
+			</td>
+		</tr>
+		<tr>
+			<td><label>备注</label></td>
+			<td colspan="5">
+				<span col="remark"></span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="6" style="background: gainsboro;text-align: left;">
+				<label>费用总计：</label>
+				<span col="totalCost"></span>
+				<label class="suf-money">元</label>
+			</td>
+		</tr>
+	</table>
+</div>

@@ -1,0 +1,95 @@
+.record-main{
+	margin: 30px 50px;
+	font-size:12px;
+}
+.record-footer{
+	margin: 30px 50px;
+	font-size:12px;
+	text-align: center;
+}
+.addr{
+	width: 220px;
+    height: 30px;
+    border: 1px solid rgba(0,0,0,0.15);
+}
+.beizhu{
+    width:900px;
+	height:100px;
+	font-size: 12px;
+	color: black;
+	line-height: 22px;
+	margin-top: 15px;
+	resize:none;
+}
+.submitButton{
+    width: 89px;
+    line-height: 32px;
+    color: #FFFFFF;
+    background-color: #00A2D4;
+    border-radius: 4px;
+    font-size:16px;
+    height: 35px;
+    border: none;
+}
+/* 上传图片 */
+@media (min-width: 992px){
+	.pic-single {
+	    width: 16.66666667%;
+    	display: inline-block;
+	}
+}
+.pic-single{
+	margin-bottom: 20px;
+	/* position: relative;
+    min-height: 1px; */
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.pic-box{
+	border: 1px solid #ddd;
+	display: block;
+    padding: 4px;
+    margin-bottom: 10px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border-radius: 4px;
+    transition: border .2s ease-in-out;
+    position: relative;
+}
+.input-pic-box{
+	border: 1px dashed #CCC;	
+}
+
+.pic-img {
+    width: 133px;
+    height: 77px;
+}
+.pic-img {
+    margin-right: auto;
+    margin-left: auto;
+    border: none;
+    display: block;
+    max-width: 100%;
+    vertical-align: middle;
+}
+.del-btn{
+    width: 21px;
+    height: 21px;
+    line-height: 28px;
+    display: inline-block;
+    font-size: 0.5em;
+    padding: 0;
+    border: 0;
+    text-align: center;
+    border-radius: 50px;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #F00;
+    color: #808000;
+    opacity: 0.7;
+}
+.text-center {
+    text-align: center;
+}

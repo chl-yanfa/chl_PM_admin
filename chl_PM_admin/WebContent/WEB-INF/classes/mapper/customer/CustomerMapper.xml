@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.CustomerMapper">
+	<resultMap id="customer" type="Customer">
+		<id 	column="id" 						property="id" />
+		<result column="user_name" 					property="userName" />
+		<result column="phone" 						property="phone" />
+		<result column="user_type" 					property="userType" />
+		<result column="weixincode" 				property="weixincode" />
+		<result column="login_name" 				property="loginName" />
+		<result column="password" 					property="password" />
+		<result column="password_salt" 				property="passwordSalt" />
+		<result column="companyid" 					property="companyid" />
+		<result column="business_type" 				property="businessType" />
+		<result column="id_card" 					property="idCard" />
+		<result column="front_id_card" 				property="frontIdCard" />
+		<result column="back_id_card" 				property="backIdCard" />
+		<result column="hand_id_card" 				property="handIdCard" />
+		<result column="certification_submit_time"	property="certificationSubmitTime" />
+		<result column="certification_state"		property="certificationState" />
+		<result column="certification_audit_time"	property="certificationAuditTime" />
+		<result column="certification_audit_user"	property="certificationAuditUser" />
+		<result column="certification_memo"			property="certificationMemo" />
+		<result column="status" 					property="status" />
+		<result column="creater" 					property="creater" />
+		<result column="operator" 					property="operator" />
+		<result column="createtime" 				property="createtime" />
+		<result column="operatortime" 				property="operatortime" />
+	</resultMap>
+	<resultMap id="customerDto" extends="customer" type="CustomerDto">
+		<result column="wallet_pledge_freeze" 		property="walletPledgeFreeze" />
+		<result column="transfer_ownership_pledge" 	property="transferOwnershipPledge" />
+		<result column="status_str" 				property="statusStr" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, user_name, phone, user_type, weixincode, login_name, password,
+		password_salt,
+		companyid, business_type, id_card, front_id_card, back_id_card, hand_id_card,
+		certification_submit_time,
+		certification_state, certification_audit_time, certification_audit_user,
+		certification_memo,
+		status, creater, operator, createtime, operatortime
+	</sql>
+	<select id="getCustomerById" resultMap="customer">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			sys_client
+		WHERE 
+			id = #{id}
+	</select>
+	<select id="getCustomerList" resultMap="customerDto">
+		SELECT 
+			SC.id,
+			SC.login_name,
+			SC.phone,
+			SC.user_name,
+			SC.certification_state,
+			CASE SC.certification_state WHEN 0 THEN '未实名' WHEN 1 THEN '待审核' WHEN 2 THEN '已实名' WHEN -1 THEN '已驳回' END
+			AS certification_state_s,
+			cpcm.wallet_pledge,
+			cpcm.wallet_pledge_freeze,
+			SC.status,
+			CASE SC.status when 1 then '可用' when 2 then '已删除' when 3 then '已冻结'  end as status_str
+		FROM 
+			sys_client SC LEFT JOIN car_pm_customer_margin cpcm ON SC.ID = cpcm.ID
+		Where 
+			SC.status in ('1','3')
+		AND
+			SC.user_type = '1'
+		<if test="keywords != null and keywords != ''">
+			AND (
+				SC.ID = #{keywords}
+				OR SC.login_name like CONCAT(CONCAT('%', #{keywords}),'%')
+				OR SC.user_name like CONCAT(CONCAT('%', #{keywords}),'%')
+				OR SC.phone like CONCAT(CONCAT('%', #{keywords}),'%')
+			)
+        </if>
+		ORDER BY SC.operatortime DESC
+	</select>
+	<select id="getCustomerListTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM 
+			sys_client SC
+		Where 
+			SC.status in ('1','3')
+		AND
+			SC.user_type = '1'
+		<if test="keywords != null and keywords != ''">
+			AND (
+				SC.ID = #{keywords}
+				OR SC.login_name like CONCAT(CONCAT('%', #{keywords}),'%')
+				OR SC.user_name like CONCAT(CONCAT('%', #{keywords}),'%')
+				OR SC.phone like CONCAT(CONCAT('%', #{keywords}),'%')
+			)
+        </if>
+	</select>
+	<update id="updateCustomerSelective">
+		update sys_client
+		<set>
+			<if test="userName != null">
+				user_name = #{userName},
+			</if>
+			<if test="phone != null">
+				phone = #{phone},
+			</if>
+			<if test="loginName != null">
+				login_name = #{loginName},
+			</if>
+			<if test="password != null">
+				password = #{password},
+			</if>
+			<if test="passwordSalt != null">
+				password_salt = #{passwordSalt},
+			</if>
+			<if test="idCard != null">
+				id_card = #{idCard},
+			</if>
+			<if test="frontIdCard != null">
+				front_id_card = #{frontIdCard},
+			</if>
+			<if test="backIdCard != null">
+				back_id_card = #{backIdCard},
+			</if>
+			<if test="handIdCard != null">
+				hand_id_card = #{handIdCard},
+			</if>
+			<if test="certificationSubmitTime != null">
+				certification_submit_time = #{certificationSubmitTime},
+			</if>
+			<if test="certificationState != null">
+				certification_state = #{certificationState},
+			</if>
+			<if test="certificationAuditTime != null">
+				certification_audit_time = #{certificationAuditTime},
+			</if>
+			<if test="certificationAuditUser != null">
+				certification_audit_user = #{certificationAuditUser},
+			</if>
+			<if test="certificationMemo != null">
+				certification_memo = #{certificationMemo},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="operator != null">
+				operator = #{operator},
+			</if>
+			<if test="operatortime != null">
+				operatortime = #{operatortime},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

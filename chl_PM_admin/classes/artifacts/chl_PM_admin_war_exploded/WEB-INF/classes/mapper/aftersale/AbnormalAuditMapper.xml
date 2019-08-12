@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.AbnormalAuditMapper">
+	<resultMap id="BaseResultMap" type="AbnormalAudit">
+		<id 	column="id"  				property="id" />
+		<result column="application_type"  	property="applicationType" />
+		<result column="application_id"  	property="applicationId" />
+		<result column="is_pass"  			property="isPass" />
+		<result column="no_pass_reason"  	property="noPassReason" />
+		<result column="create_time"  		property="createTime" />
+		<result column="is_delete" 			property="isDelete" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, application_type, application_id, is_pass, no_pass_reason,
+		create_time, is_delete
+	</sql>
+	<select id="getAbnormalAuditById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_abnormal_audit
+		where id = #{id}
+	</select>
+	<insert id="addAbnormalAudit">
+		insert into car_pm_aftersale_abnormal_audit (
+			id, application_type,application_id,
+			is_pass, no_pass_reason, create_time,is_delete
+		)values (
+			#{id}, #{applicationType},
+			#{applicationId},
+			#{isPass}, #{noPassReason}, 
+			now(),0
+		)
+	</insert>
+	<update id="updateAbnormalAuditSelective">
+		update car_pm_aftersale_abnormal_audit
+		<set>
+			<if test="applicationType != null">
+				application_type = #{applicationType},
+			</if>
+			<if test="applicationId != null">
+				application_id = #{applicationId},
+			</if>
+			<if test="isPass != null">
+				is_pass = #{isPass},
+			</if>
+			<if test="noPassReason != null">
+				no_pass_reason = #{noPassReason},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateAbnormalAudit">
+		update car_pm_aftersale_abnormal_audit
+		set 
+			application_type = #{applicationType},
+			application_id = #{applicationId},
+			is_pass = #{isPass},
+			no_pass_reason = #{noPassReason},
+			is_delete = #{isDelete}
+		where id = #{id}
+	</update>
+</mapper>

@@ -1,0 +1,45 @@
+.outtop{
+	margin-left: 55px;
+    margin-top: 55px;
+    display: inline-block;
+}
+.outtop2{
+	margin-left: 55px;
+    margin-top: 35px;
+    display: inline-block;
+}
+.outchu{
+	color:#66BAFF;
+}
+.outall2{
+    display:inine-block;
+}
+.check-div{
+    margin-left: 20px;
+}
+.out-check{
+	display:inline-block;
+	margin:5px 0px;
+	width:140px;
+}
+.beizhu3{
+    width:500px;
+	height:70px;
+	font-size: 12px;
+	color: black;
+	line-height: 22px;
+	margin-top: 15px;
+	resize:none;
+}
+.beizhu2{
+    width:500px;
+	height:100px;
+	font-size: 12px;
+	color: black;
+	line-height: 22px;
+	margin-top: 15px;
+	resize:none;
+}
+.shenporde{
+	width:500px;
+}

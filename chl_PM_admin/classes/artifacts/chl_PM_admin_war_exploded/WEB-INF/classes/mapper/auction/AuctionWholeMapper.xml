@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.AuctionWholeMapper">
+	<resultMap id="auctionWhole" 	type="AuctionWhole">
+		<id 	column="id" 					property="id" />
+		<result column="auction_no" 			property="auctionNo" />
+		<result column="full_name" 				property="fullName" />
+		<result column="lot_areas" 				property="lotAreas" />
+		<result column="vehicle_brand" 			property="vehicleBrand" />
+	    <result column="vehicle_type" 			property="vehicleType" />
+	    <result column="vehicle_system" 		property="vehicleSystem" />
+	    <result column="license_number" 		property="licenseNumber" />
+		<result column="paimai_date" 			property="paimaiDate" />
+		<result column="regist_state" 			property="registState" />
+		<result column="regist_state_flag" 		property="registStateFlag" />
+		<result column="procedure_state" 		property="procedureState" />
+		<result column="stock_state" 			property="stockState" />
+		<result column="sub_company_audit" 		property="subCompanyAudit" />
+		<result column="sub_company_audit_flag" property="subCompanyAuditFlag" />
+		<result column="set_state" 				property="setState" />
+		<result column="set_state_flag" 		property="setStateFlag" />
+		<result column="vehicle_state" 			property="vehicleState" />
+		<result column="auction_type_flag" 		property="auctionTypeFlag" />
+		<association property="imgPath" column="auctionId=id" javaType="String" 
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+	</resultMap>
+	<resultMap id="auctionSave" 	type="AuctionSave">
+		<id 	column="id" 				property="id" />
+		<result column="auction_no" 		property="auctionNo" />
+		<result column="full_name" 			property="fullName" />
+		<result column="lot_areas" 			property="lotAreas" />
+		<result column="vehicle_brand" 		property="vehicleBrand" />
+	    <result column="vehicle_type" 		property="vehicleType" />
+	    <result column="vehicle_system" 	property="vehicleSystem" />
+	    <result column="license_number" 	property="licenseNumber" />
+		<result column="create_time" 		property="saveTime" />
+		<result column="auction_type_flag" 	property="auctionTypeFlag" />
+		<association property="imgPath" column="auctionId=id" javaType="String" 
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+	</resultMap>
+	<!-- 报废列表 -->
+	<resultMap id="auctionScrap" 	type="AuctionScrap">
+		<id 	column="id" 				property="id" />
+		<result column="auction_no" 		property="auctionNo" />
+		<result column="full_name" 			property="fullName" />
+		<result column="lot_areas" 			property="lotAreas" />
+		<result column="vehicle_brand" 		property="vehicleBrand" />
+	    <result column="vehicle_type" 		property="vehicleType" />
+	    <result column="vehicle_system" 	property="vehicleSystem" />
+	    <result column="license_number" 	property="licenseNumber" />
+		<result column="scrap_state" 		property="scrapState" />
+		<result column="scrap_state_flag" 	property="scrapStateFlag" />
+		<result column="submit_user" 		property="submitUser" />
+		<result column="submit_time" 		property="submitTime" />
+		<result column="scrap_time" 		property="scrapTime" />
+		<result column="auction_type_flag" 	property="auctionTypeFlag" />
+		<association property="imgPath" column="auctionId=id" javaType="String" 
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+		<!-- 手续上传文件 -->
+		<collection property="procedureFileList" ofType="ProcedureFile" column="procedure_id=procedure_id"
+			select="mapper.standard.ProcedureFileMapper.getProcedureFileCollection">
+		</collection>
+	</resultMap>
+	<sql id="ListIf">
+		<if test="auctionType != null">
+			AND SIA.auction_type = #{auctionType}
+		</if>
+		<if test="subCompanyAuditId != null">
+			AND SIA.audit_state = #{subCompanyAuditId}
+		</if>
+		<if test="setStateId != null">
+			AND SIA.set_state = #{setStateId}
+		</if>
+		<if test="registStateId != null">
+			AND SIA.regist_state = #{registStateId}
+		</if>
+		<if test="procedureStateId != null">
+			AND SIA.procedure_state = #{procedureStateId}
+		</if>
+		<if test="stockStateId != null">
+			AND SIA.stock_state = #{stockStateId}
+		</if>
+		<if test="keywords != null and keywords != ''">
+			AND (SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%') 
+			OR SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%'))
+        </if>
+	</sql>
+	<!-- 获取车辆列表 -->
+	<select id="getAuctionWholeListByPage" resultMap="auctionWhole">
+		SELECT
+			SIA.id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system, 
+		    SIA.license_number, 
+		    case SIA.regist_state when 0 then '未登记' when 1 then '已登记' when 2 then '已驳回' end
+		    AS regist_state,		<!-- 业务登记 -->
+		    SIA.regist_state AS regist_state_flag,
+		    case SIA.procedure_state when 0 then '待提交' when 1 then '已提交' when 2 then '已出库' when 3 then '已驳回' end
+		    AS procedure_state,		<!-- 手续状态 -->
+		    case SIA.stock_state when 0 then '待入库' when 1 then '已入库' when 2 then '已出库' when 3 then '已驳回' end
+		    AS stock_state,			<!-- 库存状态 -->
+		    case SIA.audit_state when 0 then '待审核' when 1 then '审核通过' when -1 then '已驳回' end
+		    AS sub_company_audit,	<!-- 分公司审核状态 -->
+		    SIA.audit_state AS sub_company_audit_flag,
+		    case SIA.set_state when 0 then '待设置' when 1 then '已设置' when 2 then '待审核' when 3 then '已驳回' end
+		    AS set_state,	<!-- 参拍设置 -->
+		    case SIA.auction_state when 1 then '未上拍' when 10 then '未上拍' when 2 then '进入拍卖会' when 3 then '待发布' when 4 then '拍卖中' when 5 then '成交' when 8 then '流拍' when -10 then '已退货' end
+		    AS vehicle_state,
+		    SIA.set_state AS set_state_flag,
+		    SIA.auction_type auction_type_flag
+		FROM car_pm_auction SIA
+		WHERE
+		SIA.id is not null
+		AND SIA.is_delete = 0
+		<include refid="ListIf" />
+		<if test="auctionState != null">
+			AND SIA.auction_state = #{auctionState}
+		</if>
+		<if test="auctionState == null and auctionStateList==null">
+			AND auction_state in (1,2,3,4,5,7,8,10,-10)
+		</if>
+		<if test="auctionStateList != null">
+			AND SIA.auction_state IN 
+		   	<foreach item="list" index="index" collection="auctionStateList"
+                open="(" separator="," close=")"> #{list}
+			</foreach>
+		</if>
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- 获取车辆列表总条数 -->
+	<select id="getAuctionWholeListTotal" resultType="int">
+		SELECT COUNT(1)
+		FROM
+		car_pm_auction SIA
+		WHERE
+		SIA.id is not null
+		AND SIA.is_delete = 0
+		<include refid="ListIf" />
+		<if test="auctionState != null">
+			AND SIA.auction_state = #{auctionState}
+		</if>
+		<if test="auctionState == null and auctionStateList==null">
+			AND auction_state in (1,2,3,4,5,7,8,10,-10)
+		</if>
+		<if test="auctionStateList != null">
+			AND SIA.auction_state IN 
+		   	<foreach item="list" index="index" collection="auctionStateList"
+                open="(" separator="," close=")"> #{list}
+			</foreach>
+		</if>
+	</select>
+	<select id="getAuctionFinishListByPage" resultMap="auctionWhole">
+		SELECT
+			SIA.id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system, 
+		    SIA.license_number, 
+		    case SIA.regist_state when 0 then '未登记' when 1 then '已登记' when 2 then '已驳回' end
+		    AS regist_state,		<!-- 业务登记 -->
+		    SIA.regist_state AS regist_state_flag,
+		    case SIA.procedure_state when 0 then '待提交' when 1 then '已提交' when 2 then '已出库' when 3 then '已驳回' end
+		    AS procedure_state,		<!-- 手续状态 -->
+		    case SIA.stock_state when 0 then '待入库' when 1 then '已入库' when 2 then '已出库' when 3 then '已驳回' end
+		    AS stock_state,			<!-- 库存状态 -->
+		    case SIA.audit_state when 0 then '待审核' when 1 then '审核通过' when -1 then '已驳回' end
+		    AS sub_company_audit,	<!-- 分公司审核状态 -->
+		    SIA.audit_state AS sub_company_audit_flag,
+		    case SIA.set_state when 0 then '待设置' when 1 then '已设置' when 2 then '待审核' when 3 then '已驳回' end
+		    AS set_state,	<!-- 参拍设置 -->
+		    case SIA.auction_state when 1 then '未上拍' when 10 then '未上拍' when 2 then '进入拍卖会' when 3 then '待发布' when 4 then '拍卖中' when 5 then '成交' when 8 then '流拍' when -10 then '已退货' end
+		    AS vehicle_state,
+		    SIA.set_state AS set_state_flag,
+		    SIA.auction_type auction_type_flag
+		FROM car_pm_auction SIA,car_pm_aftersale SIAS
+		WHERE
+			SIA.id is not null
+		AND 
+			SIA.is_delete = 0
+		AND 
+			SIA.id=SIAS.auction_id
+		AND 
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		AND 
+			SIA.auction_state = 5
+		AND 
+			SIAS.take_car_state=1
+		<include refid="ListIf" />
+		ORDER BY SIA.TS DESC
+	</select>
+	<select id="getAuctionFinishListTotal" resultType="int">
+		SELECT COUNT(1)
+		FROM
+		car_pm_auction SIA,car_pm_aftersale SIAS
+		WHERE
+			SIA.id is not null
+		AND 
+			SIA.is_delete = 0
+		AND 
+			SIA.id=SIAS.auction_id
+		AND 
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		AND 
+			SIA.auction_state = 5
+		AND 
+			SIAS.take_car_state=1
+		<include refid="ListIf" />
+	</select>
+	<!-- getAuctionWholeTab 车辆列表TAB -->
+	<select id="getAuctionWholeTab" parameterType="map" resultType="map">
+		SELECT 
+			'0' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE SIA.is_delete = 0 AND SIA.auction_state in (1,2,3,4,5,7,8,10,-10)
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'1' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE SIA.is_delete = 0 AND SIA.auction_state in (1,10)
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'2' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE SIA.is_delete = 0 AND SIA.auction_state = 2
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'3' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE SIA.is_delete = 0 AND SIA.auction_state = 3
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'4' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE SIA.is_delete = 0 AND SIA.auction_state = 4
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'5' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE SIA.is_delete = 0 AND SIA.auction_state = 5
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'6' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE SIA.is_delete = 0 AND SIA.auction_state in (5,8)
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'7' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA,car_pm_aftersale SIAS
+		WHERE
+			SIA.is_delete = 0 
+		AND 
+			SIA.id=SIAS.auction_id
+		AND 
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		AND 
+			SIA.auction_state = 5
+		AND 
+			SIAS.take_car_state=1
+		<include refid="ListIf" />
+	</select>
+	<!-- getAuctionSaveListByPage 查询暂存车辆列表信息 -->
+	<select id="getAuctionSaveListByPage" resultMap="auctionSave">
+		SELECT
+			SIA.id,
+			SIA.auction_no,
+		    case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system,
+		    SIA.license_number, 
+		    SIA.create_time,
+		    SIA.auction_type auction_type_flag
+		FROM
+		car_pm_auction SIA
+		WHERE
+		id is not null
+		AND is_delete = 0
+		<include refid="ListIf" />
+		<if test="auctionState != null">
+			AND auction_state = #{auctionState}
+		</if>
+		ORDER BY TS DESC
+	</select>
+	<!--getAuctionSaveListTotal 获取暂存车辆列表总条数 -->
+	<select id="getAuctionSaveListTotal" resultType="int">
+		SELECT COUNT(1)
+		FROM
+		car_pm_auction SIA
+		WHERE
+		SIA.is_delete = 0
+		<include refid="ListIf" />
+		<if test="auctionState != null">
+			AND SIA.auction_state = #{auctionState}
+		</if>
+	</select>
+	<!-- getScrapCarListByPage 查询报废车辆列表信息 -->
+	<select id="getScrapCarListByPage" resultMap="auctionScrap">
+		SELECT
+			SIA.id,
+			SIA.auction_no,
+		    case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system,
+		    SIA.license_number, 
+		    SIA.create_time,
+		    SIPB.ID AS procedure_id,
+		    SIAS.submit_time AS submit_time,
+		    SIAS.operator AS submit_user,
+		    SIAS.confirm_time AS scrap_time,
+		    case SIAS.scrap_state when 0 then '待报废' when 1 then '已报废' end
+		    AS scrap_state,
+		    SIAS.scrap_state AS scrap_state_flag,
+		    SIA.auction_type auction_type_flag
+		FROM
+		car_pm_auction SIA LEFT JOIN car_pm_aftersale_scrap SIAS
+		ON SIA.id=SIAS.auction_id
+		Left join car_pm_procedure SIPB
+		ON SIA.ID=SIPB.auction_id
+		WHERE
+		SIA.id is not null
+		AND SIA.is_delete = 0
+		AND SIA.auction_state =-1
+		<include refid="ListIf" />
+		<if test="scrapState != null">
+			AND SIAS.scrap_state = #{scrapState}
+		</if>
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- getScrapCarListTotal 查询报废车辆总条数 -->
+	<select id="getScrapCarListTotal" resultType="int">
+		SELECT COUNT(1)
+		FROM
+		car_pm_auction SIA
+		LEFT JOIN car_pm_aftersale_scrap SIAS
+		ON SIA.id=SIAS.auction_id
+		WHERE
+		SIA.is_delete = 0
+		AND SIA.auction_state =-1
+		<include refid="ListIf" />
+		<if test="scrapState != null">
+			AND SIAS.scrap_state = #{scrapState}
+		</if>
+	</select>
+	<!-- getScrapCarListTab 报废车辆TAB -->
+	<select id="getScrapCarListTab" parameterType="map" resultType="map">
+		SELECT 
+			'0' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA LEFT JOIN car_pm_aftersale_scrap SIAS
+		ON SIA.id=SIAS.auction_id
+		WHERE SIA.is_delete = 0 AND SIA.auction_state =-1
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'1' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA LEFT JOIN car_pm_aftersale_scrap SIAS
+		ON SIA.id=SIAS.auction_id
+		WHERE SIA.is_delete = 0 AND SIA.auction_state =-1
+		AND SIAS.scrap_state = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'2' AS auction_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA LEFT JOIN car_pm_aftersale_scrap SIAS
+		ON SIA.id=SIAS.auction_id
+		WHERE SIA.is_delete = 0 AND SIA.auction_state =-1
+		AND SIAS.scrap_state = 1
+		<include refid="ListIf" />
+	</select>
+</mapper>

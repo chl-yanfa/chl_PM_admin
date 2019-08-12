@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.standard.SysMenuInfoMapper">
+	<resultMap id="sysMenuInfoDto" type="SysMenuInfoDto" >
+		<id property="id"               column="ID" />
+		<result property="menuName"     column="MENU_NAME" />
+		<result property="menuUrl"      column="MENU_URL" />
+		<result property="menuDescribe" column="MENU_DESCRIBE" />
+		<result property="parentId"     column="PARENT_ID" />
+		<result property="menuLevel"    column="MENU_LEVEL" />
+		<result property="menuType"     column="MENU_TYPE" />
+		<result property="sort"         column="SORT" />
+		<result property="icon"         column="ICON" />
+		<result property="isEnable"     column="IS_ENABLE" />
+		<result property="createUser"   column="CREATE_USER" />
+		<result property="createTime"   column="CREATE_TIME" />
+		<result property="updateUser"   column="UPDATE_USER" />
+		<result property="updateTime"   column="UPDATE_TIME" />
+	</resultMap>
+	<!-- 查询用户列表 -->
+	<select id="selectSysMenuInfo" resultMap="sysMenuInfoDto" >
+        SELECT 
+        	T1.ID, 
+        	T1.MENU_NAME, 
+        	T1.MENU_URL, 
+        	T1.MENU_DESCRIBE, 
+       		IFNULL(T1.PARENT_ID, '0') AS PARENT_ID, 
+       		T1.MENU_LEVEL, 
+       		T1.MENU_TYPE, 
+       		T1.SORT, 
+       		T1.ICON, 
+       		T1.IS_ENABLE, 
+       		T1.CREATE_USER, 
+       		T1.CREATE_TIME, 
+       		T1.UPDATE_USER, 
+       		T1.UPDATE_TIME
+			<if test="roleId != null and roleId != ''">
+			, CASE WHEN INSTR(T2.MENU_ID, T1.ID) > 0 THEN 'Y' ELSE 'N' END AS MENU_CHECKED
+			</if>
+		FROM sys_menu_info           T1
+			<if test="roleId != null and roleId != ''">
+			LEFT JOIN
+			     (
+			      SELECT GROUP_CONCAT(T1.MENU_ID) AS MENU_ID
+			        FROM sys_role_menu_info T1
+			       WHERE INSTR(#{roleId}, T1.ROLE_ID) > 0
+			         AND T1.IS_ENABLE = 'Y'
+			     ) T2 ON 1 = 1
+			</if>
+		WHERE 1 = 1
+		AND 
+			T1.IS_DELETE = 0
+			<if test="isEnable != null and isEnable != ''">
+				AND T1.IS_ENABLE = #{isEnable}
+			</if>
+			<if test="menuType != null and menuType != ''">
+				AND T1.MENU_TYPE = #{menuType}
+			</if>
+			<if test="menuLevel != null and menuLevel != ''">
+				AND T1.MENU_LEVEL = #{menuLevel}
+			</if>
+			<if test="isNotMenuLevel != null and isNotMenuLevel != ''">
+				AND T1.MENU_LEVEL != #{isNotMenuLevel}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND T1.ID IN (
+					SELECT 
+						DISTINCT T2.MENU_ID
+					FROM 
+						sys_user_role T1 JOIN sys_role_menu_info T2 ON T1.roleid = T2.ROLE_ID AND T2.IS_ENABLE = 'Y'
+					WHERE 
+						T1.userid = #{userId}
+               )
+			</if>
+         ORDER BY T1.MENU_LEVEL, T1.SORT
+	</select>
+</mapper>

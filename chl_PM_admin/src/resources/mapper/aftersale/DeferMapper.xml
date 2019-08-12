@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.DeferMapper">
+	<resultMap id="BaseResultMap" type="Defer">
+		<id 	column="id"  			property="id" />
+		<result column="auction_id"  	property="auctionId" />
+		<result column="auction_set_id" property="auctionSetId" />
+		<result column="defer_type"  	property="deferType" />
+		<result column="deadline"  		property="deadline" />
+		<result column="defer_time"  	property="deferTime" />
+		<result column="remark"  		property="remark" />
+		<result column="audit_state"  	property="auditState" />
+		<result column="create_time"  	property="createTime" />
+		<result column="is_delete"  	property="isDelete" />
+		<collection property="fileList" ofType="AftersaleFileDto" column="{fileType=type,parentId=id}"
+			select="mapper.standard.AftersaleFileMapper.getCollection">
+		</collection>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, auction_id, auction_set_id, defer_type, deadline, defer_time, remark, audit_state,
+		create_time,is_delete, 3 as type
+	</sql>
+	<select id="getDeferById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_defer
+		where id = #{id}
+	</select>
+	<select id="getDeferByAuctionSetId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_defer
+		where auction_set_id = #{auctionSetId}
+		AND is_delete=0
+		AND audit_state=0
+		order By create_time limit 1
+	</select>
+	<insert id="addDefer">
+		insert into car_pm_aftersale_defer (
+			id, auction_id, auction_set_id, defer_type,deadline, defer_time, remark,
+			audit_state, create_time, is_delete
+		)values (
+			#{id}, #{auctionId},#{auctionSetId},
+			#{deferType},
+			#{deadline}, #{deferTime}, 
+			#{remark},
+			#{auditState}, now(),0
+		)
+	</insert>
+	<update id="updateDeferSelective">
+		update car_pm_aftersale_defer
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="auctionSetId != null">
+				auction_set_id = #{auctionSetId},
+			</if>
+			<if test="deferType != null">
+				defer_type = #{deferType},
+			</if>
+			<if test="deadline != null">
+				deadline = #{deadline},
+			</if>
+			<if test="deferTime != null">
+				defer_time = #{deferTime},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="auditState != null">
+				audit_state = #{auditState},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateDefer">
+		update car_pm_aftersale_defer
+		set 
+			auction_id = #{auctionId},
+			auction_set_id = #{auctionSetId},
+			defer_type = #{deferType},
+			deadline = #{deadline},
+			defer_time = #{deferTime},
+			remark = #{remark},
+			audit_state = #{auditState},
+			is_delete = #{isDelete}
+		where id = #{id}
+	</update>
+</mapper>

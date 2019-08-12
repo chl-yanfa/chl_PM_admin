@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<!-- 是否 启用 数据中 a_column 自动映射 到 java类中驼峰命名的属性 -->
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+	<typeAliases>
+		<!-- 上传图片 -->
+		<typeAlias alias="Attachment"				type="com.car.auction.attachment.entity.Attachment" />		
+		<!-- 系统管理模块 -->
+		<typeAlias alias="UserInfoDto"				type="com.car.auction.sys.dto.UserInfoDto" />
+		<typeAlias alias="SysMenuInfoDto"			type="com.car.auction.sys.dto.SysMenuInfoDto" />
+		<!-- 组件模块 -->
+		<typeAlias alias="LyMessage"				type="com.car.auction.organization.entity.LyMessage" />
+		<typeAlias alias="User"						type="com.car.auction.organization.entity.User" />
+		<typeAlias alias="PMNumber"					type="com.car.auction.organization.entity.PMNumber" />
+		<typeAlias alias="Areas"					type="com.car.auction.organization.entity.Areas" />
+		<!-- 车辆管理 -->
+		<typeAlias alias="AuctionWhole"				type="com.car.auction.auction.entity.AuctionWhole" />
+		<typeAlias alias="AuctionSave"				type="com.car.auction.auction.entity.AuctionSave" />
+		<typeAlias alias="AuctionScrap"				type="com.car.auction.auction.entity.AuctionScrap" />
+		<typeAlias alias="Auction"					type="com.car.auction.auction.entity.Auction" />
+		<typeAlias alias="AuctionFile"				type="com.car.auction.auction.entity.AuctionFile" />
+		<typeAlias alias="AuctionFileDto"			type="com.car.auction.auction.dto.AuctionFileDto" />
+		<typeAlias alias="AuctionAudit"				type="com.car.auction.auction.entity.AuctionAudit" />
+		<typeAlias alias="AuctionSet"				type="com.car.auction.auction.entity.AuctionSet" />
+		<!-- 手续管理 -->
+		<typeAlias alias="ProcedureWhole"			type="com.car.auction.procedure.entity.ProcedureWhole" />
+		<typeAlias alias="Procedure"				type="com.car.auction.procedure.entity.Procedure" />
+		<typeAlias alias="ProcedureFile"			type="com.car.auction.procedure.entity.ProcedureFile" />
+		<typeAlias alias="ProcedureFileDto"			type="com.car.auction.procedure.dto.ProcedureFileDto" />
+		<typeAlias alias="ProcedureHistory"			type="com.car.auction.procedure.entity.ProcedureHistory" />
+		<typeAlias alias="ProcedurePlacingAudit"	type="com.car.auction.procedure.entity.ProcedurePlacingAudit" />
+		<typeAlias alias="ProcedureRecord"			type="com.car.auction.procedure.entity.ProcedureRecord" />
+		<typeAlias alias="ProcedureStatistics"		type="com.car.auction.procedure.entity.ProcedureStatistics" />
+		<!-- 入库管理 -->
+		<typeAlias alias="WarehouseWhole"			type="com.car.auction.warehouse.entity.WarehouseWhole" />
+		<typeAlias alias="WarehouseSave"			type="com.car.auction.warehouse.entity.WarehouseSave" />
+		<typeAlias alias="StockTakeCar"				type="com.car.auction.warehouse.entity.StockTakeCar" />
+		<typeAlias alias="TakeCarBill"				type="com.car.auction.warehouse.entity.TakeCarBill" />
+		<typeAlias alias="Warehouse"				type="com.car.auction.warehouse.entity.Warehouse" />
+		<typeAlias alias="TowingCompany"			type="com.car.auction.warehouse.entity.TowingCompany" />
+		<typeAlias alias="WarehouseFile"			type="com.car.auction.warehouse.entity.WarehouseFile" />
+		<typeAlias alias="WarehouseFileDto"			type="com.car.auction.warehouse.dto.WarehouseFileDto" />
+		<typeAlias alias="WarehousePlacing"			type="com.car.auction.warehouse.entity.WarehousePlacing" />
+		<typeAlias alias="WarehousePlacingAudit"	type="com.car.auction.warehouse.entity.WarehousePlacingAudit" />
+		<typeAlias alias="StockStatistics"			type="com.car.auction.warehouse.entity.StockStatistics" />
+		<!-- 拍卖管理 -->
+		<typeAlias alias="PmAuction"				type="com.car.auction.paimai.entity.PmAuction" />
+		<typeAlias alias="Paimai"					type="com.car.auction.paimai.entity.Paimai" />
+		<typeAlias alias="AuctionCar"				type="com.car.auction.paimai.entity.AuctionCar" />
+		<typeAlias alias="PaimaiStatistics"			type="com.car.auction.paimai.entity.PaimaiStatistics" />
+		<typeAlias alias="PaimaiHot"				type="com.car.auction.paimai.entity.PaimaiHot" />
+		<typeAlias alias="PaimaiInfo"				type="com.car.auction.paimai.entity.PaimaiInfo" />
+		<typeAlias alias="OfferWaterInfo"			type="com.car.auction.paimai.entity.OfferWaterInfo" />
+		<typeAlias alias="TraIndent"                type="com.car.auction.paimai.entity.TraIndent" />
+		<typeAlias alias="HighestCustomerInfo"      type="com.car.auction.paimai.entity.HighestCustomerInfo" />
+		<!-- 售后管理 -->
+		<typeAlias alias="DealInfo"					type="com.car.auction.aftersale.entity.DealInfo" />
+		<typeAlias alias="Aftersale"				type="com.car.auction.aftersale.entity.Aftersale" />
+		<typeAlias alias="DealEntity"				type="com.car.auction.aftersale.entity.DealEntity" />
+		<typeAlias alias="PayTrack"					type="com.car.auction.aftersale.entity.PayTrack" />
+		<typeAlias alias="TakeCarTrack"				type="com.car.auction.aftersale.entity.TakeCarTrack" />
+		<typeAlias alias="AftersaleFile"			type="com.car.auction.aftersale.entity.AftersaleFile" />
+		<typeAlias alias="AftersaleFileDto"			type="com.car.auction.aftersale.dto.AftersaleFileDto" />
+		<typeAlias alias="Defer"					type="com.car.auction.aftersale.entity.Defer" />
+		<typeAlias alias="AdjustPrice"				type="com.car.auction.aftersale.entity.AdjustPrice" />
+		<typeAlias alias="BackCar"					type="com.car.auction.aftersale.entity.BackCar" />
+		<typeAlias alias="AbnormalAudit"			type="com.car.auction.aftersale.entity.AbnormalAudit" />
+		<typeAlias alias="Scrap"					type="com.car.auction.aftersale.entity.Scrap" />
+		<typeAlias alias="SecondAsk"				type="com.car.auction.aftersale.entity.SecondAsk" />
+		<!-- 财务管理 -->
+		<typeAlias alias="FinanceEntity"			type="com.car.auction.finance.entity.FinanceEntity" />
+		<typeAlias alias="Pay"						type="com.car.auction.finance.entity.Pay" />
+		<typeAlias alias="PayWater"					type="com.car.auction.finance.entity.PayWater" />
+		<!-- 用户管理 -->
+		<typeAlias alias="Customer"					type="com.car.auction.customer.entity.Customer" />
+		<typeAlias alias="CustomerDto"				type="com.car.auction.customer.dto.CustomerDto" />
+		<typeAlias alias="CustomerMargin"			type="com.car.auction.customer.entity.CustomerMargin" />
+		<typeAlias alias="CustomerMarginWater"		type="com.car.auction.customer.entity.CustomerMarginWater" />
+		<typeAlias alias="CustomerMarginWaterDto"	type="com.car.auction.customer.dto.CustomerMarginWaterDto" />
+		<!-- 车互联订单 -->
+		<typeAlias alias="CarScrapOrderAutopartsDto"	type="com.car.auction.scraporder.dto.CarScrapOrderAutopartsDto" />
+		<typeAlias alias="CarScrapOrderDto"			type="com.car.auction.scraporder.dto.CarScrapOrderDto" />
+		
+	</typeAliases>
+</configuration>

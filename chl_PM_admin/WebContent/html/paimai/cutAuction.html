@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/icon.css" rel="stylesheet" type="text/css" />
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/paimai/paimai.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../js/controller/paimai/cutAuction.js"></script>
+<title>切拍</title>
+<style>
+.numberbox{
+  width:100px;height: 20px;
+}
+</style>
+</head>
+<body style="min-height: 2000px">
+	<div id="AUDIT_DIALOG"></div>
+	<div class="easyui-tabs">
+		<div title="拍卖信息">
+			<div class="content paimaiInfo-div">
+				<div class="c-header">
+					<label>拍卖会ID：</label><span col="pmhId"></span>
+					<label>拍卖会名称：</label><span col="paimaiName"></span>
+				</div>
+				<div class="c-header">
+					<label>拍品名称：</label><span col="fullName"></span>
+					<label>拍品序号：</label><span col="paimaiOrder"></span>
+				</div>
+			</div>
+			<div class="c-middle">
+				<div class="c-m-left">
+					<input name="id" hidden/>
+					<div style="text-align: center;">
+						<p style="font-size: 18px;color: #666666;margin-top: 60px;">当前出价金额：<font id="highestPrice"></font>元</p>
+						<button id="dealButton" class="cutAuction-btn">确认成交</button>
+						<table class="set-money">
+							<tr>
+								<td><label>合手价</label></td>
+								<td><label>佣&nbsp;&nbsp;&nbsp;金</label></td>
+								<td><label>保留价</label></td>
+								<td><label>其他费用</label></td>
+							</tr>
+							<tr>
+								<td col="jointPrice"></td>
+								<td col="commissionPrice"></td>
+								<td col="reservePrice"></td>
+								<td col="otherPrice"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="c-m-right">
+					<div class="c-r-title">
+						<p style="font-size: 18px;margin-left: 20px;color:#00ABEA;">当前拍卖热度
+							<span style="font-size: 14px;margin-left: 20px;color:#666666;">
+								参拍人数（<font id="bidCount"></font>人）
+							</span>
+						</p>
+					</div>
+					<div class="c-r-center">
+						<table class="cj-table cjTable">
+							<tr>
+								<td>姓名</td>
+								<td>出价时间</td>
+								<td>出价金额（元）</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="c-footer">
+				<p style="font-size: 16px;font-weight: bold;margin: 20px 20px;">最高出价客户信息</p>
+				<table class="table-body auctionTable" style="width: 100%">
+					<tr>
+						<td>用户昵称</td>
+						<td>手机号</td>
+						<td>最高出价</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div title="参拍信息">
+			<div id="auctionSetBody"></div>
+		</div>
+		<div title="拍品信息">
+			<div id="vehicleBody"></div>
+		</div>
+	</div>
+</body>
+</html>

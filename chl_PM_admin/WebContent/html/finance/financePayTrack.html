@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/finance/financePayTrack.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../js/controller/finance/financePayTrack.js"> </script>
+<title>付款跟踪</title>
+<style>
+input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px white inset;}
+.numberbox{
+  width:80px;
+}
+</style>
+</head>
+<body style="min-height: 1200px;">
+	<div class="content-top">
+		<div class="title">待付款</div>
+	</div>
+	<div class="content">
+		<div class="easyui-tabs">
+			<div title="付款跟踪">
+				<table class="pay-table dealInfo-div">
+					<tr>
+						<td colspan="2"><label>品牌型号:</label><span col="fullName"></span></td>
+						<td><label>车架号(VIN码):</label><span col="vin"></span></td>
+						<td><label>车牌号:</label><span col="licenseNumber"></span></td>
+					</tr>
+					<tr>
+						<td><label>拍卖会名称:</label><span col="paimaiName"></span></td>
+						<td><label>拍卖时间:</label><span col="auctionStartTime"></span></td>
+						<td><label>买受人:</label><span col="dealMember"></span></td>
+						<td><label>买受人联系电话:</label><span col="dealPhone"></span></td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<label>合手价:</label><span col="jointPrice"></span>
+							<label>(车款:<span col="highestPrice"></span>元   佣金:<span col="commission"></span>元   其他费用:<span col="otherPrice"></span>元  )</label>
+						</td>
+						<td><label>成交时间:</label><span col="dealTime"></span></td>
+					</tr>
+				</table>
+				<div class="addPay-DIV" hidden>
+					<form id="payForm">
+						<table class="form-table">
+							<tr>
+								<td class="tit" style="width: 150px;">付款人</td>
+								<td><input name="payHandle" class="easyui-validatebox"
+										style="width: 200px;height: 30px;" required="required"/></td>
+							</tr>
+							<!-- <tr>
+								<td class="tit">付款银行</td>
+								<td><input name="payBank" class="easyui-validatebox"
+										style="width: 200px;height: 30px;" required="required"/></td>
+							</tr>
+							<tr>
+								<td class="tit">开户行</td>
+								<td><input name="payOpeningBank" class="easyui-validatebox"
+										style="width: 200px;height: 30px;" required="required"/></td>
+							</tr>
+							<tr>
+								<td class="tit">银行账号</td>
+								<td><input name="payAccount" class="easyui-validatebox"
+										style="width: 200px;height: 30px;" required="required"/></td>
+							</tr> -->
+							<tr>
+								<td class="tit">付款金额</td>
+								<td><input name="payMoney" class="easyui-numberbox"
+										style="width: 200px;height: 30px;" required="required"/></td>
+							</tr>
+							<!-- <tr>
+								<td class="tit">联系电话</td>
+								<td><input name="payContactPhone" class="easyui-validatebox"
+										style="width: 200px;height: 30px;" required="required"/></td>
+							</tr> -->
+							<tr>
+								<td class="tit" style="vertical-align: top;">上传付款凭证</td>
+								<td>
+				                    <div class="input-pic-box pic-box addpic">
+				                        <img class="pic-img" src="../../resources/images/addimg-bg.png" 
+				                        	onclick="addFile(0)" />
+				                        <span class="delpic"></span>
+				                        <input type="hidden" class="hiddenpicid" value="" />
+				                        <input style="display: none;" type="file" 
+				                        	accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" 
+				                        	class="upload-file-0" onchange="doUpload(0)" />
+				                    </div>
+								</td>
+							</tr>
+							<tr>
+								<td class="tit" style="vertical-align: top;">备注</td>
+								<td>
+									<textarea warp="virtual" id="pay-remark" name="remark" 
+										class="beizhu"
+										onKeyUp="checkWord(this,'pay-remark-check',200);" 
+										onMouseDown="checkWord(this,'pay-remark-check',200);"
+							        	></textarea>
+							        <p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="pay-remark-check">200</span>个字符 </p>
+								</td>
+							</tr>
+						</table>
+					</form>
+					<div style="text-align: center;width: 80%;margin-top: 20px">
+						<button class="saveBtn" onclick="addPay()">确定</button>
+					</div>
+				</div>
+				<div class="loadPay-DIV" hidden>
+					<form id="payForm-load">
+						<table class="form-table">
+							<tr>
+								<td class="tit" style="width: 150px;">付款人</td>
+								<td><input name="payHandle" class="easyui-textbox"
+										style="width: 200px;height: 30px;"/></td>
+							</tr>
+							<!-- <tr>
+								<td class="tit">付款银行</td>
+								<td><input name="payBank" class="easyui-textbox"
+										style="width: 200px;height: 30px;"/></td>
+							</tr>
+							<tr>
+								<td class="tit">开户行</td>
+								<td><input name="payOpeningBank" class="easyui-textbox"
+										style="width: 200px;height: 30px;"/></td>
+							</tr>
+							<tr>
+								<td class="tit">银行账号</td>
+								<td><input name="payAccount" class="easyui-textbox"
+										style="width: 200px;height: 30px;"/></td>
+							</tr> -->
+							<tr>
+								<td class="tit">付款金额</td>
+								<td><input name="payMoney" class="easyui-numberbox"
+										style="width: 200px;height: 30px;"/></td>
+							</tr>
+							<!-- <tr>
+								<td class="tit">联系电话</td>
+								<td><input name="payContactPhone" class="easyui-textbox"
+										style="width: 200px;height: 30px;"/></td>
+							</tr> -->
+							<tr>
+								<td class="tit" style="vertical-align: top;">上传付款凭证</td>
+								<td>
+									<div class="img-payVoucher" style="width: 120px;height: 120px;"></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="tit" style="vertical-align: top;">备注</td>
+								<td>
+									<textarea warp="virtual" name="remark" class="beizhu"></textarea>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+			<div title="拍品信息">
+				<div id="vehicleBody"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

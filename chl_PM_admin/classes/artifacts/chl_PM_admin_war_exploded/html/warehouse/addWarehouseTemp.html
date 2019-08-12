@@ -1,0 +1,425 @@
+<link href="../../resources/css/warehouse/warehouse.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/controller/warehouse/warehouse.js"></script>
+<!-- 拍品信息 -->
+<style>
+	input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px white inset;}
+	#baseInfo input{
+		border:none;
+	}
+</style>
+
+<form id="baseInfo">
+	<div class="content-main">
+		<table class="table-body">
+			<tr>
+				<td colspan="8" style="font-size: 20px;text-align: center;">拍品信息</td>
+			</tr>
+			<tr>
+				<td>品牌型号:</td>
+				<td colspan="7"><input id="fullName" name="fullName" style="width: 400px;"/></td>
+			</tr>
+			<tr>
+				<td>拍品编码:</td>
+				<td><input id="auctionNo" name="auctionNo"/></td>
+				<td>车牌号:</td>
+				<td><input id="licenseNumber" name="licenseNumber"/></td>
+				<td>车架号(VIN码):</td>
+				<td><input id="vin" name="vin"/></td>
+				<td>业务员:</td>
+				<td><input id="" name=""/></td>
+			</tr>
+		</table>
+	</div>
+</form>
+<!-- 车牌钥匙信息 -->
+<form id="addWarehouse">
+	<input name="id" class="easyui-textbox" hidden />
+	<div class="content-main">
+		<table class="table-body">
+			<tr>
+				<td colspan="7" style="font-size: 20px;text-align: center;">车牌钥匙信息</td>
+			</tr>
+			<tr>
+				<td>车牌:</td>
+				<td colspan="2">
+					<div style="width: 230px">
+						<input id="cc-0" name="carCard" value="两块" type="radio"/>
+						<label for="cc-0" style="margin-right: 20px">两块</label> 
+						<input id="cc-1" name="carCard" value="一块" type="radio"/>
+						<label for="cc-1" style="margin-right: 20px">一块</label>
+						<input id="cc-2" name="carCard" value="无" type="radio"/>
+						<label for="cc-2" style="margin-right: 20px">无</label> 
+						<input id="cc-3" name="carCard" value="损坏" type="radio"/>
+						<label for="cc-3">损坏</label>
+					</div>
+				</td>
+				<td>车牌位置:</td>
+				<td colspan="3">
+					<input id="ccProvince" name="ccProvinceId" class="easyui-combobox provinceBox"/> 
+					<input id="ccCity" name="ccCityId" class="easyui-combobox cityBox"/> 
+					<input id="ccArea" name="ccAreaId" class="easyui-combobox areaBox"/> 
+					<input id="carCardAddress" name="carCardAddress" class="easyui-validatebox addr"
+						style="width: 220px"/>
+				</td>
+			</tr>
+			<tr>
+				<td>正常钥匙:</td>
+				<td colspan="2">
+					<input id="key" name="key" class="easyui-combobox"> 
+					<label>(不含备用)</label>
+				</td>
+				<td>备用钥匙:</td>
+				<td>
+					<input id="spareKey" name="spareKey" class="easyui-combobox"> 
+				</td>
+				<td>钥匙位置:</td>
+				<td>
+					<input id="kProvince" name="kProvinceId" class="easyui-combobox provinceBox"/> 
+					<input id="kCity" name="kCityId" class="easyui-combobox cityBox"/> 
+					<input id="kArea" name="kAreaId" class="easyui-combobox areaBox"/> 
+					<input id="keyAddress" name="keyAddress" class="easyui-validatebox addr"
+						style="width: 150px"/>
+				</td>
+			</tr>
+			<tr>
+				<td>备注:</td>
+				<td colspan="6">
+					<textarea warp="virtual" id="keyRemark" name="keyRemark"
+						class="beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'keyRemark-check',200);" 
+						onMouseDown="checkWord(this,'keyRemark-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="keyRemark-check">0</span>个字符 </p>
+				</td>
+			</tr>
+			<tr>
+				<td rowspan="3">库存信息</td>
+				<td style="width: 100px">库存存放地:</td>
+				<td colspan="5">
+					<input id="sProvince" name="sProvinceId" class="easyui-combobox provinceBox"/> 
+					<input id="sCity" name="sCityId" class="easyui-combobox cityBox"/> 
+					<input id="sArea" name="sAreaId" class="easyui-combobox areaBox"/> 
+					<input id="storeAddress" name="storeAddress" class="easyui-validatebox addr"
+						style="width: 220px"/>
+				</td>
+			</tr>
+			<tr>
+				<td>库存区域:</td>
+				<td colspan="5">
+					<textarea warp="virtual" id="storeSpace" name="storeSpace"
+						class="s-beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'storeSpace-check',200);" 
+						onMouseDown="checkWord(this,'storeSpace-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="storeSpace-check">0</span>个字符 </p>
+				</td>
+			</tr>
+			<tr>
+				<td>入库时间:</td>
+				<td colspan="5">
+					<input id="storeTime" name="storeTime"/>
+				</td>
+			</tr>
+		</table>
+		<table class="table-body">
+			<tr>
+				<td colspan="6" style="font-size: 20px;text-align: center;">拖车信息</td>
+			</tr>
+			<tr>
+				<td>拖车费:</td>
+				<td>
+					<input id="trailerCost" name="trailerCost" class="easyui-numberbox"
+						style="height: 24px;"/>
+					<label>元</label>
+				</td>
+				<td>应支付给:</td>
+				<td>
+					<input id="trailerCostPay" name="trailerCostPay" class="easyui-combobox"/>
+				</td>
+				<td>上传凭证:</td>
+				<td>
+					<input id="voucher" name="voucherFile" type="file" hidden onChange="doUploadVoucher(this)"/>
+					<a onClick="document.getElementById('voucher').click();" class="a-upload">请选择文件</a>
+					<input type="hidden" class="hiddenvoucherid" value=""/>
+					<span id="voucherName"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>拖车电话:</td>
+				<td><input id="trailerPhone" name="trailerPhone" class="easyui-textbox"/></td>
+				<td>起始地:</td>
+				<td colspan="3">
+					<input id="originProvince" name="originProvinceId" class="easyui-combobox provinceBox"/> 
+					<input id="originCity" name="originCityId" class="easyui-combobox cityBox"/> 
+					<input id="originAddress" name="originAddress" class="easyui-validatebox addr"
+						style="width: 220px"/>
+				</td>
+			</tr>
+			<tr>
+				<td>公里数:</td>
+				<td>
+					<input id="distance" name="distance" class="easyui-textbox"/>
+					<label>公里</label> 
+				</td>
+				<td>目的地:</td>
+				<td colspan="3">
+					<input id="destinationProvince" name="destinationProvinceId" class="easyui-combobox provinceBox"/> 
+					<input id="destinationCity" name="destinationCityId" class="easyui-combobox cityBox"/> 
+					<input id="destinationAddress" name="destinationAddress" class="easyui-validatebox addr"
+						style="width: 220px"/>
+				</td>
+			</tr>
+		</table>
+		<h4 style="font-size: 16px;margin-top: 10px;">上传拍卖截图及拖车照片</h4>
+		<!-- 图片上传 -->
+		<!--头部，相册选择和格式选择-->
+		<div id="uploader" style="margin-top: 10px;margin-bottom: 20px;width: 90%">
+			<!-- 图片上传 -->
+			<ul id="pic-upload-row">
+				<li class="pic-single">
+                    <div class="input-pic-box pic-box">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png" onclick="addPic('upload-warehouse')" />
+                        <input style="display: none;" type="file" accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" class="upload-warehouse" onchange="doUpload('upload-warehouse')" />
+                    </div>
+                </li>
+			</ul>
+		</div>
+		<table class="table-body">
+			<tr>
+				<td colspan="10" style="font-size: 20px;text-align: center;">事故形态</td>
+			</tr>
+			<tr>
+				<td colspan="10">
+					<label style="margin-right: 30px;">车辆情况:</label> 
+					<input id="cs-0" name="carStatus" value="外观正常" type="radio"/>
+					<label for="cs-0" style="margin-right: 30px;">外观正常</label> 
+					<input id="cs-1" name="carStatus" value="无或缺失" type="radio"/>
+					<label for="cs-1" style="margin-right: 30px;">无或缺失</label> 
+					<input id="cs-2" name="carStatus" value="拆解" type="radio"/>
+					<label for="cs-2" style="margin-right: 30px;">拆解</label> 
+					<input id="cs-3" name="carStatus" value="破损" type="radio"/>
+					<label for="cs-3" style="margin-right: 30px;">破损</label> 
+					<input id="cs-4" name="carStatus" value="无法确认" type="radio"/>
+					<label for="cs-4">无法确认</label>	
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<label style="margin-right: 30px;">变速箱类型:</label> 
+					<input id="gt-0" name="gearboxType" value="手动" type="radio"/>
+					<label for="gt-0" style="margin-right: 30px;">手动</label> 
+					<input id="gt-1" name="gearboxType" value="自动" type="radio"/>
+					<label for="gt-1" style="margin-right: 30px;">自动</label> 
+					<input id="gt-2" name="gearboxType" value="手自一体" type="radio"/>
+					<label for="gt-2">手自一体</label>
+				</td>
+				<td colspan="2">
+					<label style="margin-right: 30px;">表显里程:</label> 
+					<input id="carMileage" name="carMileage" class="easyui-textbox"/>
+				</td>
+				<td colspan="5">
+					<label style="margin-right: 30px;">车辆是否受损:</label> 
+					<input id="vid-0" name="vinIsDamage" value="0" type="radio"/>
+					<label for="vid-0" style="margin-right: 30px;">是</label> 
+					<input id="vid-1" name="vinIsDamage" value="1" type="radio"/>
+					<label for="vid-1">否</label>
+				</td>
+			</tr>
+			<tr>
+				<td>发动机</td><td style="width: 50px;"><input type="checkbox" name="engine" value="Y"></td>
+				<td>变速箱</td><td style="width: 50px;"><input type="checkbox" name="gearbox" value="Y"></td>
+				<td>水箱</td><td style="width: 50px;"><input type="checkbox" name="waterbox" value="Y"></td>
+				<td>冷凝器</td><td style="width: 50px;"><input type="checkbox" name="condenser" value="Y"></td>
+				<td>电瓶</td><td style="width: 50px;"><input type="checkbox" name="battery" value="Y"></td>
+			</tr>
+			<tr>
+				<td>空调泵</td><td><input type="checkbox" name="airconditionPump" value="Y"></td>
+				<td>马达</td><td><input type="checkbox" name="motor" value="Y"></td>
+				<td>转向助力泵</td><td><input type="checkbox" name="powerSteeringPump" value="Y"></td>
+				<td>发电机</td><td><input type="checkbox" name="dynamo" value="Y"></td>
+				<td>ABS泵</td><td><input type="checkbox" name="absPump" value="Y"></td>
+			</tr>
+			<tr>
+				<td>三元催化</td><td><input type="checkbox" name="threeWayCatalyticConverter" value="Y"></td>
+				<td>排气管</td><td><input type="checkbox" name="exhaustPipe" value="Y"></td>
+				<td>压缩机</td><td><input type="checkbox" name="compressor" value="Y"></td>
+				<td colspan="4"></td>
+			</tr>
+			<tr>
+				<td>右前大灯</td><td><input type="checkbox" name="rightFrontHeadlight" value="Y"></td>
+				<td>右后视镜</td><td><input type="checkbox" name="rightMirror" value="Y"></td>
+				<td>右前车门</td><td><input type="checkbox" name="rightFrontDoor" value="Y"></td>
+				<td>右后车门</td><td><input type="checkbox" name="rightRearDoor" value="Y"></td>
+				<td>右后尾灯</td><td><input type="checkbox" name="rightRearTailLight" value="Y"></td>
+			</tr>
+			<tr>
+				<td>左前大灯</td><td><input type="checkbox" name="leftFrontHeadlight" value="Y"></td>
+				<td>左后视镜</td><td><input type="checkbox" name="leftMirror" value="Y"></td>
+				<td>左前车门</td><td><input type="checkbox" name="leftFrontDoor" value="Y"></td>
+				<td>左后车门</td><td><input type="checkbox" name="leftRearDoor" value="Y"></td>
+				<td>左后尾灯</td><td><input type="checkbox" name="leftRearTailLight" value="Y"></td>
+			</tr>
+			<tr>
+				<td>后备箱</td><td><input type="checkbox" name="trunk" value="Y"></td>
+				<td>备胎</td><td><input type="checkbox" name="spareTire" value="Y"></td>
+				<td>随车工具</td><td><input type="checkbox" name="vehicleTools" value="Y"></td>
+				<td>三角警示牌</td><td><input type="checkbox" name="triangleIndicator" value="Y"></td>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<td>内饰</td><td><input type="checkbox" name="trim" value="Y"></td>
+				<td>仪表台</td><td><input type="checkbox" name="dashboard" value="Y"></td>
+				<td>座椅</td><td><input type="checkbox" name="seat" value="Y"></td>
+				<td>DVD/CD/收音机</td><td><input type="checkbox" name="DVDCD" value="Y"></td>
+				<td>音箱</td><td><input type="checkbox" name="voicebox" value="Y"></td>
+			</tr>
+			<tr>
+				<td>发动机电脑</td><td><input type="checkbox" name="engineComputer" value="Y"></td>
+				<td>变速箱电脑</td><td><input type="checkbox" name="gearboxComputer" value="Y"></td>
+				<td>行车电脑</td><td><input type="checkbox" name="drivingComputer" value="Y"></td>
+				<td>防盗电脑</td><td><input type="checkbox" name="burglarComputer" value="Y"></td>
+				<td>气囊电脑</td><td><input type="checkbox" name="gasbagComputer" value="Y"></td>
+			</tr>
+			<tr>
+				<td>娱乐电脑</td><td><input type="checkbox" name="entertainmentComputer" value="Y"></td>
+				<td colspan="8"></td>
+			</tr>
+			<tr>
+				<td colspan="2">车架号、发动机号的查验和事故形态描述:</td>
+				<td colspan="8">
+					<textarea warp="virtual" id="troubleDescription" name="troubleDescription"
+						class="beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'troubleDescription-check',200);" 
+						onMouseDown="checkWord(this,'troubleDescription-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="troubleDescription-check">0</span>个字符 </p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<label style="margin-right: 30px">保养手册:</label>
+					<input id="mml-0" name="maintenanceManual" value="有" type="radio"/>
+					<label for="mml-0" style="margin-right: 30px">有</label> 
+					<input id="mml-1" name="maintenanceManual" value="无" type="radio"/>
+					<label for="mml-1">无</label>
+				</td>
+				<td colspan="4">
+					<label style="margin-right: 30px">使用说明书:</label>
+					<input id="oml-0" name="operatingManual" value="有" type="radio"/>
+					<label for="oml-0" style="margin-right: 30px">有</label> 
+					<input id="oml-1" name="operatingManual" value="无" type="radio"/>
+					<label for="oml-1">无</label>
+				</td>
+				<td colspan="3">
+					<label style="margin-right: 30px">轮胎数量：</label>
+					<input id="tyreNum" name="tyreNum" class="easyui-textbox"/> 
+					<label>个</label>
+				</td>
+			</tr>
+		</table>
+		<table class="table-body">
+			<tr>
+				<td colspan="4" style="font-size: 20px;text-align: center;">车辆备注信息</td>
+			</tr>
+			<tr>
+				<td>车辆是否拆解:</td>
+				<td>
+					<input id="dis-0" name="dismantling" value="是" type="radio"/>
+					<label for="dis-0" style="margin-right: 30px">是</label> 
+					<input id="dis-1" name="dismantling" value="否" type="radio"/>
+					<label for="dis-1">否</label>
+				</td>
+				<td>拆解部位:</td>
+				<td style="width: 900px;">
+					<textarea warp="virtual" id="dismantlingPart" name="dismantlingPart" 
+						class="s-beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'dismantlingPart-check',200);" 
+						onMouseDown="checkWord(this,'dismantlingPart-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="dismantlingPart-check">0</span>个字符 </p>
+				</td>
+			</tr>
+			<tr>
+				<td>是否二次事故:</td>
+				<td>
+					<input id="tas-0" name="twoAccidents" value="是" type="radio"/>
+					<label for="tas-0" style="margin-right: 30px">是</label> 
+					<input id="tas-1" name="twoAccidents" value="否" type="radio"/>
+					<label for="tas-1">否</label>
+				</td>
+				<td>备注:</td>
+				<td>
+					<textarea warp="virtual" id="twoAccidentsRemark" name="twoAccidentsRemark" 
+						class="s-beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'twoAccidentsRemark-check',200);" 
+						onMouseDown="checkWord(this,'twoAccidentsRemark-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="twoAccidentsRemark-check">0</span>个字符 </p>
+				</td>
+			</tr>
+			<tr>
+				<td>车辆是否改装:</td>
+				<td>
+					<input id="rft-0" name="refit" value="是" type="radio"/>
+					<label for="rft-0" style="margin-right: 30px">是</label> 
+					<input id="rft-1" name="refit" value="否" type="radio"/>
+					<label for="rft-1">否</label>
+				</td>
+				<td>改装部位:</td>
+				<td>
+					<textarea warp="virtual" id="refitPart" name="refitPart" 
+						class="s-beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'refitPart-check',200);" 
+						onMouseDown="checkWord(this,'refitPart-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="refitPart-check">0</span>个字符 </p>
+				</td>
+			</tr>
+			<tr>
+				<td>已清点部件:</td>
+				<td colspan="3">
+					<textarea warp="virtual" id="checkPart" name="checkPart" 
+						class="s-beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'checkPart-check',200);" 
+						onMouseDown="checkWord(this,'checkPart-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="checkPart-check">0</span>个字符 </p>
+				</td>
+			</tr>
+			<tr>
+				<td>无法清点部件:</td>
+				<td colspan="3">
+					<textarea warp="virtual" id="noCheckPark" name="noCheckPark" 
+						class="s-beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'noCheckPark-check',200);" 
+						onMouseDown="checkWord(this,'noCheckPark-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="noCheckPark-check">0</span>个字符 </p>
+				</td>
+			</tr>
+			<tr>
+				<td>单独收纳部件:</td>
+				<td colspan="3">
+					<textarea warp="virtual" id="receivingPart" name="receivingPart" 
+						class="s-beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'receivingPart-check',200);" 
+						onMouseDown="checkWord(this,'receivingPart-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="receivingPart-check">0</span>个字符 </p>
+				</td>
+			</tr>
+			<tr>
+				<td>备注:</td>
+				<td colspan="3">
+					<textarea warp="virtual" id="remark" name="remark" 
+						class="s-beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'remark-check',200);" 
+						onMouseDown="checkWord(this,'remark-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="remark-check">0</span>个字符 </p>
+				</td>
+			</tr>
+			
+		</table>	
+	</div>
+</form>

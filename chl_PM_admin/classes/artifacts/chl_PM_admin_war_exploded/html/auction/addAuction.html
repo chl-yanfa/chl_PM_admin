@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/auction/addAuction.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=NfeFkeBXjyXsHYMsfGPu4V6M4UMkCtFB"></script>
+<script type="text/javascript" src="../../js/controller/paimai/overrideDataGridView.js"></script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" charset="utf-8" src="../../resources/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../resources/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../resources/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="../../js/controller/auction/auction.js"> </script>
+<script type="text/javascript" src="../../js/controller/auction/addAuction.js"> </script>
+<title>新建拍品</title>
+<style>
+input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px white inset;}
+.carright{
+	float: left;
+	padding-bottom: 10px;
+}
+.carright p span{
+	font-size: 12px;
+    color: #999;
+    margin:0 5px 0 5px;
+    display:block;
+    float: left;
+}
+</style>
+</head>
+<body style="min-height: 2000px">
+	<div id="Dialog"></div>
+	<form id="vehicleInfo">
+		<input name="scrapOrderId" class="easyui-textbox" hidden />
+		<div class="content-main">
+			<p class="title">基本信息</p>
+			<table class="table-body">
+				<tr>
+					<th style="width: 8%;">拍品类型：</th>
+					<td colspan="5">
+						<input id="at-0" type="radio" name="auctionType" value="0" checked="checked">
+						<label for="at-0">全车配件</label> 
+						<input id="at-1" type="radio" name="auctionType" value="1" style="margin-left: 20px;">
+						<label for="at-1">高价值配件</label> 
+						<input id="at-2" type="radio" name="auctionType" value="2" style="margin-left: 20px;">
+						<label for="at-2">大宗配件</label>
+					</td>
+				</tr>
+				<tr>
+					<th>商品名称：</th>
+					<td colspan="3">
+						<input name="fullName" class="easyui-validatebox" 
+							required="required" style="width: 90%;">
+					</td>
+					<th style="width: 8%;" class="carTemp">VIN：</th>
+					<td style="width: 25%;" class="carTemp">
+						<input id="vin" name="vin" class="easyui-validatebox" required="required">
+					</td>
+					<th style="width: 8%;display: none;" class="partsTemp"></th>
+					<td style="width: 25%;display: none;" class="partsTemp"></td>
+				</tr>
+				<tr>
+					<th style="width: 8%;">所在地：</th>
+					<td style="width: 25%;">
+						<input id="lotAreasId" name="lotAreasId">
+						<input id="lotAreas" name="lotAreas" class="easyui-textbox" hidden>
+					</td>
+					<th style="width: 8%;" class="carTemp">出厂日期：</th>
+					<td style="width: 25%;" class="carTemp">
+						<input id="productionDate" name="productionDate">
+					</td>
+					<th style="width: 8%;" class="carTemp">钥匙：</th>
+					<td style="width: 25%;" class="carTemp">
+						<input id="key-0" name="isHasKey" value="无" type="radio"/>
+						<label for="key-0">无</label> 
+						<input id="key-1" name="isHasKey" value="有" type="radio" style="margin-left: 20px;"/>
+						<label for="key-1">有</label>
+					</td>
+					<th style="width: 8%;display: none;" class="partsTemp">数量：</th>
+					<td style="width: 25%;display: none;" class="partsTemp">
+						<input id="partsCount" name="partsCount" class="easyui-validatebox" onKeyUp="value=value.replace(/[^\d]/g,'')">
+					</td>
+					<th style="width: 8%;display: none;" class="allPartsTemp">重量：</th>
+					<td style="width: 25%;display: none;" class="allPartsTemp">
+						<input id="partsWeight" name="partsWeight" class="easyui-validatebox">
+					</td>
+					<th style="width: 8%;display: none;" class="vPartsTemp"></th>
+					<td style="width: 25%;display: none;" class="vPartsTemp"></td>
+				</tr>
+				<tr>
+					<th style="vertical-align: top;">描述：</th>
+					<td colspan="5">
+						<textarea warp="virtual" name="description" 
+							class="beizhu"
+							data-options="multiline:true"
+							onKeyUp="checkWord(this,'description-check',200);" 
+							onMouseDown="checkWord(this,'description-check',200);"
+							></textarea>
+						<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="description-check">200</span>个字符 </p>
+					</td>
+				</tr>
+				<tr>
+					<th style="vertical-align: top;">购买要求：</th>
+					<td colspan="5">
+						<textarea warp="virtual" name="buyRequirement" 
+							class="beizhu"
+							data-options="multiline:true"
+							onKeyUp="checkWord(this,'buyRequirement-check',200);" 
+							onMouseDown="checkWord(this,'buyRequirement-check',200);"
+							></textarea>
+						<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="buyRequirement-check">200</span>个字符 </p>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="content-main carTemp">
+			<!-- 添加车辆 -->
+			<a class="addLot">+添加车辆</a>
+		</div>
+		<div class="content-main">
+			<p class="title">商品照片</p>
+			<!-- 车辆图片 -->
+			<ul id="pic-upload-row">
+				<li class="pic-single">
+                    <div class="input-pic-box pic-box">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png" onclick="addPic('upload-auction')" />
+                        <input style="display: none;" type="file" accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" class="upload-auction" onchange="doUpload('upload-auction')" />
+                    </div>
+                </li>
+			</ul>
+		</div>
+		<div class="content-main partsTemp" style="display: none;">
+			<!-- 添加配件 -->
+			<a class="addLot">+添加配件</a>
+		</div>
+		<div id="partsList" class="content-main partsTemp" style="display: none;">
+			<!-- 配件展示区 -->
+			<table class="partsTable">
+				<tr>
+					<td>编号</td>
+					<td>配件名称</td>
+					<td>配件OE号</td>
+					<td>车辆VIN</td>
+					<td>车辆型号</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+		<div class="content-main">
+			<p class="title">看货地址</p>
+			<table class="table-body">
+				<tr>
+					<th style="width: 8%;">联系方式：</th>
+					<td style="width: 25%;">
+						<input name="lookContactNumber" class="easyui-textbox"/>
+					</td>
+					<th style="width: 8%;">联系人：</th>
+					<td style="width: 25%;">
+						<input name="lookContacts" class="easyui-textbox"/>
+					</td>
+					<th style="width: 8%;">地址：</th>
+					<td style="width: 25%;">
+						<input id="lookAddress" name="lookAddress" autocomplete="off" class="easyui-textbox"/>
+						<input id="lookCoordinate" name="lookCoordinate" class="easyui-textbox" hidden/>
+					</td>
+				</tr>
+			</table>
+			<p class="title">竞价须知</p>
+			<script id="bidNotice" type="text/plain" name="bidNotice" style="width:100%;height:400px;"></script>
+			<p class="title">特别提示</p>
+			<script id="specialNotice" type="text/plain" name="specialNotice" style="width:100%;height:200px;"></script>
+		</div>
+	</form>
+	<div class="content-footer">
+		<button class="saveBtn" id="c-save" onclick="saveAuction(0,0,0)">暂存</button>
+		<button class="submitBtn" id="c-pub" onclick="saveAuction(0,1,0)" >发布</button>
+	</div>
+	<!-- 地图 -->
+    <div style="display: none;">
+        <div id="showmap">
+            <table>
+                <tr>
+                    <td>
+                    	<div style="margin-top:10px;margin-left:10px;width:350px;">
+	                       	<input id="address-searchText"/>
+	                       	<a href="javascript:void(0)" class="l-btn l-btn-small l-btn-plain" 
+	                       		onclick="searchAddress()">
+	                       		<span class="l-btn-text">搜索</span>
+	                       	</a>
+                       	</div>
+                       	<div style="margin-top:10px;margin-left:10px;width:350px;">
+	                        <input id="suggestId"/>
+                        </div>
+                        <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;z-index:1000;"></div>
+                        <div id="l-map" style="width:535px;height:305px;margin-top:10px;margin-left:10px;"></div>
+                    </td>
+                    <td style="width: 10px;"></td>
+                </tr>
+            </table>
+            <br/>
+            <div id="allmap"></div>
+        </div>
+    </div>
+<script type="text/javascript">
+	//实例化编辑器
+	var bidNoticeEditor = UE.getEditor('bidNotice');
+	bidNoticeEditor.ready(function() {
+		bidNoticeEditor.setContent('<p>我公司受委托在车互联网站(网址：www.chehulian.com)进行公开拍卖活动，现就有关的网上拍卖，事宜敬告各位竞买人：</p>'+
+				'<p>1、本（拍卖须知），根据（，中华人民共和国民事诉讼法），等相关法律规定所制订，竞买人应认真仔细阅读，了解本须知的全部内容。</p>'+
+				'<p>2、本次拍卖活动遵循“公开、公平、公正、诚实守信”的原则，拍卖活动具有法律效力。参加本次拍卖活动的当事人和竞买人必须遵守本须知的各项条款，并对自己的行为承担法律责任。</p>'+
+				'<p>3、凡具备完全民事行为能力的公民、法人和其他组织均可参加竞买。竞买成功后，竞买人(法定代表人、其他组织的负责人)须与委托代理人一同到标的物，停放地办理交接手续。如委托手续不全，竞买活动认定为委托代理人的个人行为。不符合条件参加竞买的，竞买人自行承担相应的法律责任。</p>'+
+				'<p>4、本次拍卖活动设置延时出价功能，在拍卖活动结束前，你最后30秒如果，有竞买人出价，就自动增加30秒。</p>'+
+				'<p>5、竞买人对，拍卖标的物第一次确认出价竞拍前，按系统提示报名激纳保证金，系统会自动冻结该笔款项。拍卖成交的，本标的物竟得者(以下称买受人)冻结的保证金，将在办理完交接手续后自动解冻，其他竞买人的保证金在拍卖后1~5分钟内自动解冻。拍卖未成交的(即流拍的)，竞买人的保证金在拍卖活动结束后1～5分钟内自动解除。拍卖未成交的(即流拍的)，竞买人的保证金在拍卖活动结束后1~5分钟解冻，保证金解冻期间不计利息。</p>'+
+				'<p>6、本次拍卖是经法定公告期和展示期后才举行的，已根据评估公司调查情况就拍卖标的物已知及，可能存在的瑕疵已在本次拍卖资料中做了详细的说明。拍卖人对拍卖标的物所作的说明和提供的视频资料，图片等，仅供竞买人参考，不构成对标的物的任何担保。所以请，竞买人在拍卖前必须仔细审查拍卖标的物，调查是否存在瑕疵，认真研究查看所有竞买标的物的实际情况，并请亲临展示现场，实地看样，未看样的竞买人视为对本标的实物现状的确认，慎重决定竞买行为，竞买人一旦作出竞买行为，既表明以完全了解，并接受标的物的现状和，一切已知及未知的瑕疵。买受人悔拍后保证金不予退还。对拍卖标的能否办理过户手续以及办理时间等情况，请就买人，请竞买前自行到相关职能部门咨询确认，因标的物现状，即存在瑕疵等原因不能或延迟办理过户手续及办理二次过户造成的费用增加的后果自负，拍卖人不做过户的任何承诺，不承担过户涉及的一切费用。</p>'+
+				'<p>7、拍卖成交后，买受人应与网上成交后2日内将，拍卖成交款和其他费用汇入指定账户(户名：车互联(北京)科技有限公司  开户银行：中国工商银行股份有限公司北京科学院支行  账号：0200206909200092673)，并凭付款凭证明及相关身份材料等到标的物领取标的。</p>'+
+				'<p>8、买受人逾期未支付拍卖款，买受人的保证金将转为违约金。</p>'+
+				'<p>9、买受人付款后应及时提取标的物，并办理过户手续，逾期不办理的，买受人应支付由此产生的费用，并承担北边的雾可能发生的损毁、灭失等后果。</p>'+
+				'<p>10、本次拍卖活动计价货币为人民币，拍卖时的起拍价，成交价均不含，买受人在拍卖标的物交割，过户时所发生的全部费用和税费。</p>'+
+				'<p>11、参加竞买的人应当遵守拍卖须知的规定。，不得阻挠其他竞买人竞拍，不得操纵。垄断竞拍价格，严禁竞买人恶意串标，上述行为一经发现，将取消其竞买资格，并追究相关的法律责任。</p>'+
+				'<p>12、根据法律规定，委托方有权在拍卖开始前、拍卖过程中，中止拍卖或撤回拍卖。</p>'+
+				'<p>13、凡发现拍卖中有违规行为，可如实举报。</p>'+
+				'<p>14、标的物成交价不含交易税。</p>');
+	});
+	var specialNoticeEditor = UE.getEditor('specialNotice');
+	specialNoticeEditor.ready(function() {
+		specialNoticeEditor.setContent('<p>1、此标的是否有雨淋及水泡现象，二次运损等实地勘察为准。</p>'+
+				'<p>2、拍卖成交后，所产生的一切费用有买受人承担。</p>'+
+				'<p>3、请各位会员自行查询配件的使用状态以及车型，使用性质，慎重出价。</p>'+
+				'<p>4、获拍成交后，买受人自拍成交日起5日内，前往标的物所在地办理交割手续，逾期未办理,视为违约，竞买保证金不予退还。</p>');
+	});
+	function G(id) {
+	    return document.getElementById(id);
+	}
+	var map = new BMap.Map("l-map");
+	map.setCurrentCity("北京");
+	map.enableScrollWheelZoom();//启动鼠标滚轮缩放地图
+	map.centerAndZoom(new BMap.Point(116.4136103013, 39.9110666857), 12);                // 初始化地图,设置城市和地图级别。
+	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+	var geoc = new BMap.Geocoder();
+	var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+	    {
+	        "input": "suggestId", 
+	        "location": map
+	    });
+	map.addEventListener("click", function (e) {
+	    var pt = e.point;
+	    console.log('point',pt);
+	    $("#lookCoordinate").val(pt.lng + "," + pt.lat);
+	    geoc.getLocation(pt, function (rs) {
+	        map.clearOverlays();
+	        map.addOverlay(new BMap.Marker(pt));
+	        $('#suggestId').searchbox('setValue',rs.address);
+	    });
+	});
+	ac.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
+	    var str = "";
+	    var _value = e.fromitem.value;
+	    var value = "";
+	    if (e.fromitem.index > -1) {
+	        value = _value.province + _value.city + _value.district + _value.street + _value.business;
+	    }
+	    str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+	
+	    value = "";
+	    if (e.toitem.index > -1) {
+	        _value = e.toitem.value;
+	        value = _value.province + _value.city + _value.district + _value.street + _value.business;
+	    }
+	    str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+	    G("searchResultPanel").innerHTML = str;
+	});
+	
+	var myValue;
+	ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+	    var _value = e.item.value;
+	    myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+	    G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+	    setPlace();
+	});
+	
+	function setPlace() {
+	    map.clearOverlays();    //清除地图上所有覆盖物
+	    function myFun() {
+	        var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+	        map.centerAndZoom(pp, 18);
+	        map.addOverlay(new BMap.Marker(pp));    //添加标注
+	    }
+	    var local = new BMap.LocalSearch(map, { //智能搜索
+	        onSearchComplete: myFun
+	    });
+	    local.search(myValue);
+	}
+	//点击打开地图
+	$(document).delegate('#lookAddress', 'click', function (event) {
+	    event.preventDefault();
+	    $('#showmap').dialog({
+	        title: '取车地址',
+	        modal : true,
+	        buttons: [{
+	            text: '取消',
+	            handler:function(){
+	            	$('#showmap').dialog("close",true);
+	            }
+	        }, {
+	            text: '确定',
+	            handler:function(){
+	                $("#lookAddress").val($('#suggestId').searchbox('getValue'));
+	            	$('#showmap').dialog("close",true);
+	            }
+	        }]
+	    })
+	    map.centerAndZoom("北京", 11);      // 用城市名设置地图中心点
+	});
+	function searchAddress(){
+		var val = $('#address-searchText').searchbox('getValue').trim();
+		if(val!=null && val!=''){
+			var local = new BMap.LocalSearch(map,{renderOptions: {map: map,panel: "results"}}); 
+			local.search(val);
+		}
+	}
+</script>
+</body>
+</html>

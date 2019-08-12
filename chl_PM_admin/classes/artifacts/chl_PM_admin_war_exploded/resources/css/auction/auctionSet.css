@@ -1,0 +1,34 @@
+.set-main{
+	margin-top:20px;
+	width: 80%;
+}
+.table-body{
+	border-collapse: collapse; 
+	text-align: center; 
+	width: 100%;
+	border: none;
+}
+.table-body td{
+	padding: 1em;
+}
+#auctionSet .table-body input{
+	text-align: center;
+}
+.set-footer{
+	margin-top:20px;
+	text-align: center;
+	width: 80%;
+}
+.submitButton{
+    width: 89px;
+    line-height: 32px;
+    color: #FFFFFF;
+    background-color: #00A2D4;
+    border-radius: 4px;
+    font-size:16px;
+    height: 35px;
+    border: none;
+}
+.suf-money{
+	margin-left: 10px;
+}

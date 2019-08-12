@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.AttachmentMapper">
+	<resultMap id="BaseResultMap" type="Attachment">
+		<id 	column="id" 				property="id" />
+		<result column="original_name" 		property="originalName" />
+		<result column="storage_path" 		property="storagePath" />
+		<result column="oss_key" 			property="ossKey" />
+		<result column="creater" 			property="creater" />
+		<result column="operator" 			property="operator" />
+		<result column="createtime" 		property="createtime" />
+		<result column="operatortime" 		property="operatortime" />
+		<result column="isvalid" 			property="isvalid" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, original_name, storage_path, oss_key, creater, operator, createtime,
+		operatortime, isvalid
+	</sql>
+	<select id="getAttachmentById" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			tb_attachment
+		where 
+			id = #{id}
+	</select>
+	<insert id="addAttachment">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">  
+			SELECT LAST_INSERT_ID()  
+		</selectKey> 
+		insert into tb_attachment
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="originalName != null">
+				original_name,
+			</if>
+			<if test="storagePath != null">
+				storage_path,
+			</if>
+			<if test="ossKey != null">
+				oss_key,
+			</if>
+			<if test="creater != null">
+				creater,
+			</if>
+			<if test="operator != null">
+				operator,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+			<if test="operatortime != null">
+				operatortime,
+			</if>
+			<if test="isvalid != null">
+				isvalid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="originalName != null">
+				#{originalName},
+			</if>
+			<if test="storagePath != null">
+				#{storagePath},
+			</if>
+			<if test="ossKey != null">
+				#{ossKey},
+			</if>
+			<if test="creater != null">
+				#{creater},
+			</if>
+			<if test="operator != null">
+				#{operator},
+			</if>
+			<if test="createtime != null">
+				#{createtime},
+			</if>
+			<if test="operatortime != null">
+				#{operatortime},
+			</if>
+			<if test="isvalid != null">
+				#{isvalid},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateAttachment">
+		update tb_attachment
+		<set>
+			<if test="originalName != null">
+				original_name = #{originalName},
+			</if>
+			<if test="storagePath != null">
+				storage_path = #{storagePath},
+			</if>
+			<if test="ossKey != null">
+				oss_key = #{ossKey},
+			</if>
+			<if test="creater != null">
+				creater = #{creater},
+			</if>
+			<if test="operator != null">
+				operator = #{operator},
+			</if>
+			<if test="createtime != null">
+				createtime = #{createtime},
+			</if>
+			<if test="operatortime != null">
+				operatortime = #{operatortime},
+			</if>
+			<if test="isvalid != null">
+				isvalid = #{isvalid},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

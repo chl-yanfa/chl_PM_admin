@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.AdjustPriceMapper">
+	<resultMap id="BaseResultMap" type="AdjustPrice">
+		<id 	column="id" 					property="id" />
+		<result column="auction_id"  			property="auctionId" />
+		<result column="auction_set_id"  		property="auctionSetId" />
+		<result column="car_price_type"  		property="carPriceType" />
+		<result column="car_price_value"  		property="carPriceValue" />
+		<result column="car_price_after"  		property="carPriceAfter" />
+		<result column="commission_type"  		property="commissionType" />
+		<result column="commission_value"  		property="commissionValue" />
+		<result column="commission_after"  		property="commissionAfter" />
+		<result column="remark"  				property="remark" />
+		<result column="audit_state"  			property="auditState" />
+		<result column="create_time"  			property="createTime" />
+		<result column="is_delete"  			property="isDelete" />
+		<collection property="fileList" ofType="AftersaleFileDto" column="{fileType=type,parentId=id}"
+			select="mapper.standard.AftersaleFileMapper.getCollection">
+		</collection>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, auction_id, auction_set_id, car_price_type, car_price_value, car_price_after,
+		commission_type,
+		commission_value, commission_after, remark, audit_state, 
+		create_time, is_delete, 4 as type
+	</sql>
+	<select id="getAdjustPriceById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_adjust_price
+		where id = #{id}
+	</select>
+	<select id="getAdjustPriceByAuctionSetId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_adjust_price
+		where auction_set_id = #{auctionSetId}
+		AND is_delete=0
+		AND audit_state=0
+		order By create_time limit 1
+	</select>
+	<insert id="addAdjustPrice">
+		insert into car_pm_aftersale_adjust_price (
+			id, auction_id, auction_set_id,car_price_type,
+			car_price_value, car_price_after, commission_type,
+			commission_value, commission_after, remark,
+			audit_state, create_time, is_delete
+		)values (
+			#{id}, #{auctionId}, #{auctionSetId},
+			#{carPriceType},
+			#{carPriceValue}, #{carPriceAfter},
+			#{commissionType},
+			#{commissionValue},
+			#{commissionAfter}, #{remark},
+			#{auditState}, now(),0
+		)
+	</insert>
+	<update id="updateAdjustPriceSelective">
+		update car_pm_aftersale_adjust_price
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="auctionSetId != null">
+				auction_set_id = #{auctionSetId},
+			</if>
+			<if test="carPriceType != null">
+				car_price_type = #{carPriceType},
+			</if>
+			<if test="carPriceValue != null">
+				car_price_value = #{carPriceValue},
+			</if>
+			<if test="carPriceAfter != null">
+				car_price_after = #{carPriceAfter},
+			</if>
+			<if test="commissionType != null">
+				commission_type = #{commissionType},
+			</if>
+			<if test="commissionValue != null">
+				commission_value = #{commissionValue},
+			</if>
+			<if test="commissionAfter != null">
+				commission_after = #{commissionAfter},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="auditState != null">
+				audit_state = #{auditState},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateAdjustPrice">
+		update car_pm_aftersale_adjust_price
+		set 
+			auction_id = #{auctionId},
+			auction_set_id = #{auctionSetId},
+			car_price_type = #{carPriceType},
+			car_price_value = #{carPriceValue},
+			car_price_after = #{carPriceAfter},
+			commission_type = #{commissionType},
+			commission_value = #{commissionValue},
+			commission_after = #{commissionAfter},
+			remark = #{remark},
+			audit_state = #{auditState},
+			is_delete = #{isDelete}
+		where id = #{id}
+	</update>
+</mapper>

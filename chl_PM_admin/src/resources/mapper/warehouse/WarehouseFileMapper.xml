@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.WarehouseFileMapper">
+	<resultMap id="BaseResultMap" type="WarehouseFileDto">
+		<id 	column="id" 			property="id" />
+		<result column="stock_id" 		property="stockId" />
+		<result column="file_type" 		property="fileType" />
+		<result column="attachment_id" 	property="attachmentId" />
+		<result column="sort" 			property="sort" />
+		<result column="is_delete" 		property="isDelete" />
+		<result column="create_user" 	property="createUser" />
+		<result column="create_time" 	property="createTime" />
+		<result column="img_path" 		property="imgPath" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, stock_id, file_type, attachment_id, sort, is_delete, create_user, create_time
+	</sql>
+	<select id="getWarehouseFileById" resultMap="BaseResultMap">
+		select
+			cpwf.*,ta.storage_path img_path
+		from 
+			car_pm_warehouse_file cpwf left join tb_attachment ta on cpwf.attachment_id = ta.id
+		where 
+			cpwf.id = #{id}
+	</select>
+	<select id="getCollectionByStockId" resultMap="BaseResultMap">
+		select
+			cpwf.*,ta.storage_path img_path
+		from 
+			car_pm_warehouse_file cpwf left join tb_attachment ta on cpwf.attachment_id = ta.id
+		where 
+			cpwf.stock_id = #{stockId}
+		and 
+			cpwf.is_delete = 0
+		order by sort
+	</select>
+	<insert id="addWarehouseFile">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">  
+			SELECT LAST_INSERT_ID()  
+		</selectKey> 
+		insert into car_pm_warehouse_file (
+			stock_id, file_type, attachment_id, sort, 
+			create_user, is_delete, create_time
+		)
+		values (
+			#{stockId},#{fileType},#{attachmentId},#{sort},
+			#{createUser}, 0, now()
+		)
+	</insert>
+	<!-- addWarehouseFileBatch 新增图片-->
+	<insert id="addWarehouseFileBatch" parameterType="java.util.List">
+	    INSERT INTO car_pm_warehouse_file (
+	    	stock_id, file_type, attachment_id, sort, 
+			create_user, is_delete, create_time
+	    )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.stockId},#{item.fileType},#{item.attachmentId},#{item.sort},
+            #{item.createUser},0, now()
+            )
+        </foreach>
+	</insert>
+	<update id="updateWarehouseFile">
+		update car_pm_warehouse_file
+		<set>
+			<if test="stockId != null">
+				stock_id = #{stockId},
+			</if>
+			<if test="fileType != null">
+				file_type = #{fileType},
+			</if>
+			<if test="attachmentId != null">
+				attachment_id = #{attachmentId},
+			</if>
+			<if test="sort != null">
+				sort = #{sort},
+			</if>
+			<if test="createUser != null">
+				create_user = #{createUser},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

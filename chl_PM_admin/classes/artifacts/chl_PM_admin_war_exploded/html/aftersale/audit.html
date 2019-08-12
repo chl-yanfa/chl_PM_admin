@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/icon.css" rel="stylesheet" type="text/css" />
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/aftersale/audit.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../js/controller/aftersale/audit.js"></script>
+<title>跟踪申请</title>
+<style>
+.numberbox{
+  width:100px;height: 20px;
+}
+</style>
+</head>
+<body style="min-height: 1000px">
+	<div id="DIALOG"></div>
+	<div id="tabs-div" class="easyui-tabs">
+		<div title="延期">
+			<form id="deferForm">
+				<input name='id' hidden/>
+				<table class="table-body" style="width: 60%;margin-left: 30px;">
+					<tr>
+						<td class="r-td"><label>申请类型:</label></td>
+						<td colspan="4">
+							<label>延期</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="r-td"><label>延期类型:</label></td>
+						<td colspan="4">
+							<input name="deferType"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="r-td"><label><span class="deferName">提货</span>截止时间:</label></td>
+						<td>
+							<input name="deadline"/>
+						</td>
+						<td class="r-td"><label><span class="deferName">提货</span>时间延期至:</label></td>
+						<td>
+							<input name="deferTime"/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<div id="deferPhoto"></div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">备注:</td>
+					</tr>
+					<tr>
+						<td colspan="5"><textarea warp="virtual" name="remark"
+						class="beizhu" data-options="multiline:true"></textarea>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<div class="content-footer deferBtn" >
+				<button class="agreeBtn" onclick="audit(0,1)">审核通过</button>
+				<button class="rejectBtn" onclick="audit(0,-1)">驳回</button>
+			</div>
+			<div class="content-footer deferAfter" hidden>
+				<button class="agreeBtn"></button>
+			</div>
+		</div>
+		<div title="调价">
+			<form id="adjustPriceForm">
+				<input name="id" hidden/>
+				<table class="table-body" style="width: 60%;margin-left: 30px;">
+					<tr>
+						<td class="r-td"><label>申请类型:</label></td>
+						<td colspan="4">
+							<label>调价</label>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<label style="margin-right: 10px;margin-left: 20px;">合手价:</label>
+							<span col=""></span>
+							<label style="margin-right: 40px;">元</label>
+							<label style="margin-right: 10px;">车款:</label>
+							<span col=""></span>
+							<label style="margin-right: 40px;">元</label>
+							<label style="margin-right: 10px;">佣金:</label>
+							<span col=""></span>
+							<label style="margin-right: 40px;">元</label>
+							<label style="margin-right: 10px;">其他费用:</label>
+							<span col=""></span>
+							<label>元</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="r-td"><label>车款减免:</label></td>
+						<td>
+							<input name="carPriceType" value="车款百分比" type="radio"/>
+							<label style="margin-right: 30px;">车款百分比</label> 
+							<input name="carPriceType" value="固定值" type="radio"/>
+							<label>固定值</label> 
+						</td>
+						<td>
+							<input name="carPriceValue" class="easyui-numberbox"/>
+							<span id="cpt-type"></span>
+						</td>
+						<td class="r-td"><label>减免后金额:</label></td>
+						<td><input name="carPriceAfter" class="easyui-numberbox"/>元</td>
+					</tr>
+					<tr>
+						<td class="r-td"><label>佣金打折:</label></td>
+						<td>
+							<input name="commissionType" value="佣金百分比" type="radio"/>
+							<label style="margin-right: 30px;">车款百分比</label> 
+							<input name="commissionType" value="固定值" type="radio"/>
+							<label>固定值</label> 
+						</td>
+						<td>
+							<input name="commissionValue" class="easyui-numberbox"/>
+							<span id="ct-type"></span>
+						</td>
+						<td class="r-td"><label>减免后金额:</label></td>
+						<td><input name="commissionAfter" class="easyui-numberbox"/>元</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<div id="adjustPricePhoto"></div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">备注:</td>
+					</tr>
+					<tr>
+						<td colspan="5"><textarea warp="virtual" name="remark"
+						class="beizhu" data-options="multiline:true"></textarea>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<div class="content-footer adjustPriceBtn">
+				<button class="agreeBtn" onclick="audit(1,1)">审核通过</button>
+				<button class="rejectBtn" onclick="audit(1,-1)">驳回</button>
+			</div>
+			<div class="content-footer adjustPriceAfter" hidden>
+				<button class="agreeBtn"></button>
+			</div>
+		</div>
+		<div title="退货">
+			<form id="backCarForm">
+				<input name='id' hidden/>
+				<table class="table-body" style="width: 60%;margin-left: 30px;">
+					<tr>
+						<td class="r-td" style="width: 80px;"><label>申请类型:</label></td>
+						<td colspan="4">
+							<label>退货</label>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<div id="backCarPhoto"></div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">备注:</td>
+					</tr>
+					<tr>
+						<td colspan="5"><textarea warp="virtual" name="remark"
+						class="beizhu" data-options="multiline:true"></textarea>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<div class="content-footer backCarBtn">
+				<button class="agreeBtn" onclick="audit(2,1)">审核通过</button>
+				<button class="rejectBtn" onclick="audit(2,-1)">驳回</button>
+			</div>
+			<div class="content-footer backCarAfter" hidden>
+				<button class="agreeBtn"></button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

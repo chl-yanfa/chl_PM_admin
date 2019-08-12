@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.AuctionFileMapper">
+	<resultMap id="BaseResultMap" type="AuctionFileDto">
+		<id 	column="id" 			property="id" />
+		<result column="auction_id" 	property="auctionId" />
+		<result column="file_type" 		property="fileType" />
+		<result column="attachment_id" 	property="attachmentId" />
+		<result column="sort" 			property="sort" />
+		<result column="pic_type" 		property="picType" />
+		<result column="is_delete" 		property="isDelete" />
+		<result column="create_user" 	property="createUser" />
+		<result column="create_time" 	property="createTime" />
+		<result column="img_path" 		property="imgPath" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, auction_id, file_type, attachment_id, sort, 
+		pic_type, is_delete, create_user, create_time
+	</sql>
+	<select id="getHeadImgByAuctionId" resultType="String">
+		select
+			ta.storage_path
+		from 
+			car_pm_auction_file cpf left join tb_attachment ta on cpf.attachment_id = ta.id
+		where 
+			cpf.auction_id = #{auctionId}
+		<!-- and 
+			pic_type = 1 -->
+		and 
+			cpf.is_delete = 0
+		and 
+			ta.isvalid = 1
+		order by 
+			cpf.sort limit 1
+	</select>
+	<select id="getFileListByAuctionId" resultMap="BaseResultMap">
+		select
+			cpf.*,ta.storage_path img_path
+		from 
+			car_pm_auction_file cpf left join tb_attachment ta on cpf.attachment_id = ta.id
+		where 
+			cpf.auction_id = #{auctionId}
+		and 
+			cpf.is_delete = 0
+		and 
+			ta.isvalid = 1
+		order by cpf.sort 
+	</select>
+	<select id="getAuctionFileById" resultMap="BaseResultMap">
+		select
+			cpf.*,ta.storage_path img_path
+		from 
+			car_pm_auction_file cpf left join tb_attachment ta on cpf.attachment_id = ta.id
+		where 
+			cpf.id = #{id}
+	</select>
+	<insert id="addAuctionFile">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">  
+			SELECT LAST_INSERT_ID()  
+		</selectKey> 
+		insert into car_pm_auction_file (
+			auction_id, file_type, attachment_id, sort, 
+			pic_type, is_delete, create_user, create_time
+		)
+		values (
+			#{auctionId}, #{fileType}, #{attachmentId}, #{sort},
+			#{picType}, 0, #{createUser}, now()
+		)
+	</insert>
+	<insert id="addAuctionFileBatch" parameterType="java.util.List">
+		insert into car_pm_auction_file (
+			auction_id, file_type, attachment_id, sort, 
+			pic_type, is_delete, create_user, create_time
+		)values
+		<foreach collection="list" item="item" index="index" separator=",">
+		(
+			#{item.auctionId}, #{item.fileType}, #{item.attachmentId}, #{item.sort},
+			#{item.picType}, 0, #{item.createUser}, now()
+		)
+		</foreach>
+	</insert>
+	<update id="updateAuctionFile">
+		update car_pm_auction_file
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="fileType != null">
+				file_type = #{fileType},
+			</if>
+			<if test="attachmentId != null">
+				attachment_id = #{attachmentId},
+			</if>
+			<if test="sort != null">
+				sort = #{sort},
+			</if>
+			<if test="picType != null">
+				pic_type = #{picType},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

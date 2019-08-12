@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.TowingCompanyMapper">
+	<resultMap id="BaseResultMap" type="TowingCompany">
+		<id 	column="id" 			property="id" />
+		<result column="company_name" 	property="companyName" />
+		<result column="contact_person" property="contactPerson" />
+		<result column="contact_phone" 	property="contactPhone" />
+		<result column="areas" 			property="areas" />
+		<result column="areas_id" 		property="areasId" />
+		<result column="remark" 		property="remark" />
+		<result column="create_time" 	property="createTime" />
+		<result column="update_time" 	property="updateTime" />
+		<result column="is_delete" 		property="isDelete" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, company_name, contact_person, contact_phone, areas,
+		areas_id, remark,
+		create_time, update_time, is_delete
+	</sql>
+	<select id="getTowingCompanyListByPage" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+			car_pm_towing_company
+		WHERE
+			is_delete = 0
+		<if test="companyName != null and companyName != ''">   
+			AND company_name like CONCAT(CONCAT('%', #{companyName}),'%')
+        </if>
+		<if test="contactPerson != null and contactPerson != ''">  
+			AND contact_person like CONCAT(CONCAT('%', #{contactPerson}),'%')
+        </if>
+        <if test="contactPhone != null and contactPhone != ''">   
+			AND contact_phone = #{contactPhone}
+        </if>
+        <if test="areasId != null and areasId != ''">   
+			AND areas_id = #{areasId}
+        </if>
+        ORDER BY
+			create_time DESC
+	</select>
+	<select id="getTowingCompanyListTotal" resultType="int">
+		SELECT
+			count(1)
+		FROM
+			car_pm_towing_company
+		WHERE
+			is_delete = 0
+		<if test="companyName != null and companyName != ''">   
+			AND company_name like CONCAT(CONCAT('%', #{companyName}),'%')
+        </if>
+		<if test="contactPerson != null and contactPerson != ''">  
+			AND contact_person like CONCAT(CONCAT('%', #{contactPerson}),'%')
+        </if>
+        <if test="contactPhone != null and contactPhone != ''">   
+			AND contact_phone = #{contactPhone}
+        </if>
+        <if test="areasId != null and areasId != ''">   
+			AND areas_id = #{areasId}
+        </if>
+	</select>
+	<select id="getTowingCompanyById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_towing_company
+		where id = #{id}
+	</select>
+	<insert id="addTowingCompany">
+		insert into car_pm_towing_company (
+			id, company_name, contact_person,
+			contact_phone, areas, areas_id,
+			remark, create_time,is_delete
+		)values (
+			#{id}, #{companyName},
+			#{contactPerson},
+			#{contactPhone}, #{areas}, #{areasId},
+			#{remark}, 
+			now(),0
+		)
+	</insert>
+	<insert id="addTowingCompanySelective">
+		insert into car_pm_towing_company
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="companyName != null">
+				company_name,
+			</if>
+			<if test="contactPerson != null">
+				contact_person,
+			</if>
+			<if test="contactPhone != null">
+				contact_phone,
+			</if>
+			<if test="areas != null">
+				areas,
+			</if>
+			<if test="areasId != null">
+				areas_id,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			create_time,
+			is_delete,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="companyName != null">
+				#{companyName},
+			</if>
+			<if test="contactPerson != null">
+				#{contactPerson},
+			</if>
+			<if test="contactPhone != null">
+				#{contactPhone},
+			</if>
+			<if test="areas != null">
+				#{areas},
+			</if>
+			<if test="areasId != null">
+				#{areasId},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			now(),
+			0,
+		</trim>
+	</insert>
+	<update id="updateTowingCompanySelective">
+		update car_pm_towing_company
+		<set>
+			<if test="companyName != null">
+				company_name = #{companyName},
+			</if>
+			<if test="contactPerson != null">
+				contact_person = #{contactPerson},
+			</if>
+			<if test="contactPhone != null">
+				contact_phone = #{contactPhone},
+			</if>
+			<if test="areas != null">
+				areas = #{areas},
+			</if>
+			<if test="areasId != null">
+				areas_id = #{areasId},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+			update_time = now(),
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateTowingCompany">
+		update car_pm_towing_company
+		set 
+			company_name = #{companyName},
+			contact_person = #{contactPerson},
+			contact_phone = #{contactPhone},
+			areas = #{areas},
+			areas_id = #{areasId},
+			remark = #{remark},
+			update_time = now(),
+			is_delete = #{isDelete}
+		where id = #{id}
+	</update>
+</mapper>

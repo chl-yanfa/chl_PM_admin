@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/url.js"></script>
+<script type="text/javascript" src="../../js/dataFormat.js"></script>
+<script type="text/javascript" src="../../js/controller/warehouse/addWarehouse.js"></script>
+<style type="text/css">
+.submitBtn {
+	margin-left: 520px;
+	width: 89px;
+	line-height: 32px;
+	color: #FFFFFF;
+	background-color: #00A2D4;
+	border-radius: 4px;
+	font-size: 16px;
+	height: 35px;
+}
+
+.saveBtn {
+	width: 89px;
+	line-height: 32px;
+	color: #FFFFFF;
+	background-color: #00A2D4;
+	border-radius: 4px;
+	font-size: 16px;
+	height: 35px;
+}
+</style>
+<title>新增车辆入库</title>
+</head>
+<body>
+	<div class="easyui-tabs">
+		<!-- 车辆入库登记 -->
+		<div title="车辆入库登记" style="padding: 10px">
+			<div id="warehouseBody"></div>
+		</div>
+		<!-- 拍品信息 -->
+		<div title="拍品信息" style="padding: 10px" id="ss">
+			<div id="vehicleBody"></div>
+		</div>
+		<!-- 拍品信息 -->
+
+	</div>
+	<input type="button" class="submitBtn" value="提交" onclick="addOrEditWarehouse(0,1)" />
+	<input type="button" class="saveBtn" value="保存" onclick="addOrEditWarehouse(0,0)" />
+</body>
+</html>

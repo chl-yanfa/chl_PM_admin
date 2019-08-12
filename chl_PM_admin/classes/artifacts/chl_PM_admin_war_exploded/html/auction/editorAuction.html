@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/auction/editorAuction.css" rel="stylesheet" type="text/css"/>
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/controller/paimai/overrideDataGridView.js"></script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=NfeFkeBXjyXsHYMsfGPu4V6M4UMkCtFB"></script>
+<script type="text/javascript" charset="utf-8" src="../../resources/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../resources/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../resources/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="../../js/controller/auction/auction.js"> </script>
+<script type="text/javascript" src="../../js/controller/auction/editorAuction.js"> </script>
+<title>车辆管理列表</title>
+<style>
+	input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px white inset;}
+</style>
+</head>
+<body style="min-height: 1000px;">
+	<div id="Dialog"></div>
+	<form id="vehicleInfo" style="font-size: 12px;">
+		<!-- 车辆id -->
+		<input name="id" class="easyui-textbox" hidden />
+		<input name="scrapOrderId" class="easyui-textbox" hidden />
+		<p class="hosttt" style="margin-left: 16px;">基本信息</p>
+		<div class="carMain">
+			<table class="table-body">
+				<tr>
+					<td style="width: 10%;">拍品类型：</td>
+					<td style="width: 23%;">
+						<input type="radio" name="auctionType" value="0">
+						<label style="margin-right:20px;">全车配件</label> 
+						<input type="radio" name="auctionType" value="1">
+						<label style="margin-right:20px;">高价值配件</label> 
+						<input type="radio" name="auctionType" value="2">
+						<label >大宗配件</label>
+					</td>
+					<td style="width: 10%;">拍品编号：</td>
+					<td style="width: 23%;">
+						<input id="auctionNo" name="auctionNo" class="easyui-validatebox"/>
+					</td>
+					<td class="carTemp" style="width: 10%;">车架号：</td>
+					<td class="carTemp" style="width: 23%;">
+						<input id="vin" name="vin" class="easyui-validatebox">
+					</td>
+					<td style="width: 10%;display: none;" class="partsTemp"></td>
+					<td style="width: 23%;display: none;" class="partsTemp"></td>
+				</tr>
+				<tr>
+					<td>拍品名称：</td>
+					<td colspan="5">
+						<input id="fullName" name="fullName" class="easyui-validatebox"
+							style="width: 500px;">
+					</td>
+				</tr>
+				<tr>
+					<td>所在地：</td>
+					<td>
+						<input id="lotAreasId" name="lotAreasId">
+						<input id="lotAreas" name="lotAreas" class="easyui-textbox" hidden>
+					</td>
+					<td class="carTemp">出厂日期：</td>
+					<td class="carTemp">
+						<input id="productionDate" name="productionDate">
+					</td>
+					<td class="carTemp">钥匙:</td>
+					<td class="carTemp">
+						<input id="key-0" name="isHasKey" value="无" type="radio"/>
+						<label for="key-0" style="margin-right: 20px">无</label> 
+						<input id="key-1" name="isHasKey" value="有" type="radio"/>
+						<label for="key-1">有</label>
+					</td>
+					<td class="partsTemp">数量：</td>
+					<td class="partsTemp">
+						<input id="partsCount" name="partsCount" class="easyui-validatebox" onKeyUp="value=value.replace(/[^\d]/g,'')">
+					</td>
+					<td class="allPartsTemp">重量：</td>
+					<td class="allPartsTemp">
+						<input id="partsWeight" name="partsWeight" class="easyui-validatebox">
+					</td>
+					<td class="vPartsTemp"></td>
+					<td class="vPartsTemp"></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top;">商品描述：</td>
+					<td colspan="6">
+						<textarea warp="virtual" id="description" name="description" 
+							class="beizhu"
+							data-options="multiline:true"
+							onKeyUp="checkWord(this,'description-check',200);" 
+							onMouseDown="checkWord(this,'description-check',200);"
+							></textarea>
+						<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="description-check">0</span>个字符 </p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top;">购买要求：</td>
+					<td colspan="6">
+						<textarea warp="virtual" id="buyRequirement" name="buyRequirement" 
+							class="beizhu"
+							data-options="multiline:true"
+							onKeyUp="checkWord(this,'buyRequirement-check',200);" 
+							onMouseDown="checkWord(this,'buyRequirement-check',200);"
+							></textarea>
+						<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="buyRequirement-check">0</span>个字符 </p>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="carMain">
+			<p class="hosttt">看货地址</p>
+			<table class="table-body">
+				<tr>
+					<td style="width: 10%;">联系人：</td>
+					<td style="width: 23%;">
+						<input id="lookContacts" name="lookContacts" class="easyui-textbox"/>
+					</td>
+					<td style="width: 10%;">联系方式：</td>
+					<td style="width: 23%;">
+						<input id="lookContactNumber" name="lookContactNumber" class="easyui-textbox"/>
+					</td>
+					<td style="width: 10%;">地址：</td>
+					<td style="width: 23%;">
+						<input id="lookAddress" name="lookAddress" autocomplete="off" class="easyui-textbox" style="width: 300px;"/>
+						<input id="lookCoordinate" name="lookCoordinate" class="easyui-textbox" hidden/>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="carMain carTemp">
+			<!-- 添加车辆 -->
+			<a class="addLot">+添加车辆</a>
+		</div>
+		<div class="carMain">
+			<p class="hosttt">车辆照片</p>
+			<!-- 图片上传 -->
+			<ul id="pic-upload-row">
+				<li class="pic-single">
+                    <div class="input-pic-box pic-box">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png" onclick="addAuctiontPic('upload-auction')" />
+                        <input style="display: none;" type="file" accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" class="upload-auction" onchange="doUpload('upload-auction')" />
+                    </div>
+                </li>
+			</ul>
+		</div>
+		<div class="carMain partsTemp">
+			<!-- 添加配件 -->
+			<a class="addLot">+添加配件</a>
+		</div>
+		<div id="partsList" class="carMain partsTemp">
+			<!-- 配件展示区 -->
+			<table id="partsTable" class="partsTable">
+				<tr>
+					<td>编号</td>
+					<td>配件名称</td>
+					<td>配件OE号</td>
+					<td>车辆VIN</td>
+					<td>车辆型号</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+		<div class="carMain">
+			<p class="hosttt">竞价须知</p>
+			<script id="bidNotice" type="text/plain" name="bidNotice" style="width:99%;height:400px;"></script>
+			<p class="hosttt">特别提示</p>
+			<script id="specialNotice" type="text/plain" name="specialNotice" style="width:99%;height:200px;"></script>
+		</div>
+	</form>
+	<div class="carMain" style="text-align: center;">
+		<button onclick="saveAuction(1,1,0)" class="submitBtn" id="c-pub">提交</button>
+		<button class="backBtn" onclick="goback()">返回</button>
+	</div>
+	<!-- 地图 -->
+    <div style="display: none;">
+        <div id="showmap">
+            <table>
+                <tr>
+                    <td>
+                    	<div style="margin-top:10px;margin-left:10px;width:350px;">
+	                       	<input id="address-searchText"/>
+	                       	<a href="javascript:void(0)" class="l-btn l-btn-small l-btn-plain" 
+	                       		onclick="searchAddress()">
+	                       		<span class="l-btn-text">搜索</span>
+	                       	</a>
+                       	</div>
+                       	<div style="margin-top:10px;margin-left:10px;width:350px;">
+	                        <input id="suggestId"/>
+                        </div>
+                        <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;z-index:1000;"></div>
+                        <div id="l-map" style="width:535px;height:305px;margin-top:10px;margin-left:10px;"></div>
+                    </td>
+                    <td style="width: 10px;"></td>
+                </tr>
+            </table>
+            <br/>
+            <div id="allmap"></div>
+        </div>
+    </div>
+<script type="text/javascript">
+	//实例化编辑器
+	var bidNoticeEditor = UE.getEditor('bidNotice');
+	var specialNoticeEditor = UE.getEditor('specialNotice');
+
+	function G(id) {
+	    return document.getElementById(id);
+	}
+	var map = new BMap.Map("l-map");
+	map.setCurrentCity("北京");
+	map.enableScrollWheelZoom();//启动鼠标滚轮缩放地图
+	map.centerAndZoom(new BMap.Point(116.4136103013, 39.9110666857), 12);                // 初始化地图,设置城市和地图级别。
+	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+	var geoc = new BMap.Geocoder();
+	var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+	    {
+	        "input": "suggestId", 
+	        "location": map
+	    });
+	map.addEventListener("click", function (e) {
+	    var pt = e.point;
+	    console.log('point',pt);
+	    $("#lookCoordinate").val(pt.lng + "," + pt.lat);
+	    geoc.getLocation(pt, function (rs) {
+	        map.clearOverlays();
+	        map.addOverlay(new BMap.Marker(pt));
+	        $('#suggestId').searchbox('setValue',rs.address);
+	    });
+	});
+	ac.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
+	    var str = "";
+	    var _value = e.fromitem.value;
+	    var value = "";
+	    if (e.fromitem.index > -1) {
+	        value = _value.province + _value.city + _value.district + _value.street + _value.business;
+	    }
+	    str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+	
+	    value = "";
+	    if (e.toitem.index > -1) {
+	        _value = e.toitem.value;
+	        value = _value.province + _value.city + _value.district + _value.street + _value.business;
+	    }
+	    str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+	    G("searchResultPanel").innerHTML = str;
+	});
+	
+	var myValue;
+	ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+	    var _value = e.item.value;
+	    myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+	    G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+	    setPlace();
+	});
+	
+	function setPlace() {
+	    map.clearOverlays();    //清除地图上所有覆盖物
+	    function myFun() {
+	        var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+	        map.centerAndZoom(pp, 18);
+	        map.addOverlay(new BMap.Marker(pp));    //添加标注
+	    }
+	    var local = new BMap.LocalSearch(map, { //智能搜索
+	        onSearchComplete: myFun
+	    });
+	    local.search(myValue);
+	}
+	//点击打开地图
+	$(document).delegate('#lookAddress', 'click', function (event) {
+	    event.preventDefault();
+	    $('#showmap').dialog({
+	        title: '取车地址',
+	        modal : true,
+	        buttons: [{
+	            text: '取消',
+	            handler:function(){
+	            	$('#showmap').dialog("close",true);
+	            }
+	        }, {
+	            text: '确定',
+	            handler:function(){
+	                $("#lookAddress").val($('#suggestId').searchbox('getValue'));
+	            	$('#showmap').dialog("close",true);
+	            }
+	        }]
+	    })
+	    map.centerAndZoom("北京", 11);      // 用城市名设置地图中心点
+	});
+	function searchAddress(){
+		var val = $('#address-searchText').searchbox('getValue').trim();
+		if(val!=null && val!=''){
+			var local = new BMap.LocalSearch(map,{renderOptions: {map: map,panel: "results"}}); 
+			local.search(val);
+		}
+	}
+</script>
+</body>
+</html>

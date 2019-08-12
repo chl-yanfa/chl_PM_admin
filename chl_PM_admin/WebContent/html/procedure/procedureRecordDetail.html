@@ -1,0 +1,73 @@
+<!-- 上传手续之后，提交跳转的页面->完结归档 -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/procedure/procedureRecordDetail.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/tcwErpDataGridView.js"></script>
+<script type="text/javascript" src="../../js/url.js"></script>
+<script type="text/javascript" src="../../js/dataFormat.js"></script>
+<script type="text/javascript" src="../../js/controller/procedure/procedureRecordDetail.js"></script>
+<title>查看手续归档</title>
+<style type="text/css">
+.textEllipsis {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.textEllipsis:hover {
+	height: auto;
+	word-break: break-all;
+	text-decoration: none;
+}
+</style>
+</head>
+<body>
+	<div class="ee" id="record" style="display:none">
+		<form id="procedureRecord">
+			<div class="all">已归档</div>
+			<div class="splid">
+				<div class="ee">
+					<label class="hj">操作人：</label>
+					<input id="applicantId" name="applicantId">
+				</div>
+				<div class="ee">
+					<label class="hj">申请时间：</label>
+					<input id="createTime" name="createTime">
+				</div>
+			</div>
+			<br>
+			<div class="jj">
+				<label style="font-size: 12px;">备注：</label> <br>
+				<textarea clos=",50" rows="" warp="virtual" id="remark"
+					name="remark" class="easyui-textbox cc"
+					data-options="multiline:true"></textarea>
+			</div>
+		</form>
+	</div>
+	<div class="ee" id="notRecord" style="display:none">
+		<div class="all">未归档</div>
+		<br>
+	</div>
+	<div class="easyui-tabs">
+		<div title="手续入库登记" style="padding: 10px">
+			<div id="procedureBody"></div>
+		</div>
+		<div title="拍品信息" style="padding: 10px">
+			<div id="vehicleBody"></div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<body>
+	<div id="sureStore">
+		<form id="outWarehouse">
+			<input id="stockId" name="stockId" hidden>
+			<div class="cattype">
+				<div class="cattype">
+					<label class="sure-1">车型:</label> 
+					<input class="sure-2 sure-3" readonly="readonly" id="carModel" name="carModel">
+				</div>
+				<div class="cattype">
+					<label class="sure-1">车牌号:</label> 
+					<input class="sure-3" readonly="readonly" id="licenseNum" name="licenseNum">
+				</div>
+			</div>
+			<br>
+			<div class="cattypes">
+				<div class="cattypes">
+					<input type="checkbox" id="carPlacing" name="carPlacing" class="sure-4" value="车辆出库"> 
+					<label for="carPlacing" class="sure-5">车辆出库</label>
+				</div>
+				<div class="cattypes">
+					<label class="sure-1">出库时间:</label> 
+					<input class="easyui-datetbox" id="carPlacingTime" name="carPlacingTime">
+				</div>
+			</div>
+			<br>
+			<div class="cattypes">
+				<div class="cattypes">
+					<input type="checkbox" id="keyPlacing" name="keyPlacing" class="sure-4" value="钥匙出库"> 
+					<label for="keyPlacing" class="sure-5">钥匙出库</label>
+				</div>
+				<div class="cattypes">
+					<label class="sure-1">出库时间:</label> 
+					<input class="easyui-datetbox" id="keyPlacingTime" name="keyPlacingTime">
+				</div>
+			</div>
+			<br>
+			<div class="cattypes">
+				<div class="cattypes">
+					<input type="checkbox" id="licensePlacing" name="licensePlacing" class="sure-4" value="车牌出库"> 
+					<label for="licensePlacing" class="sure-5">车牌出库</label>
+				</div>
+				<div class="cattypes">
+					<label class="sure-1">出库时间:</label> 
+					<input class="easyui-datetbox" id="licensePlacingTime" name="licensePlacingTime">
+				</div>
+			</div>
+			<br>
+			<div class="cattypes">
+				<p class="sure-1">出库原因:</p>
+				<textarea clos=",50" rows="" warp="virtual" id="placingReason"
+					name="placingReason" class="easyui-textbox storagebeizhu"
+					data-options="multiline:true"></textarea>
+			</div>
+		</form>
+	</div>
+</body>

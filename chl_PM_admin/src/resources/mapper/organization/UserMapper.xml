@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.standard.UserMapper">
+	<resultMap id="user" type="User">
+		<id property="id" column="id" />
+		<result property="userName" column="USER_NAME" />
+		<result property="roleId" column="ROLE_ID" />
+		<result property="roleName" column="ROLE_NAME" />
+		
+	</resultMap>
+
+	<select id="getUser" resultMap="user">
+		SELECT
+			'S002' AS ID,
+			T1.real_name,
+			T3.ID AS ROLE_ID, 
+			T3.ROLE_NAME AS ROLE_NAME
+		FROM sys_user T1
+		LEFT JOIN sys_user_rel_info T2
+			ON T1.ID = T2.USER_ID AND T2.INFO_TYPE ='S002' AND T2.IS_ENABLE = 'Y'
+		LEFT JOIN sys_role_info T3
+			ON T2.INFO_ID = T3.ID AND T3.is_delete = 0
+		WHERE
+			T1.ID = #{id}
+	</select>
+	<!-- 查询业务员	SYS_USER getAllUser -->
+	<select id="getAllUser" resultMap="user">
+		SELECT
+			real_name AS ID,
+			real_name
+		FROM
+			sys_user
+		WHERE
+			status = '1'
+	</select>
+
+</mapper>

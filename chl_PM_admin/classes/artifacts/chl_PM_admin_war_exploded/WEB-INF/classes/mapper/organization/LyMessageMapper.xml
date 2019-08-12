@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.LyMessageMapper">
+	<resultMap id="BaseResultMap" type="LyMessage">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="lyid" jdbcType="VARCHAR" property="lyid" />
+		<result column="masterBrand" jdbcType="VARCHAR" property="masterbrand" />
+		<result column="brand" jdbcType="VARCHAR" property="brand" />
+		<result column="serial" jdbcType="VARCHAR" property="serial" />
+		<result column="ctype" jdbcType="VARCHAR" property="ctype" />
+		<result column="trademark" jdbcType="VARCHAR" property="trademark" />
+		<result column="factory" jdbcType="VARCHAR" property="factory" />
+		<result column="series" jdbcType="VARCHAR" property="series" />
+		<result column="model" jdbcType="VARCHAR" property="model" />
+		<result column="saleName" jdbcType="VARCHAR" property="salename" />
+		<result column="modelYear" jdbcType="VARCHAR" property="modelyear" />
+		<result column="emissionLevel" jdbcType="VARCHAR" property="emissionlevel" />
+		<result column="carStyle" jdbcType="VARCHAR" property="carstyle" />
+		<result column="guideprice" jdbcType="VARCHAR" property="guideprice" />
+		<result column="listedYear" jdbcType="VARCHAR" property="listedyear" />
+		<result column="listedMonth" jdbcType="VARCHAR" property="listedmonth" />
+		<result column="makeYear" jdbcType="VARCHAR" property="makeyear" />
+		<result column="stopYear" jdbcType="VARCHAR" property="stopyear" />
+		<result column="productionStatus" jdbcType="VARCHAR" property="productionstatus" />
+		<result column="dcountry" jdbcType="VARCHAR" property="dcountry" />
+		<result column="mchinaOrImport" jdbcType="VARCHAR" property="mchinaorimport" />
+		<result column="displacement" jdbcType="VARCHAR" property="displacement" />
+		<result column="outputVolume" jdbcType="VARCHAR" property="outputvolume" />
+		<result column="inletForm" jdbcType="VARCHAR" property="inletform" />
+		<result column="fuelType" jdbcType="VARCHAR" property="fueltype" />
+		<result column="roz" jdbcType="VARCHAR" property="roz" />
+		<result column="maxPower" jdbcType="VARCHAR" property="maxpower" />
+		<result column="kwPower" jdbcType="VARCHAR" property="kwpower" />
+		<result column="cylinderArrangement" jdbcType="VARCHAR" property="cylinderarrangement" />
+		<result column="cylinderNum" jdbcType="VARCHAR" property="cylindernum" />
+		<result column="valvesNum" jdbcType="VARCHAR" property="valvesnum" />
+		<result column="gearboxType" jdbcType="VARCHAR" property="gearboxtype" />
+		<result column="gearboxDes" jdbcType="VARCHAR" property="gearboxdes" />
+		<result column="gearsNum" jdbcType="VARCHAR" property="gearsnum" />
+		<result column="frontBrakeType" jdbcType="VARCHAR" property="frontbraketype" />
+		<result column="rearBrakeType" jdbcType="VARCHAR" property="rearbraketype" />
+		<result column="powerType" jdbcType="VARCHAR" property="powertype" />
+		<result column="engineLocation" jdbcType="VARCHAR" property="enginelocation" />
+		<result column="drivingMethod" jdbcType="VARCHAR" property="drivingmethod" />
+		<result column="wheelbase" jdbcType="VARCHAR" property="wheelbase" />
+		<result column="doorNum" jdbcType="VARCHAR" property="doornum" />
+		<result column="seatNum" jdbcType="VARCHAR" property="seatnum" />
+		<result column="frontTireSpecification" jdbcType="VARCHAR" property="fronttirespecification" />
+		<result column="rearTireSpecification" jdbcType="VARCHAR" property="reartirespecification" />
+		<result column="frontHubSpecification" jdbcType="VARCHAR" property="fronthubspecification" />
+		<result column="rearHubSpecification" jdbcType="VARCHAR" property="rearhubspecification" />
+		<result column="wheelHubMaterial" jdbcType="VARCHAR" property="wheelhubmaterial" />
+		<result column="spareTireSpecification" jdbcType="VARCHAR" property="sparetirespecification" />
+		<result column="powerSunroof" jdbcType="VARCHAR" property="powersunroof" />
+		<result column="vistaSunroof" jdbcType="VARCHAR" property="vistasunroof" />
+		<result column="hid" jdbcType="VARCHAR" property="hid" />
+		<result column="frontFogLamp" jdbcType="VARCHAR" property="frontfoglamp" />
+		<result column="rearWiper" jdbcType="VARCHAR" property="rearwiper" />
+		<result column="airConditioner" jdbcType="VARCHAR" property="airconditioner" />
+		<result column="autoAirConditioner" jdbcType="VARCHAR" property="autoairconditioner" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, lyid, masterBrand, brand, serial, ctype, trademark, factory, series,
+		model, saleName,
+		modelYear, emissionLevel, carStyle, guideprice, listedYear, listedMonth,
+		makeYear,
+		stopYear, productionStatus, dcountry, mchinaOrImport, displacement,
+		outputVolume,
+		inletForm, fuelType, roz, maxPower, kwPower, cylinderArrangement, cylinderNum,
+		valvesNum,
+		gearboxType, gearboxDes, gearsNum, frontBrakeType, rearBrakeType, powerType,
+		engineLocation,
+		drivingMethod, wheelbase, doorNum, seatNum, frontTireSpecification,
+		rearTireSpecification,
+		frontHubSpecification, rearHubSpecification, wheelHubMaterial, spareTireSpecification,
+		powerSunroof, vistaSunroof, hid, frontFogLamp, rearWiper,
+		airConditioner, autoAirConditioner
+	</sql>
+	<select id="getLyMessageByLyids" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ly_message
+		<trim prefix="WHERE" prefixOverrides="AND"> 
+		    <if test="list != null and list != ''">   
+				AND lyid IN 
+			   	<foreach item="lyid" index="index" collection="list"
+	                open="(" separator="," close=")"> #{lyid}
+				</foreach>
+	        </if>
+        </trim>
+	</select>
+	<select id="getLyMessageCountByLyids" resultType="int">
+		select
+		count(1)
+		from ly_message
+		<trim prefix="WHERE" prefixOverrides="AND"> 
+		    <if test="list != null and list != ''">   
+				AND lyid IN 
+			   	<foreach item="lyid" index="index" collection="list"
+	                open="(" separator="," close=")"> #{lyid}
+				</foreach>
+	        </if>
+        </trim>
+	</select>
+	
+</mapper>

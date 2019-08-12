@@ -1,0 +1,40 @@
+<body>
+	<div id="applyStore">
+		<form id="outWarehouseAbnormal">
+			<input id="stockId" name="stockId" hidden>
+			<div class="cattype">
+				<div class="cattype">
+					<label class="apply-1">车型:</label> 
+					<input class="apply-2 apply-3" readonly="readonly" id="carModel" name="carModel">
+				</div>
+				<div class="cattype">
+					<label class="apply-1">车牌号:</label> 
+					<input class="apply-3" readonly="readonly" id="licenseNum" name="licenseNum">
+				</div>
+			</div>
+			<br>
+			<div class="cattypes">
+				<div class="cattypes">
+					<input type="checkbox" id="carP" name="carPlacing" class="apply-4" value="车辆出库"> 
+					<label for="carP" class="apply-5">车辆出库</label>
+				</div>
+				<div class="cattypes">
+					<label class="apply-1">出库时间:</label> 
+					<input class="easyui-datebox" id="carPlacingTime" name="carPlacingTime">
+				</div>
+			</div>
+			<br>
+			<div class="cattypes">
+				<label class="apply-1">费用金额:</label> 
+				<input class="easyui-textbox" id="amount" name="amount">
+			</div>
+			<br>
+			<div class="cattypes">
+				<p class="sure-1">出库原因:</p>
+				<textarea clos=",50" rows="" warp="virtual" id="placingReason"
+					name="placingReason" class="easyui-textbox applybeizhu"
+					data-options="multiline:true"></textarea>
+			</div>
+		</form>
+	</div>
+</body>

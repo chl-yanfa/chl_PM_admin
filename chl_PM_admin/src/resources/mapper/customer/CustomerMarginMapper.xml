@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.CustomerMarginMapper">
+	<resultMap id="BaseResultMap" type="CustomerMargin">
+		<id 	column="id" 						property="id" />
+		<result column="wallet_pledge" 				property="walletPledge" />
+		<result column="wallet_pledge_freeze" 		property="walletPledgeFreeze" />
+		<result column="create_time" 				property="createTime" />
+		<result column="create_user" 				property="createUser" />
+		<result column="update_time" 				property="updateTime" />
+		<result column="update_user" 				property="updateUser" />
+		<result column="is_delete" 					property="isDelete" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, wallet_pledge, wallet_pledge_freeze,
+		is_delete, 
+		create_time, create_user, update_time, update_user
+	</sql>
+	<select id="getCustomerMarginById" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM 
+			car_pm_customer_margin
+		WHERE 
+			id = #{id}
+	</select>
+	
+	<insert id="addCustomerMargin">
+		insert into car_pm_customer_margin
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="walletPledge != null">
+				wallet_pledge,
+			</if>
+			<if test="walletPledgeFreeze != null">
+				wallet_pledge_freeze,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="updateUser != null">
+				update_user,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			create_time,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="walletPledge != null">
+				#{walletPledge},
+			</if>
+			<if test="walletPledgeFreeze != null">
+				#{walletPledgeFreeze},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete},
+			</if>
+			<if test="createUser != null">
+				#{createUser},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime},
+			</if>
+			now(),
+		</trim>
+	</insert>
+	
+	<update id="updateCustomerMarginSelective">
+		UPDATE CAR_PM_CUSTOMER_MARGIN
+		<set>
+			<if test="walletPledge != null">
+				wallet_pledge = #{walletPledge},
+			</if>
+			<if test="walletPledgeFreeze != null">
+				wallet_pledge_freeze = #{walletPledgeFreeze},
+			</if>
+			<if test="updateTime != null">
+				update_time = now(),
+			</if>
+			<if test="updateUser != null">
+				update_user = #{updateUser},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<!-- thawCustomerMargin 解冻保证金 -->
+	<update id="thawCustomerMargin">
+		UPDATE 
+        	CAR_PM_CUSTOMER_MARGIN
+        SET
+        	wallet_pledge = wallet_pledge + #{walletPledge},
+        	wallet_pledge_freeze = wallet_pledge_freeze - #{walletPledgeFreeze},
+        	update_time = now(),
+        	update_user = #{updateUser}
+        WHERE 
+        	id = #{id}
+	</update>
+	<!-- chargeCustomerMargin 充值保证金 -->
+	<update id="chargeCustomerMargin">
+		UPDATE 
+        	CAR_PM_CUSTOMER_MARGIN
+        SET
+        	wallet_pledge = wallet_pledge + #{walletPledge},
+        	update_time = now(),
+        	update_user = #{updateUser}
+        WHERE 
+        	id = #{id}
+	</update>
+	<!-- refundCustomerMargin 退款参拍保证金 -->
+	<update id="refundCustomerMargin">
+		UPDATE 
+        	CAR_PM_CUSTOMER_MARGIN
+        SET
+        	wallet_pledge = wallet_pledge - #{walletPledge},
+        	update_time = now(),
+        	update_user = #{updateUser}
+        WHERE 
+        	id = #{id}
+	</update>
+</mapper>

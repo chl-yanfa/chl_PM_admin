@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../js/lib/eui/themes/icon.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/lib/eui/tcwErpDataGridView.js"></script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript">
+	load("../../js/controller/auction/saveList.js?v=" + new Date().getTime());
+</script>
+<title>暂存车辆列表</title>
+</head>
+<body style="min-height: 1000px">
+	<table id="list"></table>
+</body>
+<script type="text/javascript">
+var toolbarType = [
+	'拍品类型','',{id :'tb-auctionType'},'',
+	'拍卖时间','',{id :'tb-paimaiDateStart'},'','到','',{id :'tb-paimaiDateEnd'},'',
+	{id:'searchText'},'&nbsp;',
+	{text : '查询',id : 'iconSearch'},'&nbsp;',
+	{text : '重置',id : 'iconReset'}
+];
+</script>
+</html>

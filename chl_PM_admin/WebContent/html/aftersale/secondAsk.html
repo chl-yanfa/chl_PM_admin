@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/aftersale/abortAuction.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../js/controller/aftersale/secondAsk.js"> </script>
+<title>二询</title>
+<style>
+input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px white inset;}
+.numberbox{
+  width:80px;
+}
+</style>
+</head>
+<body>
+<div class="content">
+	<h3><span style="color:#5191e1;margin-right:3px;">▍</span>申请二询</h3>
+	<div class="line"></div>
+	<form id="secondAskForm">
+		<table class="table-noborder" style="margin: 30px 0px;width: 80%">
+			<tr>
+				<td style="width: 80px;vertical-align: top;"><label>备注：</label></td>
+				<td colspan="5">
+					<textarea warp="virtual" name="remark"
+						class="beizhu" data-options="multiline:true"
+						onKeyUp="checkWord(this,'remark-check',200);" 
+						onMouseDown="checkWord(this,'remark-check',200);"
+						></textarea>
+					<p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="remark-check">200</span>个字符 </p>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<div class="content">
+	<h3><span style="color:#5191e1;margin-right:3px;">▍</span>上传照片</h3>
+	<div class="line"></div>
+	<div id="uploader" style="width: 90%;margin: 30px 0px;">
+		<!-- 图片上传 -->
+		<ul id="pic-upload-row">
+			<li class="pic-single">
+                   <div class="input-pic-box pic-box">
+                       <img class="pic-img" src="../../resources/images/addimg-bg.png" onclick="addPic('upload-secondAsk')" />
+                       <input style="display: none;" type="file" accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" class="upload-secondAsk" onchange="doUpload('upload-secondAsk')" />
+                   </div>
+               </li>
+		</ul>
+	</div>
+</div>
+<div class="content-footer">
+	<button class="submitBtn" onclick="addSecondAsk()">提交</button>
+	<button class="cancelBtn" onclick="cancel()">取消</button>
+</div>
+</body>
+</html>

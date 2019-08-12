@@ -1,0 +1,58 @@
+.carTop{
+	margin-left:16px;
+}
+.carTop td{
+	padding: 1em;
+    border:1px solid #dbdbdb;
+}
+.carMain{
+	margin-top:20px;
+	margin-left:16px;
+}
+.carMain td{
+	padding: 1em;
+    border:1px solid #dbdbdb;
+}
+.sh input{
+	border:none;
+}
+.hongxing{
+	width:10px;
+	height:25px;
+	font-size: 14px;
+	color: #D6001D;
+}
+.hosttt{
+	font-size:16px;
+	margin-bottom:10px;
+	background: steelblue;
+	color: white;
+}
+.table_car{
+	border-collapse: collapse; 
+	text-align: center; 
+	border: 1px solid #dbdbdb;
+}
+.text-div{
+	width: 100%;
+	word-break:break-all;
+	word-wrap:break-word;
+	margin-bottom: 10px;
+}
+.view-beizhu{
+	width: 90%;
+	height: 100px;
+	border: none;
+}
+.partsTable{
+	border-collapse: collapse; 
+	text-align: center; 
+	border: 1px solid #dbdbdb;
+	width: 100%;
+}
+.partsTable td{
+	padding: 0.5em;
+    border:1px solid #dbdbdb;
+    font-size: 12px;
+    text-align: center;
+}

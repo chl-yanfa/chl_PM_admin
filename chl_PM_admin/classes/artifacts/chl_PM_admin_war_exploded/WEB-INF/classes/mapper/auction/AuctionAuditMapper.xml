@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.AuctionAuditMapper">
+	<resultMap id="auctionAudit" type="AuctionAudit">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="auction_id" jdbcType="VARCHAR" property="auctionId" />
+		<result column="audit_flag" jdbcType="INTEGER" property="auditFlag" />
+		<result column="audit_flag_id" jdbcType="VARCHAR" property="auditFlagId" />
+		<result column="is_pass" jdbcType="INTEGER" property="isPass" />
+		<result column="no_pass_reason" jdbcType="VARCHAR" property="noPassReason" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+		<result column="TS" jdbcType="TIMESTAMP" property="TS" />
+	</resultMap>
+	<sql id="AuctionAudit_Column">
+		id, auction_id, audit_flag, audit_flag_id, is_pass, no_pass_reason,
+		create_time,
+		is_delete, TS
+	</sql>
+	<select id="getAuctionAuditById" resultMap="auctionAudit">
+		SELECT
+		<include refid="AuctionAudit_Column" />
+		FROM car_pm_auction_audit
+		WHERE ID = #{id,jdbcType=VARCHAR}
+		AND is_delete = 0
+	</select>
+	<select id="getAuctionAuditByCondition" resultMap="auctionAudit">
+		SELECT
+		<include refid="AuctionAudit_Column" />
+		FROM car_pm_auction_audit
+		<trim prefix="WHERE" prefixOverrides="AND">
+			AND is_delete = 0
+		    <if test="id != null and id != ''">   
+			   AND id = #{id}
+	        </if>
+	        <if test="auctionId != null and auctionId != ''">   
+			   AND auction_id = #{auctionId}
+	        </if>
+		    <if test="auditFlag != null and auditFlag != ''">   
+			   AND audit_flag = #{auditFlag}
+	        </if>
+	        <if test="auditFlagId != null and auditFlagId != ''">   
+			   AND audit_flag_id = #{auditFlagId}
+	        </if>
+        </trim>
+	</select>
+	<insert id="addAuctionAudit">
+		INSERT INTO car_pm_auction_audit (
+			id, auction_id, audit_flag,
+			audit_flag_id, is_pass, no_pass_reason,
+			create_time, is_delete
+		)
+		values (
+			#{id,jdbcType=VARCHAR}, 
+			#{auctionId,jdbcType=VARCHAR},
+			#{auditFlag,jdbcType=INTEGER},
+			#{auditFlagId,jdbcType=VARCHAR}, 
+			#{isPass,jdbcType=INTEGER}, 
+			#{noPassReason,jdbcType=VARCHAR},
+			now(), 0
+		)
+	</insert>
+	<insert id="addAuctionAuditSelective">
+		INSERT INTO car_pm_auction_audit
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="auctionId != null">
+				auction_id,
+			</if>
+			<if test="auditFlag != null">
+				audit_flag,
+			</if>
+			<if test="auditFlagId != null">
+				audit_flag_id,
+			</if>
+			<if test="isPass != null">
+				is_pass,
+			</if>
+			<if test="noPassReason != null">
+				no_pass_reason,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="auctionId != null">
+				#{auctionId,jdbcType=VARCHAR},
+			</if>
+			<if test="auditFlag != null">
+				#{auditFlag,jdbcType=INTEGER},
+			</if>
+			<if test="auditFlagId != null">
+				#{auditFlagId,jdbcType=VARCHAR},
+			</if>
+			<if test="isPass != null">
+				#{isPass,jdbcType=INTEGER},
+			</if>
+			<if test="noPassReason != null">
+				#{noPassReason,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateAuctionAuditSelective">
+		UPDATE car_pm_auction_audit
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId,jdbcType=VARCHAR},
+			</if>
+			<if test="auditFlag != null">
+				audit_flag = #{auditFlag,jdbcType=INTEGER},
+			</if>
+			<if test="auditFlagId != null">
+				audit_flag_id = #{auditFlagId,jdbcType=VARCHAR},
+			</if>
+			<if test="isPass != null">
+				is_pass = #{isPass,jdbcType=INTEGER},
+			</if>
+			<if test="noPassReason != null">
+				no_pass_reason = #{noPassReason,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=INTEGER},
+			</if>
+		</set>
+		WHERE ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateAuctionAudit">
+		UPDATE car_pm_auction_audit
+		SET 
+			auction_id = #{auctionId,jdbcType=VARCHAR},
+			audit_flag = #{auditFlag,jdbcType=INTEGER},
+			audit_flag_id = #{auditFlagId,jdbcType=VARCHAR},
+			is_pass = #{isPass,jdbcType=INTEGER},
+			no_pass_reason = #{noPassReason,jdbcType=VARCHAR},
+			is_delete = #{isDelete,jdbcType=INTEGER}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="deleteAuctionAudit">
+		UPDATE car_pm_auction_audit
+		SET 
+			is_delete = 1
+		where auction_id = #{auctionId,jdbcType=VARCHAR}
+	</update>
+</mapper>

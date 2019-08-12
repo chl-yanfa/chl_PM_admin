@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.WarehousePlacingMapper">
+	<resultMap id="BaseResultMap" type="WarehousePlacing">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+	    <result column="stock_id" jdbcType="VARCHAR" property="stockId" />
+	    <result column="car_model" jdbcType="VARCHAR" property="carModel" />
+	    <result column="license_num" jdbcType="VARCHAR" property="licenseNum" />
+	    <result column="car_placing" jdbcType="VARCHAR" property="carPlacing" />
+	    <result column="car_placing_time" jdbcType="TIMESTAMP" property="carPlacingTime" />
+	    <result column="key_placing" jdbcType="VARCHAR" property="keyPlacing" />
+	    <result column="key_placing_time" jdbcType="TIMESTAMP" property="keyPlacingTime" />
+	    <result column="license_placing" jdbcType="VARCHAR" property="licensePlacing" />
+	    <result column="license_placing_time" jdbcType="TIMESTAMP" property="licensePlacingTime" />
+	    <result column="amount" jdbcType="VARCHAR" property="amount" />
+	    <result column="placing_reason" jdbcType="VARCHAR" property="placingReason" />
+	    <result column="proposer" jdbcType="VARCHAR" property="proposer" />
+	    <result column="audit_state" jdbcType="INTEGER" property="auditState" />
+	    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, stock_id, car_model, license_num, car_placing, car_placing_time, key_placing, 
+	    key_placing_time, license_placing, license_placing_time, amount, placing_reason, 
+	    proposer, audit_state, create_time, update_time, is_delete
+	</sql>
+	<select id="getWarehousePlacingById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_warehouse_placing
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<select id="getWarehousePlacingToAudit" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_warehouse_placing
+		where stock_id = #{stockId,jdbcType=VARCHAR}
+		and audit_state=1
+		ORDER BY create_time DESC
+		LIMIT 1
+	</select>
+	<insert id="addWarehousePlacing">
+		insert into car_pm_warehouse_placing (
+			id, stock_id, car_model,
+			license_num, car_placing, car_placing_time,
+			key_placing, key_placing_time, license_placing,
+			license_placing_time, amount, placing_reason,
+			proposer, audit_state, create_time, is_delete)
+		values (
+			#{id,jdbcType=VARCHAR}, #{stockId,jdbcType=VARCHAR},
+			#{carModel,jdbcType=VARCHAR},
+			#{licenseNum,jdbcType=VARCHAR}, #{carPlacing,jdbcType=VARCHAR}, #{carPlacingTime,jdbcType=TIMESTAMP},
+			#{keyPlacing,jdbcType=VARCHAR}, #{keyPlacingTime,jdbcType=TIMESTAMP},
+			#{licensePlacing,jdbcType=VARCHAR},
+			#{licensePlacingTime,jdbcType=TIMESTAMP}, #{amount,jdbcType=VARCHAR},
+			#{placingReason,jdbcType=VARCHAR},
+			#{proposer,jdbcType=VARCHAR}, #{auditState,jdbcType=INTEGER},
+			now(),0)
+	</insert>
+	<insert id="addWarehousePlacingSelective">
+		insert into car_pm_warehouse_placing
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="stockId != null">
+				stock_id,
+			</if>
+			<if test="carModel != null">
+				car_model,
+			</if>
+			<if test="licenseNum != null">
+				license_num,
+			</if>
+			<if test="carPlacing != null">
+				car_placing,
+			</if>
+			<if test="carPlacingTime != null">
+				car_placing_time,
+			</if>
+			<if test="keyPlacing != null">
+				key_placing,
+			</if>
+			<if test="keyPlacingTime != null">
+				key_placing_time,
+			</if>
+			<if test="licensePlacing != null">
+				license_placing,
+			</if>
+			<if test="licensePlacingTime != null">
+				license_placing_time,
+			</if>
+			<if test="amount != null">
+				amount,
+			</if>
+			<if test="placingReason != null">
+				placing_reason,
+			</if>
+			<if test="proposer != null">
+				proposer,
+			</if>
+			<if test="auditState != null">
+				audit_state,
+			</if>
+			create_time,
+			is_delete,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="stockId != null">
+				#{stockId,jdbcType=VARCHAR},
+			</if>
+			<if test="carModel != null">
+				#{carModel,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseNum != null">
+				#{licenseNum,jdbcType=VARCHAR},
+			</if>
+			<if test="carPlacing != null">
+				#{carPlacing,jdbcType=VARCHAR},
+			</if>
+			<if test="carPlacingTime != null">
+				#{carPlacingTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="keyPlacing != null">
+				#{keyPlacing,jdbcType=VARCHAR},
+			</if>
+			<if test="keyPlacingTime != null">
+				#{keyPlacingTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="licensePlacing != null">
+				#{licensePlacing,jdbcType=VARCHAR},
+			</if>
+			<if test="licensePlacingTime != null">
+				#{licensePlacingTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="amount != null">
+				#{amount,jdbcType=VARCHAR},
+			</if>
+			<if test="placingReason != null">
+				#{placingReason,jdbcType=VARCHAR},
+			</if>
+			<if test="proposer != null">
+				#{proposer,jdbcType=VARCHAR},
+			</if>
+			<if test="auditState != null">
+				#{auditState,jdbcType=INTEGER},
+			</if>
+			now(),
+			0,
+		</trim>
+	</insert>
+	<update id="updateWarehousePlacingSelective">
+		update car_pm_warehouse_placing
+		<set>
+			<if test="stockId != null">
+				stock_id = #{stockId,jdbcType=VARCHAR},
+			</if>
+			<if test="carModel != null">
+				car_model = #{carModel,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseNum != null">
+				license_num = #{licenseNum,jdbcType=VARCHAR},
+			</if>
+			<if test="carPlacing != null">
+				car_placing = #{carPlacing,jdbcType=VARCHAR},
+			</if>
+			<if test="carPlacingTime != null">
+				car_placing_time = #{carPlacingTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="keyPlacing != null">
+				key_placing = #{keyPlacing,jdbcType=VARCHAR},
+			</if>
+			<if test="keyPlacingTime != null">
+				key_placing_time = #{keyPlacingTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="licensePlacing != null">
+				license_placing = #{licensePlacing,jdbcType=VARCHAR},
+			</if>
+			<if test="licensePlacingTime != null">
+				license_placing_time = #{licensePlacingTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=VARCHAR},
+			</if>
+			<if test="placingReason != null">
+				placing_reason = #{placingReason,jdbcType=VARCHAR},
+			</if>
+			<if test="proposer != null">
+				proposer = #{proposer,jdbcType=VARCHAR},
+			</if>
+			<if test="auditState != null">
+				audit_state = #{auditState,jdbcType=INTEGER},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=INTEGER},
+			</if>
+			update_time = now(),
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateWarehousePlacing">
+		update car_pm_warehouse_placing
+		set 
+			stock_id = #{stockId,jdbcType=VARCHAR},
+			car_model = #{carModel,jdbcType=VARCHAR},
+			license_num = #{licenseNum,jdbcType=VARCHAR},
+			car_placing = #{carPlacing,jdbcType=VARCHAR},
+			car_placing_time = #{carPlacingTime,jdbcType=TIMESTAMP},
+			key_placing = #{keyPlacing,jdbcType=VARCHAR},
+			key_placing_time = #{keyPlacingTime,jdbcType=TIMESTAMP},
+			license_placing = #{licensePlacing,jdbcType=VARCHAR},
+			license_placing_time = #{licensePlacingTime,jdbcType=TIMESTAMP},
+			amount = #{amount,jdbcType=VARCHAR},
+			placing_reason = #{placingReason,jdbcType=VARCHAR},
+			proposer = #{proposer,jdbcType=VARCHAR},
+			audit_state = #{auditState,jdbcType=INTEGER},
+			update_time = now(),
+			is_delete = #{isDelete,jdbcType=INTEGER}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

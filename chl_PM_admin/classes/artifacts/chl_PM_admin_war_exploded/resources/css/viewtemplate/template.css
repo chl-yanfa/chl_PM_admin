@@ -1,0 +1,42 @@
+.table-body{
+	border-collapse: collapse; 
+	text-align: center; 
+	width: 100%;
+}
+.table-body td{
+	padding: 1em;
+    border:1px solid #dbdbdb;
+}
+.carMain{
+	margin-top:20px;
+	margin-left:16px;
+}
+.car32{
+	font-size:14px;
+	display:inline-block;
+	float:left;
+	margin-left: 46px;
+}
+.car34{
+	margin-left:50px;
+	color:red;
+}
+.item {
+	float: left;
+	position: relative;
+	margin: 28px;
+}
+.zj-img {
+	width: 120px;
+	height: 120px;
+}
+.zj-img img {
+	width: 100%;
+	height: 100%;
+}
+.suf-money{
+	margin-left: 10px;
+}
+.v-hide{
+	visibility:hidden;
+}

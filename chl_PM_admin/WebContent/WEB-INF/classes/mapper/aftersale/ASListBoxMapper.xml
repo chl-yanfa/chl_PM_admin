@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.ASListBoxMapper">
+	<resultMap id="dealEntity" type="DealEntity">
+		<id 	column="id" 						property="id" />
+		<result column="auction_set_id" 			property="auctionSetId" />
+		<result column="auction_no" 				property="auctionNo" />
+		<result column="full_name" 					property="fullName" />
+		<result column="lot_areas" 					property="lotAreas" />
+		<result column="vehicle_brand" 				property="vehicleBrand" />
+	    <result column="vehicle_type" 				property="vehicleType" />
+	    <result column="vehicle_system" 			property="vehicleSystem" />
+	    <result column="license_number" 			property="licenseNumber" />
+		<result column="vehicle_state" 				property="vehicleState" />
+		<result column="deal_time" 					property="dealTime" />
+		<result column="pay_state" 					property="payState" />
+		<result column="take_car_state" 			property="takeCarState" />
+		<result column="abortive_state_flag" 		property="abortiveStateFlag" />
+		<result column="auction_type_flag" 			property="auctionTypeFlag" />
+		<result column="pay_state_flag" 			property="payStateFlag" />
+		<result column="take_car_state_flag" 		property="takeCarStateFlag" />
+		<result column="defer_state_flag" 			property="deferStateFlag" />
+		<result column="adjust_price_state_flag" 	property="adjustPriceStateFlag" />
+		<result column="back_car_state_flag" 		property="backCarStateFlag" />
+		<association property="imgPath" column="auctionId=id" javaType="String"
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+	</resultMap>
+	<sql id="ListIf">
+		<if test="auctionType != null">
+			AND SIA.auction_type = #{auctionType}
+		</if>
+		<if test="keywords != null and keywords != ''">
+			AND (SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%')
+			OR SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%'))
+        </if>
+	</sql>
+	<!-- 获取成交列表 -->
+	<select id="getDealListByPage" resultMap="dealEntity">
+		SELECT
+			SIA.id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）')
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）')
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand,
+		    SIA.vehicle_type,
+		    SIA.vehicle_system,
+		    SIA.license_number,
+		    case SIA.auction_state when 5 then '已成交' end
+		    AS vehicle_state,				<!-- 拍品状态 -->
+		    SIAS.deal_time AS deal_time,
+		    case SIAS.pay_state when 0 then '未付款' when 1 then '已付款' when 2 then '已退款' end
+		    AS pay_state,
+		    case SIAS.take_car_state when 0 then '未提货' when 1 then '已提货' when 2 then '已退货' end
+		    AS take_car_state,
+		    SIA.auction_type auction_type_flag
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0
+		AND
+			SIA.auction_state = 5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		<if test="aftersaleState != null">
+			AND SIA.aftersale_state = #{aftersaleState}
+		</if>
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- 获取成交列表总条数 -->
+	<select id="getDealListTotal" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0
+		AND
+			SIA.auction_state = 5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		<if test="aftersaleState != null">
+			AND SIA.aftersale_state = #{aftersaleState}
+		</if>
+	</select>
+	<!-- getDealTab 成交列表TAB -->
+	<select id="getDealTab" parameterType="map" resultType="map">
+		SELECT
+			'0' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'1' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIA.aftersale_state =0
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'2' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIA.aftersale_state =1
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'3' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIA.aftersale_state =1
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'4' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIA.aftersale_state =3
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'5' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIA.aftersale_state =3
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'6' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIA.aftersale_state =5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'7' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIA.aftersale_state =-1
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'8' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIA.aftersale_state =-3
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'9' AS aftersale_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIA.aftersale_state =-5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<include refid="ListIf" />
+
+	</select>
+	<!-- 获取售后异常列表 -->
+	<select id="getAbnormalListByPage" resultMap="dealEntity">
+		SELECT
+			SIA.id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）')
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）')
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand,
+		    SIA.vehicle_type,
+		    SIA.vehicle_system,
+		    SIA.license_number,
+		    SIA.license_number,
+		    case SIA.auction_state when 5 then '已成交' end
+		    AS vehicle_state,				<!-- 拍品状态 -->
+		    SIAS.deal_time AS deal_time,
+		    case SIAS.pay_state when 0 then '未付款' when 1 then '已付款' when 2 then '已退款' end
+		    AS pay_state,
+		    case SIAS.take_car_state when 0 then '未提货' when 1 then '已提货' when 2 then '已退货' end
+		    AS take_car_state,
+		    SIA.auction_type auction_type_flag,
+		    SIAS.defer_state defer_state_flag,
+		    SIAS.adjust_price_state adjust_price_state_flag,
+		    SIAS.back_car_state back_car_state_flag
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0
+		AND
+			SIA.auction_state = 5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<if test="afAuditState == null">
+			AND (SIAS.defer_state is not null OR SIAS.adjust_price_state is not null OR SIAS.back_car_state is not null)
+		</if>
+		<if test="afAuditState == 0">
+			AND (SIAS.defer_state=0 OR SIAS.adjust_price_state=0 OR SIAS.back_car_state=0)
+		</if>
+		<if test="afAuditState == 1">
+			AND (SIAS.defer_state=1 OR SIAS.adjust_price_state=1 OR SIAS.back_car_state=1)
+		</if>
+		<if test="afAuditState == 2">
+			AND (SIAS.defer_state=-1 OR SIAS.adjust_price_state=-1 OR SIAS.back_car_state=-1)
+		</if>
+		<include refid="ListIf" />
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- 获取售后异常列表总条数 -->
+	<select id="getAbnormalListTotal" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0
+		AND
+			SIA.auction_state = 5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		<if test="afAuditState == null">
+			AND (SIAS.defer_state is not null OR SIAS.adjust_price_state is not null OR SIAS.back_car_state is not null)
+		</if>
+		<if test="afAuditState == 0">
+			AND (SIAS.defer_state=0 OR SIAS.adjust_price_state=0 OR SIAS.back_car_state=0)
+		</if>
+		<if test="afAuditState == 1">
+			AND (SIAS.defer_state=1 OR SIAS.adjust_price_state=1 OR SIAS.back_car_state=1)
+		</if>
+		<if test="afAuditState == 2">
+			AND (SIAS.defer_state=-1 OR SIAS.adjust_price_state=-1 OR SIAS.back_car_state=-1)
+		</if>
+		<include refid="ListIf" />
+
+	</select>
+	<!-- getAbnormalTab 售后异常列表TAB -->
+	<select id="getAbnormalTab" parameterType="map" resultType="map">
+		SELECT
+			'0' AS af_audit_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		AND
+			(SIAS.defer_state is not null OR SIAS.adjust_price_state is not null OR SIAS.back_car_state is not null)
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'1' AS af_audit_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		AND
+			(SIAS.defer_state=0 OR SIAS.adjust_price_state=0 OR SIAS.back_car_state=0)
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'2' AS af_audit_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		AND
+			(SIAS.defer_state=1 OR SIAS.adjust_price_state=1 OR SIAS.back_car_state=1)
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'3' AS af_audit_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA JOIN car_pm_aftersale SIAS
+			ON SIA.id=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 5
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		AND
+			(SIAS.defer_state=-1 OR SIAS.adjust_price_state=-1 OR SIAS.back_car_state=-1)
+		<include refid="ListIf" />
+
+	</select>
+	<!-- 获取流拍列表 -->
+	<select id="getAbortiveListByPage" resultMap="dealEntity">
+		SELECT
+			SIA.id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）')
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）')
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand,
+		    SIA.vehicle_type,
+		    SIA.vehicle_system,
+		    SIA.license_number,
+		    case SIA.auction_state when 8 then '流拍' end
+		    AS vehicle_state,			<!-- 拍品状态 -->
+		    SIA.abortive_state AS abortive_state_flag,
+		    SIA.auction_type auction_type_flag
+		FROM
+			car_pm_auction SIA
+		WHERE
+			SIA.is_delete = 0
+		AND
+			SIA.auction_state = 8
+		<if test="abortiveState != null">
+			AND SIA.abortive_state = #{abortiveState}
+		</if>
+		<include refid="ListIf" />
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- 获取流拍列表总条数 -->
+	<select id="getAbortiveListTotal" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM
+			car_pm_auction SIA
+		WHERE
+			SIA.is_delete = 0
+		AND
+			SIA.auction_state = 8
+		<if test="abortiveState != null">
+			AND SIA.abortive_state = #{abortiveState}
+		</if>
+		<include refid="ListIf" />
+
+	</select>
+	<!-- getAbortiveTab 流拍列表TAB -->
+	<select id="getAbortiveTab" parameterType="map" resultType="map">
+		SELECT
+			'0' AS abortive_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 8
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'1' AS abortive_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 8
+		AND
+			SIA.abortive_state = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'2' AS abortive_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 8
+		AND
+			SIA.abortive_state = 1
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT
+			'3' AS abortive_state, COUNT(1) AS TAB_COUNT
+		FROM
+			car_pm_auction SIA
+		WHERE
+			SIA.is_delete = 0 AND SIA.auction_state = 8
+		AND
+			SIA.abortive_state = -1
+		<include refid="ListIf" />
+
+	</select>
+	<!-- 获取违约列表 -->
+	<select id="getBreachListByPage" resultMap="dealEntity">
+		SELECT
+			SIA.id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）')
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）')
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand,
+		    SIA.vehicle_type,
+		    SIA.vehicle_system,
+		    SIA.license_number,
+		    case SIA.auction_state when -10 then '已退货' end
+		    AS vehicle_state,
+		    case SIAS.pay_state when 0 then '未付款' when 1 then '已付款' when 2 then '已退款' end
+		    AS pay_state,
+		    case SIAS.take_car_state when 0 then '未提货' when 1 then '已提货' when 2 then '已退货' end
+		    AS take_car_state,
+		    SIA.auction_type auction_type_flag,
+		    SIAS.pay_state pay_state_flag,
+		    SIAS.take_car_state take_car_state_flag,
+		    SIAS.defer_state defer_state_flag,
+		    SIAS.adjust_price_state adjust_price_state_flag,
+		    SIAS.back_car_state back_car_state_flag
+		FROM
+			car_pm_auction SIA LEFT JOIN car_pm_aftersale SIAS ON SIA.ID=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		AND
+			SIA.auction_state = -10
+		<include refid="ListIf" />
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- 获取违约列表总条数 -->
+	<select id="getBreachListTotal" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM
+			car_pm_auction SIA LEFT JOIN car_pm_aftersale SIAS ON SIA.ID=SIAS.auction_id
+		WHERE
+			SIA.is_delete = 0
+		AND
+			SIAS.is_delete = 0
+		AND
+			SIAS.is_history = 0
+		AND
+			SIA.auction_state = -10
+		<include refid="ListIf" />
+	</select>
+	
+</mapper>

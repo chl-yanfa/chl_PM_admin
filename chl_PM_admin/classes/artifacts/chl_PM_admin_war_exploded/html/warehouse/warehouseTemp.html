@@ -1,0 +1,374 @@
+<link href="../../resources/css/warehouse/warehouse.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/controller/warehouse/warehouse.js"></script>
+<!-- 拍品信息 -->
+<style>
+	input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px white inset;}
+	#baseInfo input{
+		border:none;
+	}
+</style>
+
+<form id="baseInfo">
+	<div class="content-main">
+		<table class="table-body">
+			<tr>
+				<td colspan="8" style="font-size: 20px;text-align: center;">拍品信息</td>
+			</tr>
+			<tr>
+				<td>品牌型号:</td>
+				<td colspan="7"><input name="fullName" style="width: 400px;"/></td>
+			</tr>
+			<tr>
+				<td>车主:</td><td><input name="carOwnerName" /></td>
+				<td>车牌号:</td><td><input name="drivingNo"/></td>
+				<td>车架号(VIN码):</td><td><input name="drivingVin"/></td>
+				<td>业务员:</td><td><input name="salesman"/></td>
+			</tr>
+			<tr>
+				<td>委托方机构:</td>
+				<td><input name="baile"/></td>
+				<td>所属分公司:</td>
+				<td><input name="subCompany"/></td>
+				<td>车辆类型:</td>
+				<td><input name="drivingType"/></td>
+				<td>发动机号:</td>
+				<td><input name="engineNo"/></td>
+			</tr>
+		</table>
+	</div>
+</form>
+<!-- 车牌钥匙信息 -->
+<form id="addWarehouse">
+	<input name="id" hidden />
+	<div class="content-main">
+		<table class="table-body">
+			<tr>
+				<td colspan="7" style="font-size: 20px;text-align: center;">车牌钥匙信息</td>
+			</tr>
+			<tr>
+				<td>车牌:</td>
+				<td colspan="2">
+					<div style="width: 230px">
+						<input name="carCard" value="两块" type="radio"/>
+						<label style="margin-right: 20px">两块</label> 
+						<input name="carCard" value="一块" type="radio"/>
+						<label style="margin-right: 20px">一块</label>
+						<input name="carCard" value="无" type="radio"/>
+						<label style="margin-right: 20px">无</label> 
+						<input name="carCard" value="损坏" type="radio"/>
+						<label>损坏</label>
+					</div>
+				</td>
+				<td>车牌位置:</td>
+				<td colspan="3">
+					<input name="ccProvince" class="com-box"/> 
+					<input name="ccCity" class="com-box"/> 
+					<input name="ccArea" class="com-box"/> 
+					<input name="carCardAddress" class="addr" style="width: 220px"/>
+				</td>
+			</tr>
+			<tr>
+				<td>正常钥匙:</td>
+				<td colspan="2">
+					<input name="key" class="com-box"> 
+					<label>(不含备用)</label>
+				</td>
+				<td>备用钥匙:</td>
+				<td>
+					<input name="spareKey" class="com-box"> 
+				</td>
+				<td>钥匙位置:</td>
+				<td>
+					<input name="kProvince" class="com-box"/> 
+					<input name="kCity" class="com-box"/> 
+					<input name="kArea" class="com-box"/> 
+					<input name="keyAddress" class="addr" style="width: 150px"/>
+				</td>
+			</tr>
+			<tr>
+				<td>备注:</td>
+				<td colspan="6">
+					<textarea warp="virtual" name="keyRemark"
+						class="beizhu" data-options="multiline:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td rowspan="3">库存信息</td>
+				<td style="width: 100px">库存存放地:</td>
+				<td colspan="5">
+					<input name="sProvince" class="com-box"/> 
+					<input name="sCity" class="com-box"/> 
+					<input name="sArea" class="com-box"/> 
+					<input name="storeAddress" class="addr" style="width: 220px"/>
+				</td>
+			</tr>
+			<tr>
+				<td>库存区域:</td>
+				<td colspan="5">
+					<textarea warp="virtual" name="storeSpace"
+						class="s-beizhu" data-options="multiline:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>入库时间:</td>
+				<td colspan="5">
+					<input name="storeTime" class="com-box"/>
+				</td>
+			</tr>
+		</table>
+		<table class="table-body">
+			<tr>
+				<td colspan="6" style="font-size: 20px;text-align: center;">拖车信息</td>
+			</tr>
+			<tr>
+				<td>拖车费:</td>
+				<td>
+					<input name="trailerCost" class="easyui-textbox"/>
+					<label>元</label>
+				</td>
+				<td>应支付给:</td>
+				<td>
+					<input name="trailerCostPay" class="com-box"/>
+				</td>
+				<td>凭证:</td>
+				<td>
+					<input name="voucherName" class="com-box" style="border: none;width: 200px;">
+				</td>
+			</tr>
+			<tr>
+				<td>拖车电话:</td>
+				<td><input name="trailerPhone" class="easyui-textbox"/></td>
+				<td>起始地:</td>
+				<td colspan="3">
+					<input name="originProvince" class="com-box"/> 
+					<input name="originCity" class="com-box"/> 
+					<input name="originAddress" class="addr" style="width: 220px"/>
+				</td>
+			</tr>
+			<tr>
+				<td>公里数:</td>
+				<td>
+					<input name="distance" class="easyui-textbox"/>
+					<label>公里</label> 
+				</td>
+				<td>目的地:</td>
+				<td colspan="3">
+					<input name="destinationProvince" class="com-box"/> 
+					<input name="destinationCity" class="com-box"/> 
+					<input name="destinationAddress" class="addr" style="width: 220px"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="6">
+					<h4 style="font-size: 16px;">拍卖截图及拖车照片</h4>
+					<div id="warehousePhoto"></div>
+				</td>
+			</tr>
+		</table>
+		<table class="table-body">
+			<tr>
+				<td colspan="10" style="font-size: 20px;text-align: center;">事故形态</td>
+			</tr>
+			<tr>
+				<td colspan="10">
+					<label style="margin-right: 30px;">车辆情况:</label> 
+					<input name="carStatus" value="外观正常" type="radio"/>
+					<label style="margin-right: 30px;">外观正常</label> 
+					<input name="carStatus" value="无或缺失" type="radio"/>
+					<label style="margin-right: 30px;">无或缺失</label> 
+					<input name="carStatus" value="拆解" type="radio"/>
+					<label style="margin-right: 30px;">拆解</label> 
+					<input name="carStatus" value="破损" type="radio"/>
+					<label style="margin-right: 30px;">破损</label> 
+					<input name="carStatus" value="无法确认" type="radio"/>
+					<label >无法确认</label>	
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<label style="margin-right: 30px;">变速箱类型:</label> 
+					<input name="gearboxType" value="手动" type="radio"/>
+					<label style="margin-right: 30px;">手动</label> 
+					<input name="gearboxType" value="自动" type="radio"/>
+					<label style="margin-right: 30px;">自动</label> 
+					<input name="gearboxType" value="手自一体" type="radio"/>
+					<label>手自一体</label>
+				</td>
+				<td colspan="2">
+					<label style="margin-right: 30px;">表显里程:</label> 
+					<input name="carMileage" class="easyui-textbox"/>
+				</td>
+				<td colspan="5">
+					<label style="margin-right: 30px;">车辆是否受损:</label> 
+					<input name="vinIsDamage" value="0" type="radio"/>
+					<label style="margin-right: 30px;">是</label> 
+					<input name="vinIsDamage" value="1" type="radio"/>
+					<label>否</label>
+				</td>
+			</tr>
+			<tr>
+				<td>发动机</td><td style="width: 50px;"><input type="checkbox" name="engine" value="Y"></td>
+				<td>变速箱</td><td style="width: 50px;"><input type="checkbox" name="gearbox" value="Y"></td>
+				<td>水箱</td><td style="width: 50px;"><input type="checkbox" name="waterbox" value="Y"></td>
+				<td>冷凝器</td><td style="width: 50px;"><input type="checkbox" name="condenser" value="Y"></td>
+				<td>电瓶</td><td style="width: 50px;"><input type="checkbox" name="battery" value="Y"></td>
+			</tr>
+			<tr>
+				<td>空调泵</td><td><input type="checkbox" name="airconditionPump" value="Y"></td>
+				<td>马达</td><td><input type="checkbox" name="motor" value="Y"></td>
+				<td>转向助力泵</td><td><input type="checkbox" name="powerSteeringPump" value="Y"></td>
+				<td>发电机</td><td><input type="checkbox" name="dynamo" value="Y"></td>
+				<td>ABS泵</td><td><input type="checkbox" name="absPump" value="Y"></td>
+			</tr>
+			<tr>
+				<td>三元催化</td><td><input type="checkbox" name="threeWayCatalyticConverter" value="Y"></td>
+				<td>排气管</td><td><input type="checkbox" name="exhaustPipe" value="Y"></td>
+				<td>压缩机</td><td><input type="checkbox" name="compressor" value="Y"></td>
+				<td colspan="4"></td>
+			</tr>
+			<tr>
+				<td>右前大灯</td><td><input type="checkbox" name="rightFrontHeadlight" value="Y"></td>
+				<td>右后视镜</td><td><input type="checkbox" name="rightMirror" value="Y"></td>
+				<td>右前车门</td><td><input type="checkbox" name="rightFrontDoor" value="Y"></td>
+				<td>右后车门</td><td><input type="checkbox" name="rightRearDoor" value="Y"></td>
+				<td>右后尾灯</td><td><input type="checkbox" name="rightRearTailLight" value="Y"></td>
+			</tr>
+			<tr>
+				<td>左前大灯</td><td><input type="checkbox" name="leftFrontHeadlight" value="Y"></td>
+				<td>左后视镜</td><td><input type="checkbox" name="leftMirror" value="Y"></td>
+				<td>左前车门</td><td><input type="checkbox" name="leftFrontDoor" value="Y"></td>
+				<td>左后车门</td><td><input type="checkbox" name="leftRearDoor" value="Y"></td>
+				<td>左后尾灯</td><td><input type="checkbox" name="leftRearTailLight" value="Y"></td>
+			</tr>
+			<tr>
+				<td>后备箱</td><td><input type="checkbox" name="trunk" value="Y"></td>
+				<td>备胎</td><td><input type="checkbox" name="spareTire" value="Y"></td>
+				<td>随车工具</td><td><input type="checkbox" name="vehicleTools" value="Y"></td>
+				<td>三角警示牌</td><td><input type="checkbox" name="triangleIndicator" value="Y"></td>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<td>内饰</td><td><input type="checkbox" name="trim" value="Y"></td>
+				<td>仪表台</td><td><input type="checkbox" name="dashboard" value="Y"></td>
+				<td>座椅</td><td><input type="checkbox" name="seat" value="Y"></td>
+				<td>DVD/CD/收音机</td><td><input type="checkbox" name="DVDCD" value="Y"></td>
+				<td>音箱</td><td><input type="checkbox" name="voicebox" value="Y"></td>
+			</tr>
+			<tr>
+				<td>发动机电脑</td><td><input type="checkbox" name="engineComputer" value="Y"></td>
+				<td>变速箱电脑</td><td><input type="checkbox" name="gearboxComputer" value="Y"></td>
+				<td>行车电脑</td><td><input type="checkbox" name="drivingComputer" value="Y"></td>
+				<td>防盗电脑</td><td><input type="checkbox" name="burglarComputer" value="Y"></td>
+				<td>气囊电脑</td><td><input type="checkbox" name="gasbagComputer" value="Y"></td>
+			</tr>
+			<tr>
+				<td>娱乐电脑</td><td><input type="checkbox" name="entertainmentComputer" value="Y"></td>
+				<td colspan="8"></td>
+			</tr>
+			<tr>
+				<td colspan="2">车架号、发动机号的查验和事故形态描述:</td>
+				<td colspan="8">
+					<textarea warp="virtual" name="troubleDescription"
+						class="beizhu" data-options="multiline:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<label style="margin-right: 30px">保养手册:</label>
+					<input name="maintenanceManual" value="有" type="radio"/>
+					<label style="margin-right: 30px">有</label> 
+					<input name="maintenanceManual" value="无" type="radio"/>
+					<label>无</label>
+				</td>
+				<td colspan="4">
+					<label style="margin-right: 30px">使用说明书:</label>
+					<input name="operatingManual" value="有" type="radio"/>
+					<label style="margin-right: 30px">有</label> 
+					<input name="operatingManual" value="无" type="radio"/>
+					<label>无</label>
+				</td>
+				<td colspan="3">
+					<label style="margin-right: 30px">轮胎数量：</label>
+					<input name="tyreNum" class="easyui-textbox"/> 
+					<label>个</label>
+				</td>
+			</tr>
+		</table>
+		<table class="table-body">
+			<tr>
+				<td colspan="4" style="font-size: 20px;text-align: center;">车辆备注信息</td>
+			</tr>
+			<tr>
+				<td>车辆是否拆解:</td>
+				<td>
+					<input name="dismantling" value="是" type="radio"/>
+					<label style="margin-right: 30px">是</label> 
+					<input name="dismantling" value="否" type="radio"/>
+					<label>否</label>
+				</td>
+				<td>拆解部位:</td>
+				<td style="width: 900px;">
+					<textarea warp="virtual" name="dismantlingPart" 
+						class="s-beizhu" data-options="multiline:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>是否二次事故:</td>
+				<td>
+					<input name="twoAccidents" value="是" type="radio"/>
+					<label style="margin-right: 30px">是</label> 
+					<input name="twoAccidents" value="否" type="radio"/>
+					<label>否</label>
+				</td>
+				<td>备注:</td>
+				<td>
+					<textarea warp="virtual" name="twoAccidentsRemark" 
+						class="s-beizhu" data-options="multiline:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>车辆是否改装:</td>
+				<td>
+					<input name="refit" value="是" type="radio"/>
+					<label style="margin-right: 30px">是</label> 
+					<input name="refit" value="否" type="radio"/>
+					<label>否</label>
+				</td>
+				<td>改装部位:</td>
+				<td>
+					<textarea warp="virtual" name="refitPart" 
+						class="s-beizhu" data-options="multiline:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>已清点部件:</td>
+				<td colspan="3">
+					<textarea warp="virtual" name="checkPart" 
+						class="s-beizhu" data-options="multiline:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>无法清点部件:</td>
+				<td colspan="3">
+					<textarea warp="virtual" name="noCheckPark" 
+						class="s-beizhu" data-options="multiline:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>单独收纳部件:</td>
+				<td colspan="3">
+					<textarea warp="virtual" name="receivingPart" 
+						class="s-beizhu" data-options="multiline:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>备注:</td>
+				<td colspan="3">
+					<textarea warp="virtual" name="remark" 
+						class="s-beizhu" data-options="multiline:true"></textarea>
+				</td>
+			</tr>
+			
+		</table>	
+	</div>
+</form>

@@ -1,0 +1,258 @@
+<body style="min-height: 1000px">
+	<table id="orderList"></table>
+<script>
+
+var carToolbarType = [
+	{id:'searchText'},'&nbsp;',
+	{text : '搜索',id : 'iconSearch'},'&nbsp;',
+	{text : '重置',id : 'iconReset'}
+];
+var autopartsToolbarType = [
+	{id:'searchText'},'&nbsp;',
+	{text : '搜索',id : 'iconSearch'},'&nbsp;',
+	{text : '重置',id : 'iconReset'},'&nbsp;',
+	{text : '添加所有勾选配件',id : 'submitCheck'},'&nbsp;',
+];
+function initCarDateGrid(_type){
+	$("#orderList").datagrid({
+    	loadMsg : "系统查询到已完成的整车订单",
+        nowrap : true,
+        striped : true,
+        fit : false,
+        fitColumns : true,
+        url:'../../carscraporder/getCarScrapOrderList',
+        method : 'post',
+        autoLoad:false,
+        idField : 'id',
+        columns : [[
+				{title : '整车图片', field : 'headImgPath', width : 20, align : 'center',formatter:function(value,row,index){
+					if(value!=null && value.length>0){
+						return "<img src='"+value+"' width='80px' height='80px'/>";
+					}else{
+						return "<img src='' width='80px' height='80px'/>";
+					}
+				}},
+                {title : '车型', field : 'carModelNumber', width : 100, align : 'center'},
+                {title : 'VIN', field : 'carFrameNumber', width : 60,align:'center'},
+                {title : '车牌号', field : 'carNumber', width :40, align : 'center'},
+                {title : '操作', field : 'id', width : 20, align : 'center',formatter:function(value,row,index){
+                	sessionStorage.setItem(value, JSON.stringify(row));
+                	var add="add('"+value+"',"+_type+")";
+                	var styleStr='href="javascript:void(0);" style="font-size: 14px;color: #4EA2FF;"';
+                	var optionStr = '<a '+styleStr+' onclick="'+add+'">添加</a>';
+                    return optionStr;
+               }}
+              ]],
+        toolbar : carToolbarType,
+        pagination : true,
+        singleSelect : true,
+        fitStyle : true
+    });
+	$('#searchText').searchbox({
+	   width :300,
+	   prompt : '车型/车架号/车牌号'
+	});
+	$('#iconSearch').click(function() {
+		reLoadData(0,7);
+	});
+	$('#iconReset').click(function() {
+		$('#searchText').searchbox('clear');
+		reLoadData(0,7);
+	});
+	reLoadData(0,7);
+}
+function reLoadData(type,orderStatus){
+	var loadType = type==1?"reload":"load";
+	$("#orderList").datagrid(loadType, {
+		keywords: $('#searchText').searchbox('getValue').trim(),
+		orderStatus:orderStatus
+	});
+}
+function initAutopartsDateGrid(_type){
+	$("#orderList").datagrid({
+    	loadMsg : "系统查询到已完成的旧件订单",
+        nowrap : true,
+        striped : true,
+        fit : false,
+        fitColumns : true,
+        url:'../../carscraporder/getCarScrapOrderAutopartsList',
+        method : 'post',
+        autoLoad:false,
+        view:tcwOrderInfoView,
+        idField : 'id',
+        rowTitleAutopartsCheckboxFormatter:function(row){
+        	return "订单编号："+row['orderNo'];
+        },
+        columns : [[
+				{title : '基本信息', field : 'text', width : 80, align : 'center',formatter:function(value,row,index){
+					var headImgPath='';
+					if(row.headImgPath!=null&&row.headImgPath.length>0){
+						headImgPath=row.headImgPath;
+					}
+					var resultDiv=
+						"<div class='inforMain'>"+
+							"<div class='carpic'>"+
+								"<img src='"+headImgPath+"' border='0' width='80' height='80'>"+
+							"</div>"+
+							"<div class='carright'>"+
+								"<p>"+
+									"<span>车身配件："+row.partsName+"</span>"+
+								"</p>"+
+								"<p class='carmess'>"+
+									"<span>"+row.carNumber+"</span>"+
+								"</p>"+
+								"<p class='carmess'>"+
+									"<span>"+row.carFrameNumber+"</span>"+
+								"</p>"+
+							"</div>"+
+						"</div>";
+					return resultDiv;
+				}},
+                {title : 'OE', field : 'partsNum', width : 30,align:'center'},
+                {title : '车型', field : 'carModelNumber', width : 100, align : 'center'},
+                {title : '操作', field : 'id', width : 20, align : 'center',formatter:function(value,row,index){
+                	sessionStorage.setItem(value, JSON.stringify(row));
+                	var addSingle="addSingle('"+value+"',"+_type+")";
+                	var styleStr='href="javascript:void(0);" style="font-size: 14px;color: #4EA2FF;"';
+                	var optionStr = '<a '+styleStr+' onclick="'+addSingle+'">添加</a>';
+                    return optionStr;
+               }}
+              ]],
+		toolbar : autopartsToolbarType,
+        pagination : true,
+        singleSelect : true,
+        fitStyle : true
+    });
+	$('#searchText').searchbox({
+	   width :300,
+	   prompt : '订单编号/配件名称/OE编号/车型/车架号/车牌号'
+	});
+	$('#iconSearch').click(function() {
+		reLoadData(0,8);
+	});
+	$('#iconReset').click(function() {
+		$('#searchText').searchbox('clear');
+		reLoadData(0,8);
+	});
+	$('#submitCheck').click(function() {
+		submitCheck(_type);
+	});
+	reLoadData(1,8);
+}
+function add(id,_type) {
+	if(_type == 1){
+		//删除之前的车辆
+		var scrapOrderId = $("input[name='scrapOrderId']").val();
+		var auctionId = $("input[name='id']").val();
+		if(scrapOrderId){
+			$.ajax({
+		        url: "../../carscraporder/deleteParts/" + scrapOrderId +"?orderType=1&auctionId="+auctionId,
+		        type: "DELETE",
+		        dataType: "json",
+		        success: function (res) {
+		            if (res.returnCode == "000000") {
+		            	syncCar(id);
+					    //添加车辆
+					    $.post("../../carscraporder/addParts",{
+					    	orderType:1,
+					    	orderId:id,
+					    	auctionId:auctionId
+						},function(res,status){
+							$('#Dialog').dialog("close",true);														
+						});
+		            }
+		        }
+		    });
+		}
+	}else{
+		syncCar(id);
+		$('#Dialog').dialog("close",true);	
+	}
+}
+function syncCar(id){
+	var row=JSON.parse(sessionStorage.getItem(id));
+    $("input[name='scrapOrderId']").val(id)
+    $("#vehicleInfo input[name='fullName']").val(row.carModelNumber)
+    $("#vehicleInfo input[name='vin']").val(row.carFrameNumber)
+    $('#lotAreasId').combobox('setValue',row.orderAreasId);
+    $("#lotAreas").val(row.orderAreas)//排量
+}
+function addSingle(id,_type){
+	var row=JSON.parse(sessionStorage.getItem(id));
+	var idlength = $(".partsTable input[class='autopartsid']").length;
+	for (var i = 0; i < idlength; i++) {
+		var thisid = $(".partsTable input[class='autopartsid']:eq(" + i + ")").val();
+		if(thisid == id){
+			$('#Dialog').dialog("close",true);
+			return;
+		}
+	}
+	var htmlText= '<tr>'+
+		'<td>'+
+			'<input class="numberId" readonly="readonly" style="width:20px;border:none;"/>'+
+			'<input type="hidden" class="autopartsid" value="'+id+'" />'+
+		'</td>'+
+		'<td>'+row.partsName+'</td>'+
+		'<td>'+row.partsNum+'</td>'+
+		'<td>'+row.carFrameNumber+'</td>'+
+		'<td>'+row.carModelNumber+'</td>'+
+		'<td><a onclick="deleteParts(this,'+_type+')">删除</a></td>'+
+		'</tr>';
+	
+	$('.partsTable').append(htmlText);
+	var count = $(".partsTable input[class='numberId']").length;
+	for (var i = 0; i < count; i++) {
+	    $(".partsTable input[class='numberId']:eq(" + i + ")").val(i+1);
+	}
+	if(_type == 1){
+		var auctionId = $("input[name='id']").val();
+		$.post("../../carscraporder/addParts",{
+	    	orderType:2,
+	    	orderId:id,
+	    	auctionId:auctionId
+		},function(res,status){
+		});
+	}
+	$('#Dialog').dialog("close",true);
+}
+function submitCheck(_type){
+	var htmlText= '';
+    $("input[name='auctionCarBox']:checked").each(function(i){
+        var id = $(this).val();
+        var row=JSON.parse(sessionStorage.getItem(id));
+    	var idlength = $(".partsTable input[class='autopartsid']").length;
+    	for (var i = 0; i < idlength; i++) {
+    		var thisid = $(".partsTable input[class='autopartsid']:eq(" + i + ")").val();
+    		if(thisid == id){
+    			return;
+    		}
+    	}
+    	htmlText= '<tr>'+
+		'<td>'+
+			'<input class="numberId" readonly="readonly" style="width:20px;border:none;"/>'+
+			'<input type="hidden" class="autopartsid" value="'+id+'" />'+
+		'</td>'+
+		'<td>'+row.partsName+'</td>'+
+		'<td>'+row.partsNum+'</td>'+
+		'<td>'+row.carFrameNumber+'</td>'+
+		'<td>'+row.carModelNumber+'</td>'+
+		'<td><a onclick="deleteParts(this,'+_type+')">删除</a></td>'+
+		'</tr>';
+		$('.partsTable').append(htmlText);
+		if(_type == 1){
+			var auctionId = $("input[name='id']").val();
+			$.post("../../carscraporder/addParts",{
+		    	orderType:2,
+		    	orderId:id,
+		    	auctionId:auctionId
+			},function(res,status){});
+		}
+    });
+    $('#Dialog').dialog("close",true);
+	var count = $(".partsTable input[class='numberId']").length;
+	for (var i = 0; i < count; i++) {
+	    $(".partsTable input[class='numberId']:eq(" + i + ")").val(i+1);
+	}
+}
+</script>
+</body>

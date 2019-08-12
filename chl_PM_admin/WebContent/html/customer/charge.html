@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+<link href="../../js/lib/eui/themes/icon.css" rel="stylesheet" type="text/css" />
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/finance/financePayTrack.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../js/controller/customer/charge.js"> </script>
+<title>用户充值</title>
+<style>
+input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px white inset;}
+.numberbox{
+  width:80px;
+}
+</style>
+</head>
+<body style="min-height: 1000px;">
+	<div class="content">
+		<table class="pay-table marginInfo-div">
+			<tr>
+				<td style="width: 150px;">商户编号</td><td col="mid"></td>
+				<td style="width: 150px;">商户名称</td><td col="nickname"></td>
+				<td style="width: 150px;">联系方式</td><td col="phone"></td>
+			</tr>
+			<tr>
+				<td>证件类型</td><td>身份证</td>
+				<td>证件号码</td><td col="idCard"></td>
+				<td></td><td></td>
+			</tr>
+		</table>
+		<div class="addPay-DIV">
+			<form id="chargeForm">
+				<input name="mid" hidden/>
+				<table class="form-table">
+					<tr>
+						<td class="tit" style="width: 150px;">收款方式</td>
+						<td><input id="chargeSource" name="chargeSource" class="easyui-combobox"/></td>
+					</tr>
+					<tr>
+						<td class="tit">充值金额</td>
+						<td><input name="chargeAmount" class="easyui-numberbox" required="required"
+								style="width: 200px;height: 30px;"/></td>
+					</tr>
+					<tr>
+						<td class="tit" style="vertical-align: top;">上传付款凭证</td>
+						<td>
+							<div class="input-pic-box pic-box addpic">
+		                        <img class="pic-img" src="../../resources/images/addimg-bg.png" 
+		                        	onclick="addFile(0)" />
+		                        <span class="delpic"></span>
+		                        <input type="hidden" class="hiddenpicid" value="" />
+		                        <input style="display: none;" type="file" 
+		                        	accept=".png,.jpg,.jpeg,.gif,.PNG,.JPG,.JPEG,.GIF" name="upload" 
+		                        	class="upload-file-0" onchange="doUpload(0)" />
+		                    </div>
+						</td>
+					</tr>
+					<tr>
+						<td class="tit" style="vertical-align: top;">备注</td>
+						<td>
+							<textarea warp="virtual" id="pay-remark" name="memo" 
+								class="beizhu"
+								onKeyUp="checkWord(this,'pay-remark-check',200);" 
+								onMouseDown="checkWord(this,'pay-remark-check',200);"
+					        	></textarea>
+					        <p style="text-align: right;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="pay-remark-check">200</span>个字符 </p>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<div style="text-align: center;width: 80%;margin-top: 20px">
+				<button id="chargeMarginBtn" class="saveBtn" onclick="chargeMargin()">确定</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

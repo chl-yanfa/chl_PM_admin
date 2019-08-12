@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/paimai/paimai.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"> </script>
+<script type="text/javascript" src="../../js/url.js"> </script>
+<script type="text/javascript" src="../../js/dataFormat.js"> </script>
+<script type="text/javascript" src="../../js/controller/paimai/addPaimai.js"> </script>
+<title>新增拍卖会</title>
+<style>
+input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px white inset;}
+</style>
+</head>
+<body>
+	<div class="content" style="width: 80%">
+		<form id="addPaimai">
+			<table class="table-body noborder" style="width: 100%">
+				<tr>
+					<td class="tit">拍卖会名称：</td>
+					<td colspan="3">
+						<input name="paimaiName" class="easyui-textbox" style="width: 400px"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="tit"><span class="red">*</span>拍卖开始时间：</td>
+					<td colspan="3"><input id="paimaiStartTime" name="paimaiStartTime"/></td>
+				</tr>
+				<tr>
+					<td class="tit"><span class="red">*</span>结束间隔时间：</td>
+					<td>
+						<input id="intervalTime" name="intervalTime" required="required"
+							class="easyui-numberbox" style="width: 200px;height: 25px"/>
+						<label class="suf">秒</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="tit"><span class="red">*</span>单车拍卖时长：</td>
+					<td>
+						<input id="singleTime" name="singleTime" required="required"
+							class="easyui-numberbox" style="width: 200px;height: 25px"/>
+						<label class="suf">秒</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="tit" style="vertical-align: top;">备注：</td>
+					<td colspan="3">
+						<textarea warp="virtual" name="remark" class="beizhu" 
+							data-options="multiline:true"></textarea>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="content-footer" style="width: 80%">
+		<button class="submitBtn" onclick="addPaimai()">提交</button>
+		<button class="cancelBtn" onclick="cancel()">取消</button>
+	</div>
+</body>
+</html>

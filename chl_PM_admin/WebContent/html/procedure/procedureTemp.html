@@ -1,0 +1,232 @@
+<link href="../../resources/css/procedure/procedure.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/controller/procedure/procedure.js"></script>
+<!-- 手续入库登记 -->
+<form id="addProcedure">
+	<input name="id" class="easyui-textbox" hidden />
+	<div class="top">
+		<div class="storage">
+			<div class="entrust">
+				<label>委托合同编号：</label> 
+				<input name="entrustContractNo" class="easyui-textbox"></input>
+			</div>
+			<div class="handover">
+				<label>交接清单编号：</label> 
+				<input name="handoverBillNo" class="easyui-textbox"></input>
+			</div>
+		</div>
+		<div class="total">
+			<div>
+				<label>手续存放位置：</label> 
+				<input name="province" class="in-combo"/> 
+				<input name="city" class="in-combo"/> 
+				<input name="area" class="in-combo"/> 
+				<input id="address" class="easyui-textbox easyui-validatebox total-a" name="address"/>
+			</div>
+		</div>
+	</div>
+	<div class="main">
+		<div style="display: inline-block; font-size: 12px;">
+			<img class="imgs" src="../../resources/images/shangchuan.png">
+			<span class="sc">上传手续扫描件</span> 
+			<span class="scc">新车请上传合格证；进口车请上传添加：报关单 商检单；大货车上传营运证</span>
+		</div>
+		<br>
+		<div class="sc-c">
+			<div class="check2">
+				<input type="checkbox" id="cb-0" name="fileTypes" value="0"/>
+				<label for="cb-0">车主身份证</label>
+			</div>
+			<input type="checkbox" id="cb-1" name="fileTypes" value="1" hidden/>
+			<div class="check">
+				<input type="checkbox" id="cb-2" name="fileTypes" value="2"/>
+				<label for="cb-2">委托合同</label>
+			</div>
+			<div class="check">
+				<input type="checkbox" id="cb-3" name="fileTypes" value="3"/>
+				<label for="cb-3">车辆登记证</label>
+			</div>
+			<div class="check">
+				<input type="checkbox" id="cb-4" name="fileTypes" value="4"/>
+				<label for="cb-4">进口车商检证</label>
+			</div>
+			<div class="check">
+				<input type="checkbox" id="cb-5" name="fileTypes" value="5"/>
+				<label for="cb-5">车辆行驶证</label>
+			</div>
+			<div class="check">
+				<input type="checkbox" id="cb-6" name="fileTypes" value="6"/>
+				<label for="cb-6">交强险单凭证</label>
+			</div>
+			<div class="check">
+				<input type="checkbox" id="cb-7" name="fileTypes" value="7"/>
+				<label for="cb-7">购车发票</label>
+			</div>
+			<div class="check">
+				<input type="checkbox" id="cb-8" name="fileTypes" value="8"/>
+				<label for="cb-8">交裁证明复印件</label>
+			</div>
+		</div>
+		<div class="sc-c2">
+			<div class="check2">
+				<input type="checkbox" id="cb-9" name="fileTypes" value="9"/>
+				<label for="cb-9">购置附加税证</label>
+			</div>
+			<div class="check3">
+				<input type="checkbox" id="cb-10" name="fileTypes" value="10"/>
+				<label for="cb-10">进口车报关单</label>
+			</div>
+			<div class="check4">
+				<input type="checkbox" id="cb-11" name="fileTypes" value="11"/>
+				<label for="cb-11">工商认证章</label>
+			</div>
+			<div class="check5">
+				<input type="checkbox" id="cb-12" name="fileTypes" value="12"/>
+				<label for="cb-12">其他证件</label>
+			</div>
+			<div class="check6">
+				<input type="checkbox" id="cb-13" name="fileTypes" value="13"/>
+				<label for="cb-13">委托方组织机构代码证</label>
+			</div>
+		</div>
+		<hr style="width: 1200px; margin: 0 auto;">
+		<div style="margin: 30px 50px;" id="uploadFile">
+			<ul id="pic-upload-row">
+				<li class="pic-single" id="li-file-0" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">0</span>
+                    </div>
+                    <p class="text-center">身份证正面照</p>
+                </li>
+                <li class="pic-single" id="li-file-1" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">1</span>
+                    </div>
+                    <p class="text-center">身份证反面照</p>
+                </li>
+                <li class="pic-single" id="li-file-2" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">2</span>
+                    </div>
+                    <p class="text-center">委托合同</p>
+                </li>
+                <li class="pic-single" id="li-file-3" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">3</span>
+                    </div>
+                    <p class="text-center">车辆登记证</p>
+                </li>
+                <li class="pic-single" id="li-file-4" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">4</span>
+                    </div>
+                    <p class="text-center">进口车商检证</p>
+                </li>
+                <li class="pic-single" id="li-file-5" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">5</span>
+                    </div>
+                    <p class="text-center">车辆行驶证</p>
+                </li>
+                <li class="pic-single" id="li-file-6" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">6</span>
+                    </div>
+                    <p class="text-center">交强险单凭证</p>
+                </li>
+                <li class="pic-single" id="li-file-7" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">7</span>
+                    </div>
+                    <p class="text-center">购车发票</p>
+                </li>
+                <li class="pic-single" id="li-file-8" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">8</span>
+                    </div>
+                    <p class="text-center">交裁证明复印件</p>
+                </li>
+                <li class="pic-single" id="li-file-9" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">9</span>
+                    </div>
+                    <p class="text-center">购置附加税证</p>
+                </li>
+                <li class="pic-single" id="li-file-10" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">10</span>
+                    </div>
+                    <p class="text-center">进口车报关单</p>
+                </li>
+                <li class="pic-single" id="li-file-11" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">11</span>
+                    </div>
+                    <p class="text-center">工商认证章</p>
+                </li>
+                <li class="pic-single" id="li-file-12" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">12</span>
+                    </div>
+                    <p class="text-center">其他证件</p>
+                </li>
+                <li class="pic-single" id="li-file-13" style="display: none">
+                    <div class="input-pic-box pic-box addpic">
+                        <img class="pic-img" src="../../resources/images/addimg-bg.png"/>
+                        <span class="delpic"></span>
+                        <input type="hidden" class="hiddenpicid" value="" />
+                        <span class="fileType">13</span>
+                    </div>
+                    <p class="text-center">委托方组织机构代码证</p>
+                </li>
+                
+			</ul>
+			
+		</div>
+	</div>
+	<div class="footer procedureHistory-DIV" style="margin-top: 20px;">
+		<p style="font-size: 16px; margin-bottom: 20px;">
+			<span style="color: #5191E1; margin-right: 10px;">|</span>手续出入库记录
+		</p>
+		<table id="procedureHistory"></table>
+	</div>
+</form>
+

@@ -1,0 +1,42 @@
+.tc_header{
+	width: 100%;
+    height:118px;
+}
+.pcontent{
+	width:948px;
+	height:auto;
+	background:#fff;
+	margin:auto;
+}
+.pcontent .header img{
+	width:212px;
+	height:52px;
+	margin-top:51px;
+	margin-left:-8px;
+}
+.title{
+	width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.takeCarBill{
+	border-collapse: collapse; 
+	border: 1px solid #dbdbdb;
+	margin: 40px 0;
+	width:100%
+}
+.takeCarBill td{
+	padding: 2.5em;
+    border:1px solid #e9e9e9;
+}
+.takeCarBill td label{
+	font-size: 14px;
+	font-weight: bold;
+	color:#6e6e6e
+}
+.takeCarBill td p,span{
+	font-size: 14px;
+	color:#9e9e9e
+}

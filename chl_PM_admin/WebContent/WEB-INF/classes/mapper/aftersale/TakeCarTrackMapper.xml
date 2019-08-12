@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.TakeCarTrackMapper">
+	<resultMap id="BaseResultMap" type="TakeCarTrack">
+		<id 	column="id"  			property="id" />
+		<result column="auction_id"  	property="auctionId" />
+		<result column="auction_set_id" property="auctionSetId" />
+		<result column="remark"  		property="remark" />
+		<result column="operator"  		property="operator" />
+		<result column="create_time"  	property="createTime" />
+		<result column="is_delete"  	property="isDelete" />
+		<collection property="fileList" ofType="AftersaleFileDto" column="{fileType=type,parentId=id}"
+			select="mapper.standard.AftersaleFileMapper.getCollection">
+		</collection>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, auction_id, auction_set_id, remark, operator, create_time, is_delete, 1 as type
+	</sql>
+	<select id="getTakeCarTrackById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_take_car_track
+		where id = #{id}
+	</select>
+	<select id="getTakeCarTrackByAuctionSetId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_take_car_track
+		where auction_set_id = #{auctionSetId}
+		AND is_delete=0
+		order By create_time
+	</select>
+	<insert id="addTakeCarTrack">
+		insert into car_pm_aftersale_take_car_track (
+			id, auction_id, auction_set_id, remark, operator,create_time, is_delete
+		)values (
+			#{id}, #{auctionId}, #{auctionSetId},
+			#{remark},
+			#{operator},
+			now(), 0
+		)
+	</insert>
+	<insert id="addTakeCarTrackSelective">
+		insert into car_pm_aftersale_take_car_track
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="auctionId != null">
+				auction_id,
+			</if>
+			<if test="auctionSetId != null">
+				auction_set_id,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="operator != null">
+				operator,
+			</if>
+			create_time,
+			is_delete,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="auctionId != null">
+				#{auctionId},
+			</if>
+			<if test="auctionSetId != null">
+				#{auctionSetId},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="operator != null">
+				#{operator},
+			</if>
+			now(),0,
+		</trim>
+	</insert>
+	<update id="updateTakeCarTrackSelective">
+		update car_pm_aftersale_take_car_track
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="auctionSetId != null">
+				auction_set_id = #{auctionSetId},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="operator != null">
+				operator = #{operator},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateTakeCarTrack">
+		update car_pm_aftersale_take_car_track
+		set 
+			auction_id = #{auctionId},
+			auction_set_id = #{auctionSetId},
+			remark = #{remark},
+			operator = #{operator},
+			is_delete = #{isDelete}
+		where id = #{id}
+	</update>
+</mapper>

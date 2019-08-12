@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.ScrapMapper">
+	<resultMap id="BaseResultMap" type="Scrap">
+		<id 	column="id" 				property="id" />
+		<result column="auction_id" 		property="auctionId" />
+		<result column="operator" 			property="operator" />
+		<result column="scrap_company" 		property="scrapCompany" />
+		<result column="scrap_money" 		property="scrapMoney" />
+		<result column="remark" 			property="remark" />
+		<result column="scrap_state" 		property="scrapState" />
+		<result column="submit_time" 		property="submitTime" />
+		<result column="confirm_time" 		property="confirmTime" />
+		<result column="confirm_remark" 	property="confirmRemark" />
+		<result column="create_time" 		property="createTime" />
+		<result column="is_delete" 			property="isDelete" />
+		<collection property="fileList" ofType="AftersaleFileDto" column="{fileType=type,parentId=id}"
+			select="mapper.standard.AftersaleFileMapper.getCollection">
+		</collection>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, auction_id, operator, scrap_company, scrap_money, remark,scrap_state,
+		submit_time,confirm_time,confirm_remark,
+		create_time, is_delete, 7 as type
+	</sql>
+	<select id="getScrapById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_scrap
+		where id = #{id}
+	</select>
+	<select id="getScrapByAuctionId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from car_pm_aftersale_scrap
+		where auction_id = #{auctionId}
+	</select>
+	<insert id="addScrap">
+		insert into car_pm_aftersale_scrap (
+			id, auction_id, operator,
+			scrap_company, scrap_money, remark,scrap_state,
+			submit_time,confirm_time,confirm_remark,
+			create_time, is_delete
+		)values (
+			#{id}, #{auctionId},
+			#{operator},
+			#{scrapCompany}, #{scrapMoney}, 
+			#{remark},
+			0,
+			#{submitTime},#{confirmTime},
+			#{confirmRemark},
+			now(), 0
+		)
+	</insert>
+	<insert id="addScrapSelective">
+		insert into car_pm_aftersale_scrap
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="auctionId != null">
+				auction_id,
+			</if>
+			<if test="operator != null">
+				operator,
+			</if>
+			<if test="scrapCompany != null">
+				scrap_company,
+			</if>
+			<if test="scrapMoney != null">
+				scrap_money,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="submitTime != null">
+				submit_time,
+			</if>
+			<if test="confirmTime != null">
+				confirm_time,
+			</if>
+			<if test="confirmRemark != null">
+				confirm_remark,
+			</if>
+			scrap_state,
+			create_time,
+			is_delete,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="auctionId != null">
+				#{auctionId},
+			</if>
+			<if test="operator != null">
+				#{operator},
+			</if>
+			<if test="scrapCompany != null">
+				#{scrapCompany},
+			</if>
+			<if test="scrapMoney != null">
+				#{scrapMoney},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="submitTime != null">
+				#{submitTime},
+			</if>
+			<if test="confirmTime != null">
+				#{confirmTime},
+			</if>
+			<if test="confirmRemark != null">
+				#{confirmRemark},
+			</if>
+			0,
+			now(),0,
+		</trim>
+	</insert>
+	<update id="updateScrapSelective">
+		update car_pm_aftersale_scrap
+		<set>
+			<if test="auctionId != null">
+				auction_id = #{auctionId},
+			</if>
+			<if test="operator != null">
+				operator = #{operator},
+			</if>
+			<if test="scrapCompany != null">
+				scrap_company = #{scrapCompany},
+			</if>
+			<if test="scrapMoney != null">
+				scrap_money = #{scrapMoney},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="scrapState != null">
+				scrap_state = #{scrapState},
+			</if>
+			<if test="submitTime != null">
+				submit_time = #{submitTime},
+			</if>
+			<if test="confirmTime != null">
+				confirm_time = #{confirmTime},
+			</if>
+			<if test="confirmRemark != null">
+				confirm_remark = #{confirmRemark},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateScrap">
+		update car_pm_aftersale_scrap
+		set 
+			auction_id = #{auctionId},
+			operator = #{operator},
+			scrap_company = #{scrapCompany},
+			scrap_money = #{scrapMoney},
+			remark = #{remark},
+			scrap_state = #{scrapState},
+			is_delete = #{isDelete},
+			submit_time = #{submitTime},
+			confirm_time = #{confirmTime},
+			confirm_remark = #{confirmRemark}
+		where id = #{id}
+	</update>
+</mapper>

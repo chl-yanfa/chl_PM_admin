@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+<title>驳回</title>
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/style.css?v="+new Date().getTime() rel="stylesheet" type="text/css">
+<link href="../../js/lib/eui/themes/icon.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/list.css?v="+new Date().getTime() rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js?v="+new Date().getTime()> </script>
+<script type="text/javascript" src="../../js/lib/eui/tcwErpDataGridView.js"></script>
+<style>
+	
+	.l-btn-left {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background: #66b1ff;
+    color: white;
+    border-radius: 3px;
+    width: 70px;
+    height: 32px;
+    font-size: 16px;
+	</style>
+</head>
+<body>
+	<div>
+        <p class="bohui" style="color:#66B1FF;margin-top:50px;margin-left:30px;">请填写驳回原因：</p>
+        <textarea 
+        	warp="virtual" id="noPassReason" 
+        	name="noPassReason" class="easyui-textbox" 
+        	style="width: 400px;height: 80px;resize:none;margin-top:10px;margin-left:30px;"
+        	onKeyUp="checkWord(this,'noPassReason-check',200);" 
+			onMouseDown="checkWord(this,'noPassReason-check',200);"
+        	data-options="multiline:true"></textarea>
+        <p style="text-align: right;margin-right: 60px;color: #666666;">还可以输入<span style="font-family: Georgia; font-size: 14px;" id="noPassReason-check">0</span>个字符 </p>
+   </div>
+   <script>
+   $(function() {
+		checkWord(document.getElementById('noPassReason'),'noPassReason-check',200);
+	});
+   </script>
+</body>
+</html>

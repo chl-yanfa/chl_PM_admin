@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.standard.WarehouseWholeMapper">
+	<resultMap id="warehouseWhole" type="WarehouseWhole">
+		<id 	column="auction_id"  		property="auctionId" />
+		<result column="stock_id"  			property="stockId" />
+		<result column="auction_no" 		property="auctionNo" />
+		<result column="full_name" 			property="fullName" />
+		<result column="lot_areas" 			property="lotAreas" />
+		<result column="vehicle_brand" 		property="vehicleBrand" />
+	    <result column="vehicle_type" 		property="vehicleType" />
+	    <result column="vehicle_system" 	property="vehicleSystem" />
+	    <result column="license_number" 	property="licenseNumber" />
+		<result column="paimai_date"  		property="paimaiDate" />
+		<result column="is_warehouse"  		property="isWarehouse" />
+		<result column="warehouseFlag"  	property="warehouseFlag" />
+		<result column="create_time"  		property="inStockDate" />
+		<result column="out_stock_time"  	property="outStockDate" />
+		<result column="key"  				property="key" />
+		<result column="carCard"  			property="carCard" />
+		<result column="sub_company_audit"  property="subCompanyAudit" />
+		<result column="stock_address"  	property="stockAddress" />
+		<result column="auction_type_flag"  property="auctionTypeFlag" />
+		<!-- 出库id -->
+		<association property="placingId" column="stock_id" javaType="String" 
+			select="getPlacingId"/>
+		<association property="imgPath" column="auctionId=auction_id" javaType="String" 
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+	</resultMap>
+	<resultMap id="stockTakeCar" type="StockTakeCar">
+		<id 	column="auction_id"  		property="auctionId" />
+		<result column="stock_id"  			property="stockId" />
+		<result column="auction_no" 		property="auctionNo" />
+		<result column="full_name" 			property="fullName" />
+		<result column="lot_areas" 			property="lotAreas" />
+		<result column="vehicle_brand" 		property="vehicleBrand" />
+	    <result column="vehicle_type" 		property="vehicleType" />
+	    <result column="vehicle_system" 	property="vehicleSystem" />
+	    <result column="license_number"  	property="licenseNumber" />
+		<result column="paimai_date"  		property="paimaiDate" />
+		<result column="is_print"  			property="isPrint" />
+		<result column="printFlag"  		property="printFlag" />
+		<result column="vehicle_state"  	property="vehicleState" />
+		<result column="auction_type_flag"  property="auctionTypeFlag" />
+		<association property="imgPath" column="auctionId=auction_id" javaType="String" 
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+	</resultMap>
+	<resultMap id="warehouseSave" type="WarehouseSave">
+		<id 	column="auction_id"  		property="auctionId" />
+		<result column="stock_id"  			property="stockId" />
+		<result column="auction_no" 		property="auctionNo" />
+		<result column="full_name" 			property="fullName" />
+		<result column="lot_areas" 			property="lotAreas" />
+		<result column="vehicle_brand" 		property="vehicleBrand" />
+	    <result column="vehicle_type" 		property="vehicleType" />
+	    <result column="vehicle_system" 	property="vehicleSystem" />
+	    <result column="license_number"  	property="licenseNumber" />
+	    <result column="vin"  				property="vin" />
+		<result column="paimai_date"  		property="paimaiDate" />
+		<result column="is_warehouse"  		property="isWarehouse" />
+		<result column="stock_address"  	property="stockAddress" />
+		<result column="save_time"  		property="saveTime" />
+		<result column="auction_type_flag"  property="auctionTypeFlag" />
+		<association property="imgPath" column="auctionId=auction_id" javaType="String" 
+			select="mapper.standard.AuctionFileMapper.getHeadImgByAuctionId"/>
+	</resultMap>
+	<resultMap id="takeCarBill" type="TakeCarBill">
+		<id 	column="auction_id"  		property="auctionId" />
+		<result column="full_name"  		property="fullName" />
+		<result column="lot_areas" 			property="lotAreas" />
+	    <result column="license_number"  	property="licenseNumber" />
+		<result column="paimai_date_order"  property="paimaiDateOrder" />
+		<result column="vin"  				property="vin" />
+		<result column="vehicle_brand" 		property="vehicleBrand" />
+	    <result column="vehicle_type" 		property="vehicleType" />
+	    <result column="vehicle_system" 	property="vehicleSystem" />
+		<result column="key"  				property="key" />
+		<result column="bailor"  			property="bailor" />
+		<result column="phone"  			property="phone" />
+		<result column="id_card"  			property="id_card" />
+		<result column="auction_type_flag"  property="auctionTypeFlag" />
+	</resultMap>
+	<sql id="ListIf">
+		<if test="auctionType != null">
+			AND SIA.auction_type = #{auctionType}
+		</if>
+		<if test="subCompanyAuditId != null">
+			AND SIA.audit_state = #{subCompanyAuditId}
+		</if>
+		<if test="inStockDate != null">
+			AND TO_DAYS(SIW.store_time) = TO_DAYS( #{inStockDate})
+		</if>
+		<if test="outStockDate != null">
+			AND TO_DAYS(SIW.out_stock_time) = TO_DAYS( #{outStockDate})
+		</if>
+		<if test="keywords != null and keywords != ''">
+			AND (SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%') 
+			OR SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%'))
+        </if>
+	</sql>
+	<!-- 获取仓库管理列表 -->
+	<select id="getWarehouseListByPage" resultMap="warehouseWhole">
+		SELECT
+			SIA.id AS auction_id,
+			SIW.id AS stock_id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system,  
+		    SIA.license_number, 
+		    case SIW.is_warehouse when 0 then '未入库' when 1 then '已入库' when 2 then '已出库' else '未入库' end
+		    AS is_warehouse,						<!-- 入库状态 -->
+		    SIW.is_warehouse AS warehouseFlag,
+		    SIW.create_time,							<!-- 入库时间 -->
+		    SIW.out_stock_time,						<!-- 出库时间 -->
+		    case SIA.audit_state when 0 then '待审核' when 1 then '审核通过' when 2 then '已驳回' end
+		    AS sub_company_audit,					<!-- 分公司审核 -->
+		    SIW.`key`,
+		    SIW.car_card,
+		    SIW.store_address AS stock_address,
+			SIA.auction_type auction_type_flag
+		FROM 
+			car_pm_auction SIA LEFT JOIN car_pm_warehouse SIW
+			ON SIA.ID=SIW.auction_id
+		WHERE
+			SIA.id is not null
+		AND 
+			SIA.is_delete = 0
+		AND 
+			SIA.auction_state != 0
+		AND 
+			(SIW.is_warehouse is null OR SIW.is_warehouse!=-1)
+		<include refid="ListIf" />
+		<if test="stockState != null">
+			AND SIA.stock_state = #{stockState}
+		</if>
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- 获取仓库管理列表总条数 -->
+	<select id="getWarehouseListTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM
+			car_pm_auction SIA LEFT JOIN car_pm_warehouse SIW
+			ON SIA.ID=SIW.auction_id
+		WHERE
+			SIA.id is not null
+		AND 
+			SIA.is_delete = 0
+		AND 
+			SIA.auction_state != 0
+		AND 
+			(SIW.is_warehouse is null OR SIW.is_warehouse!=-1)
+		<include refid="ListIf" />
+		<if test="stockState != null">
+			AND SIA.stock_state = #{stockState}
+		</if>
+	</select>
+	<!-- 获取出库id -->
+	<select id="getPlacingId" resultType="String">
+		SELECT 
+			id
+		FROM
+			CAR_PM_WAREHOUSE_PLACING
+		WHERE 
+			stock_id = #{stock_id} 
+		AND 
+			(audit_state=0 or audit_state=2)
+		LIMIT 1
+	</select>
+	<!-- getWarehouseTab 仓库列表页Tab -->
+	<select id="getWarehouseTab" parameterType="map" resultType="map">
+		SELECT 
+			'0' AS stock_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE
+		SIA.is_delete = 0 AND SIA.auction_state != 0
+		AND SIA.stock_state in (0,1,2,3)
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'1' AS stock_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE 
+		SIA.is_delete = 0 AND SIA.auction_state != 0
+		AND SIA.stock_state = 0
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'2' AS stock_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE 
+		SIA.is_delete = 0 AND SIA.auction_state != 0
+		AND SIA.stock_state = 1
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'3' AS stock_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE 
+		SIA.is_delete = 0 AND SIA.auction_state != 0
+		AND SIA.stock_state = 2
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'4' AS stock_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE 
+		SIA.is_delete = 0 AND SIA.auction_state != 0
+		AND SIA.stock_state = 1
+		<include refid="ListIf" />
+		UNION ALL
+		SELECT 
+			'5' AS stock_state, COUNT(1) AS TAB_COUNT
+		FROM 
+			car_pm_auction SIA
+		WHERE 
+		SIA.is_delete = 0 AND SIA.auction_state != 0
+		AND SIA.stock_state = 3
+		<include refid="ListIf" />
+	</select>
+	<!-- 获取暂存入库列表 -->
+	<select id="getWarehouseSaveListByPage" resultMap="warehouseSave">
+		SELECT
+			SIA.id AS auction_id,
+			SIW.id AS stock_id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system, 
+	    	SIA.license_number, 
+	    	SIA.vin,
+	    	case SIW.is_warehouse when -1 then '未入库' end AS is_warehouse,	<!-- 入库状态 -->
+	    	SIW.store_address AS stock_address,
+	    	SIW.create_time AS save_time,
+			SIA.auction_type auction_type_flag
+		FROM 
+			car_pm_auction SIA LEFT JOIN car_pm_warehouse SIW
+		ON 
+			SIA.ID=SIW.auction_id
+		WHERE
+			SIA.id is not null
+		AND 
+			SIA.is_delete = 0 
+		AND 
+			SIA.auction_state != 0
+		AND 
+			SIW.is_warehouse=-1
+		<include refid="ListIf" />
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- 获取暂存入库总条数 -->
+	<select id="getWarehouseSaveListTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM
+			car_pm_auction SIA LEFT JOIN car_pm_warehouse SIW
+			ON SIA.ID=SIW.auction_id
+		WHERE
+			SIA.id is not null
+		AND 
+			SIA.is_delete = 0 
+		AND 
+			SIA.auction_state != 0
+		AND 
+			SIW.is_warehouse=-1
+		<include refid="ListIf" />
+	</select>
+	<!-- 获取打印提货单列表页 -->
+	<select id="getTakeCarListByPage" resultMap="stockTakeCar">
+		SELECT
+			SIA.id AS auction_id,
+			SIW.id AS stock_id,
+			SIA.auction_no,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system, 
+		    SIA.license_number, 
+		    case SIW.is_print when 0 then '未打印' when 1 then '已打印' end AS is_print,
+		    SIW.is_print AS printFlag,
+		    case SIA.auction_state when 1 then '未上拍' when 10 then '未上拍' when 2 then '进入拍卖会' when 3 then '待发布' when 4 then '拍卖中' when 5 then '成交' when 8 then '流拍' when -10 then '已退货' end
+			AS vehicle_state,
+			SIA.auction_type auction_type_flag
+		FROM 
+			car_pm_auction SIA LEFT JOIN car_pm_warehouse SIW
+			ON SIA.ID=SIW.auction_id
+		WHERE
+			SIA.id is not null
+		AND 
+			SIA.is_delete = 0 
+		AND 
+			SIA.auction_state != 0
+		<include refid="ListIf" />
+		ORDER BY SIA.TS DESC
+	</select>
+	<!-- 获取打印提货单列表总条数 -->
+	<select id="getTakeCarListTotal" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM
+			car_pm_auction SIA LEFT JOIN car_pm_warehouse SIW
+			ON SIA.ID=SIW.auction_id
+		WHERE
+			SIA.id is not null
+		AND 
+			SIA.is_delete = 0 
+		AND 
+			SIA.auction_state != 0
+		<include refid="ListIf" />
+	</select>
+	<!-- 获取打印提货单 -->
+	<select id="getTakeCarBill" resultMap="takeCarBill">
+		SELECT
+			SIA.id AS auction_id,
+			case SIA.auction_type when 0 then CONCAT('全车配件（',SIA.full_name,'）') 
+				when 1 then CONCAT('高价值配件（',SIA.full_name,'）') 
+				when 2 then CONCAT('大宗物资（',SIA.full_name,'）') end AS full_name,
+			SIA.lot_areas,
+		    SIA.license_number, 
+		    SIA.vin, 
+			SIA.vehicle_brand, 
+		    SIA.vehicle_type,
+		    SIA.vehicle_system, 
+			SIW.`key`,
+			SIA.auction_type auction_type_flag
+		FROM 
+			car_pm_auction SIA LEFT JOIN car_pm_warehouse SIW
+			ON SIA.ID=SIW.auction_id
+		WHERE
+			SIA.id = #{auctionId}
+	</select>
+	<!-- 获取库存统计 -->
+	<select id="getStockStatistics" resultType="StockStatistics">
+		SELECT
+			SA.ID,
+			SA.areas_name AS lotAreas,
+			(	SELECT COUNT(1) FROM car_pm_auction SIA
+				WHERE SIA.is_delete = 0 
+				AND SIA.lot_areas_id = SA.ID
+				AND SIA.auction_state in (1,10,2)
+				<if test="keywords != null and keywords != ''">
+		          AND (
+		          	SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+		          	SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%')
+		          )
+		        </if>
+			) toPaimaiCount,<!-- 待拍卖 -->
+			(	SELECT COUNT(1) FROM car_pm_auction SIA
+				WHERE SIA.is_delete = 0 
+				AND SIA.lot_areas_id = SA.ID
+				AND SIA.auction_state =4
+				<if test="keywords != null and keywords != ''">
+		          AND (
+		          	SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+		          	SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%')
+		          )
+		        </if>
+			) paimaiCount,<!-- 拍卖中 -->
+			(	SELECT COUNT(1) FROM car_pm_auction SIA
+				WHERE SIA.is_delete = 0 
+				AND SIA.lot_areas_id = SA.ID
+				AND SIA.auction_state =8
+				AND SIA.abortive_state =0
+				<if test="keywords != null and keywords != ''">
+		          AND (
+		          	SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+		          	SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%')
+		          )
+		        </if>
+			) passInCount,<!-- 流拍待处理 -->
+			(	SELECT COUNT(1) FROM car_pm_auction SIA,car_pm_aftersale SIAS
+				WHERE SIA.is_delete = 0 
+				AND SIA.lot_areas_id = SA.ID
+				AND SIA.ID=SIAS.AUCTION_ID
+				AND SIA.auction_state=5
+				AND SIAS.IS_DELETE=0
+				AND SIAS.is_history=0
+				AND SIAS.take_car_state=0
+				<if test="keywords != null and keywords != ''">
+		          AND (
+		          	SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+		          	SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%')
+		          )
+		        </if>
+			) noTakeCarCount,<!-- 成交未提货 -->
+			(	SELECT COUNT(1) FROM car_pm_auction SIA
+				WHERE SIA.is_delete = 0 
+				AND SIA.lot_areas_id = SA.ID
+				AND SIA.stock_state=0
+				<if test="keywords != null and keywords != ''">
+		          AND (
+		          	SIA.license_number like CONCAT(CONCAT('%', #{keywords}),'%') OR 
+		          	SIA.full_name like CONCAT(CONCAT('%', #{keywords}),'%')
+		          )
+		        </if>
+			) noWarehouseCount<!-- 未入库 -->
+		FROM
+			sys_areas SA
+			<trim prefix="WHERE" prefixOverrides="AND">
+				AND SA.status = 1
+			 	AND SA.is_virtual_field = 0
+				<if test="lotAreasId != null and lotAreasId != ''">   
+					AND SA.ID = #{lotAreasId}
+				</if>
+			</trim>
+	</select>
+	<!-- 获取库存统计 -->
+	<select id="getStockStatisticsTotal" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM
+			SYS_AREAS SA
+			<trim prefix="WHERE" prefixOverrides="AND"> 
+				AND SA.status = 1
+			 	AND SA.is_virtual_field = 0
+				<if test="lotAreasId != null and lotAreasId != ''">   
+					AND SA.ID = #{lotAreasId}
+				</if>
+			</trim>
+	</select>
+</mapper>

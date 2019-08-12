@@ -1,0 +1,114 @@
+<!--  查看 -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+<meta http-equiv="expires" content="0">
+
+<link href="../../js/lib/eui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../../resources/css/auction/auction.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/lib/eui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/url.js"></script>
+<script type="text/javascript" src="../../js/dataFormat.js"></script>
+<script type="text/javascript" src="../../js/controller/auction/auction.js"> </script>
+
+<title></title>
+</head>
+<body style="min-height: 2000px">
+	<form id="vehicleInfo" style="font-size: 12px;">
+		<input name="id" class="easyui-textbox" hidden />
+		<div class="carTop">
+		<p class="hosttt">基本信息</p>
+			<table border="0" width="100%" align="center" class="table_car">
+				<tr class="sh">
+					<td style="width: 10%;">拍品类型：</td><td style="width: 23%;" col="auctionType"></td>
+					<td style="width: 10%;">拍品编号：</td><td style="width: 23%;" col="auctionNo"></td>
+					<td class="carTemp" style="width: 10%;">车架号：</td><td class="carTemp" style="width: 23%;" col="vin"></td>
+					<td class="partsTemp" style="width: 10%;"></td><td class="partsTemp" style="width: 23%;"></td>
+				</tr>
+				<tr class="sh">
+					<td>拍品名称：</td><td col="fullNameText" colspan="5"></td>
+				</tr>
+				<tr class="sh">
+					<td>所在地：</td><td col="lotAreas"></td>
+					<td class="carTemp">出厂日期：</td><td class="carTemp" col="productionDate"></td>
+					<td class="carTemp">有无钥匙：</td><td class="carTemp" col="isHasKey"></td>
+					<td class="partsTemp">数量：</td><td class="partsTemp" col="partsCount"></td>
+					<td class="allPartsTemp">重量：</td><td class="allPartsTemp" col="partsWeight"></td>
+					<td class="vPartsTemp"></td><td class="vPartsTemp"></td>
+				</tr>
+			</table>
+		</div>
+		<div class="carMain">
+			<p class="hosttt">看货信息</p>
+			<table border="0" width="100%" align="center" class="table_car">
+				<tr class="sh">
+					<td style="width: 10%;">联系人：</td><td style="width: 23%;" col="lookContacts"></td>
+					<td style="width: 10%;">联系方式：</td><td style="width: 23%;" col="lookContactNumber"></td>
+					<td style="width: 10%;">地址：</td><td style="width: 23%;" col="lookAddress"></td>
+				</tr>
+			</table>
+		</div>
+		<div class="carMain">
+			<p class="hosttt">车辆照片</p>
+			<div id="carPhotoUrl"></div>
+		</div>
+		<div id="partsList" class="carMain partsTemp">
+			<!-- 配件展示区 -->
+			<table id="partsTable" class="partsTable">
+				<tr>
+					<td>编号</td>
+					<td>配件名称</td>
+					<td>配件OE号</td>
+					<td>车辆VIN</td>
+					<td>车辆型号</td>
+				</tr>
+			</table>
+		</div>
+		<div class="carMain">
+			<p class="hosttt">商品描述</p>
+			<div class="text-div">
+				<textarea warp="virtual" id="description" name="description" 
+					class="view-beizhu"
+					data-options="multiline:true"
+					></textarea>
+			</div>
+			<p class="hosttt">购买要求</p>
+			<div class="text-div">
+				<textarea warp="virtual" id="buyRequirement" name="buyRequirement" 
+					class="view-beizhu"
+					data-options="multiline:true"
+					></textarea>
+			</div>
+			<p class="hosttt">竞价须知</p>
+			<div class="text-div" col="bidNotice"></div>
+			<p class="hosttt">特别提示</p>
+			<div class="text-div" col="specialNotice"></div>
+		</div>
+	</form> 
+	<div style="text-align: center;margin-top: 10px;">
+		<button class="backBtn" onclick="goback()">返回</button>
+	</div>
+	<script>
+		$(function() {
+			var id = getParamValue("id");
+			$.post("../../auction/getVPWById",{
+				id : id,
+			},function(res) {
+				var auction=res.entity.auction;
+				var procedure=res.entity.procedure;
+				var warehouse=res.entity.warehouse;
+				
+				loadAuctionDetail("#vehicleInfo","#carPhotoUrl",auction);								
+			});
+		});
+	</script>
+</body>
+</html>
